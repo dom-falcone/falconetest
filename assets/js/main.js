@@ -453,6 +453,7 @@ if (newsModal) {
 function updateStrangerTimer() {
     const timerContainer = document.getElementById('stranger-timer');
     const messageElement = document.getElementById('stranger-message');
+    console.log('Stranger Timer updated');
 
     // Elements for individual units
     const daysEl = document.getElementById('timer-days');
