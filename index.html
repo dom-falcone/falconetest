@@ -27,7 +27,6 @@
                 <a href="history.html">История</a>
                 <a href="enemies.html">Противники</a>
                 <a href="news.html">Новости</a>
-                <a href="photos.html">Фотоотчет</a>
             </nav>
             <div class="auth-action">
                 <a href="login.html" class="btn-login" id="auth-btn">Войти</a>
@@ -38,8 +37,39 @@
     <main class="hero">
         <div class="hero-bg" style="background-image: url('assets/images/Falcone-group-enhanced.jpeg');"></div>
         <div class="container hero-content">
-            <h1>Официальная страница дома Фальконе</h1>
+            <h1>Официальная страница Дома Фальконе</h1>
             <p>Примкнуть к нам способны лишь лучшие</p>
+
+            <!-- Stranger Things Timer -->
+            <div class="stranger-timer-wrapper animate-fade-up">
+                <div class="stranger-header">До заседания Дома Фальконе осталось:</div>
+
+                <div id="stranger-timer" class="stranger-timer-grid">
+                    <div class="timer-unit">
+                        <span id="timer-days" class="stranger-num">00</span>
+                        <span class="timer-label">days</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <span id="timer-hours" class="stranger-num">00</span>
+                        <span class="timer-label">hours</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <span id="timer-minutes" class="stranger-num">00</span>
+                        <span class="timer-label">minutes</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <span id="timer-seconds" class="stranger-num">00</span>
+                        <span class="timer-label">seconds</span>
+                    </div>
+                </div>
+
+                <div id="stranger-message" class="stranger-message" style="display: none;">Заседание Дома Фальконе
+                    началось.</div>
+            </div>
+
             <div class="actions" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
                 <a class="btn btn-primary" href="about.html">Узнать больше</a>
                 <a class="btn btn-ghost" href="contact.html">Связаться</a>
