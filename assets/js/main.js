@@ -607,3 +607,178 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// --- Auth System Integration ---
+document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+    const loginContainer = document.querySelector('.login-container');
+    const guestBtn = document.querySelector('.user-btn[data-user="Gast"]');
+    const guestAuthContainer = document.getElementById('guest-auth-container');
+    const legacyLoginGroup = document.getElementById('legacy-login-group');
+    const backBtn = document.getElementById('back-to-selection');
+
+    // Check if we are on the login page
+    if (!loginContainer || !guestBtn) return;
+
+    // Check for existing token
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+        // Optional: Verify token or redirect
+        // checkToken(token); 
+    }
+
+    // Guest Button Click - Trigger Animation & Mode
+    guestBtn.addEventListener('click', () => {
+        loginContainer.classList.add('guest-mode');
+        if (legacyLoginGroup) legacyLoginGroup.style.display = 'none';
+
+        setTimeout(() => {
+            if (guestAuthContainer) {
+                guestAuthContainer.classList.add('active');
+            }
+        }, 500); // Wait for transition
+    });
+
+    // Back Button
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            if (guestAuthContainer) {
+                guestAuthContainer.classList.remove('active');
+            }
+
+            setTimeout(() => {
+                loginContainer.classList.remove('guest-mode');
+                if (legacyLoginGroup) legacyLoginGroup.style.display = 'flex';
+            }, 300);
+        });
+    }
+
+    // Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const tab = e.target.dataset.tab;
+
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.getElementById(`${tab}-form`).classList.add('active');
+
+            // Clear messages
+            clearMessages();
+        });
+    });
+
+    function clearMessages() {
+        const msgs = document.querySelectorAll('.error-message, .success-message');
+        msgs.forEach(m => m.textContent = '');
+    }
+
+    function setLoading(btnId, isLoading) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+
+        if (isLoading) {
+            btn.dataset.originalText = btn.textContent;
+            btn.textContent = 'Загрузка...';
+            btn.disabled = true;
+        } else {
+            btn.textContent = btn.dataset.originalText || 'Отправить';
+            btn.disabled = false;
+        }
+    }
+
+    // Login Logic
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+
+            if (!email || !password) {
+                errorDiv.textContent = 'Заполните все поля';
+                return;
+            }
+
+            setLoading('login-btn', true);
+            errorDiv.textContent = '';
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    localStorage.setItem('auth_token', data.token);
+                    window.location.href = '../homepage'; // Redirect to homepage
+                } else {
+                    errorDiv.textContent = data.error || 'Ошибка входа';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Ошибка сервера';
+                console.error(err);
+            } finally {
+                setLoading('login-btn', false);
+            }
+        });
+    }
+
+    // Register Logic
+    const registerBtn = document.getElementById('register-btn');
+    if (registerBtn) {
+        registerBtn.addEventListener('click', async () => {
+            const displayName = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPass = document.getElementById('reg-password-confirm').value;
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+
+            if (!email || !password) {
+                errorDiv.textContent = 'Заполните все поля';
+                return;
+            }
+            if (password !== confirmPass) {
+                errorDiv.textContent = 'Пароли не совпадают';
+                return;
+            }
+
+            setLoading('register-btn', true);
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            try {
+                const res = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, displayName })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    successDiv.textContent = 'Регистрация успешна! Теперь войдите.';
+                    // Optional: Switch to login tab automatically
+                    setTimeout(() => {
+                        document.querySelector('[data-tab="login"]').click();
+                        document.getElementById('login-email').value = email;
+                    }, 1500);
+                } else {
+                    errorDiv.textContent = data.error || 'Ошибка регистрации';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Ошибка сервера';
+                console.error(err);
+            } finally {
+                setLoading('register-btn', false);
+            }
+        });
+    }
+});
