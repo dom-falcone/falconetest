@@ -70,6 +70,11 @@
                     <div class="track-info">
                         <h3>Гимн Дома Фальконе</h3>
                     </div>
+                    <div class="volume-control">
+                        <img src="../assets/images/volume-icon.png" alt="Volume" class="volume-icon-img">
+                        <input type="range" min="0" max="1" step="0.01" value="0.5" class="volume-slider"
+                            id="volumeSlider">
+                    </div>
                     <audio id="hymn-audio" src="../assets/audio/hymn.mp3"></audio>
                 </div>
             </div>
@@ -88,6 +93,11 @@
             const playBtn = document.getElementById('playBtn');
             const progressLine = document.getElementById('progressLine');
             const playerContainer = document.querySelector('.triangle-player');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const progressContainer = document.querySelector('.player-line-container');
+
+            // Set initial volume
+            audio.volume = 0.5;
 
             playBtn.addEventListener('click', () => {
                 if (audio.paused) {
@@ -107,6 +117,44 @@
             audio.addEventListener('ended', () => {
                 playerContainer.classList.remove('playing');
                 progressLine.style.width = '0%';
+            });
+
+            // Volume Control
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value;
+            });
+
+            // Interactive Progress Bar (Seeking & Dragging)
+            progressContainer.style.cursor = 'pointer';
+
+            const updateProgress = (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const duration = audio.duration;
+
+                // Clamp between 0 and duration
+                let newTime = (clickX / width) * duration;
+                newTime = Math.max(0, Math.min(newTime, duration));
+
+                audio.currentTime = newTime;
+            };
+
+            let isDragging = false;
+
+            progressContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateProgress(e);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    updateProgress(e);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
             });
         });
     </script>

@@ -133,7 +133,12 @@ if (contactForm) {
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
             }, function (error) {
-                alert('Ошибка отправки: ' + JSON.stringify(error));
+                console.error('EmailJS Error:', error);
+                if (error.status === 412) {
+                    alert('Ошибка конфигурации отправки (Invalid Grant). Пожалуйста, свяжитесь с администратором.');
+                } else {
+                    alert('Произошла ошибка при отправке. Попробуйте позже.');
+                }
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
             });
@@ -541,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (footerContainer) {
         const versionDiv = document.createElement('div');
         versionDiv.className = 'site-version';
-        versionDiv.textContent = 'Версия сайта: 1.3.2';
+        versionDiv.textContent = 'Версия сайта: 1.3.4. Идет разработка.';
         footerContainer.appendChild(versionDiv);
     }
 });
@@ -573,6 +578,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const loaderAudio = document.getElementById('loader-audio');
         const loaderPlayBtn = document.getElementById('loader-play-btn');
         const loaderProgress = document.getElementById('loader-progress');
+
+        if (loaderAudio) {
+            loaderAudio.volume = 0.5;
+        }
         const loaderPlayerContainer = document.querySelector('.loader-player-container');
 
         if (loaderAudio && loaderPlayBtn && loaderProgress) {
