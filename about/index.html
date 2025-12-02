@@ -46,6 +46,14 @@
                 <a href="../history">История</a>
                 <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
+                <div class="user-menu" id="user-menu" style="display: none;">
+    <div class="user-badge">
+        <span>⭐</span>
+        <span id="header-points">0</span>
+    </div>
+    <a href="dashboard.html">Кабинет</a>
+    <a href="login.html" onclick="localStorage.removeItem('auth_token')">Выход</a>
+</div>
             </nav>
             <div class="auth-action">
                 <a href="../login" class="btn-login" id="auth-btn">Войти</a>
@@ -146,4 +154,31 @@
     <script src="../assets/js/main.js"></script>
 </body>
 
+<script>
+
+const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+    
+    // Проверка авторизации для показа кнопки личного кабинета
+const token = localStorage.getItem('auth_token');
+if (token) {
+    document.getElementById('user-menu').style.display = 'flex';
+    
+    // Загрузить очки пользователя
+    fetch('https://dom-falcone-auth.dom-falcone-official.workers.dev/api/me', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.points) {
+            document.getElementById('header-points').textContent = data.points;
+        }
+    })
+    .catch(() => {
+        localStorage.removeItem('auth_token');
+        document.getElementById('user-menu').style.display = 'none';
+    });
+}
+    
+</script>
+    
 </html>
