@@ -1,19 +1,1107 @@
-...
-
-</html>
-
-
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta http-equiv="refresh" content="0; url=./homepage">
-    <script>window.location.href = "./homepage"</script>
-    <title>Redirecting...</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Личный кабинет - Dom Falcone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #050505;
+            --color-surface: #121212;
+            --color-text: #ffffff;
+            --color-text-muted: #a0a0a0;
+            --color-primary: #ff1744;
+            --color-primary-dark: #d50000;
+            --color-accent: #ff6e40;
+            --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(255, 23, 68, 0.3);
+            --font-main: 'Titillium Web', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            font-weight: 400;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .topbar {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2.2rem;
+            font-weight: normal;
+            text-decoration: none;
+            color: white;
+            font-family: 'Edwardian Script ITC', 'Snell Roundhand', cursive;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            margin-left: auto;
+            margin-right: 2.5rem;
+            align-items: center;
+        }
+
+        .nav a {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            opacity: 0.8;
+            text-decoration: none;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .nav a:hover, .nav a.active {
+            color: var(--color-primary);
+            opacity: 1;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--color-primary);
+        }
+
+        .page-header {
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: var(--color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rank-badge {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 23, 68, 0.1);
+            border: 2px solid var(--color-primary);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .rank-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .rank-points {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .bio-section {
+            margin-top: 1.5rem;
+        }
+
+        .bio-text {
+            color: var(--color-text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-type {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .activity-points {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            text-align: center;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 23, 68, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .edit-form {
+            display: none;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: var(--font-main);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .message.error {
+            background: rgba(255, 23, 68, 0.1);
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        #avatar-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    cursor: pointer;
+}
+
+#avatar-input:hover {
+    border-color: var(--color-primary);
+}
+
+.profile-avatar {
+    position: relative;
+    overflow: hidden;
+}
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .site-footer {
+            background: #000;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .site-footer small {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 968px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    If you are not redirected automatically, follow this <a href="./homepage">link to the homepage</a>.
-</body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div class="brand">
+                <a href="../homepage">
+                    <div class="logo-mark" style="background: linear-gradient(135deg, #ff1744, #ff6e40);"></div>
+                    <span class="brand-title">Dom Falcone</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="../about">О доме</a>
+                <a href="../history">История</a>
+                <a href="../enemies">Противники</a>
+                <a href="../news">Новости</a>
+                <a href="../photos">Фотоотчет</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-badge" id="points-badge">
+                    <span>⭐</span>
+                    <span id="header-points">0</span>
+                </div>
+                <a href="../dashboard" class="nav a active">Кабинет</a>
+            </div>
+        </div>
+    </header>
 
+    <div class="loading-overlay" id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <h1>Личный кабинет</h1>
+                <p style="color: var(--color-text-muted);">Управление профилем и активностью</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Левая колонка - Профиль -->
+                <div>
+                    <div class="card">
+                        <div id="profile-view">
+                            <div class="profile-avatar" id="avatar-container">
+    <img id="avatar-img" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none;">
+    <span id="avatar-initials">?</span>
+</div>
+                            <div class="profile-name" id="display-name">Загрузка...</div>
+                            <div class="profile-email" id="email">...</div>
+
+                            <div class="rank-badge">
+                                <div class="rank-name" id="rank-name">Загрузка...</div>
+                                <div class="rank-points" id="points">0 очков</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
+                                </div>
+                                <div class="progress-label">
+                                    <span id="progress-current">0</span>
+                                    <span id="progress-next">100</span>
+                                </div>
+                            </div>
+
+                            <div class="bio-section">
+                                <div class="bio-text" id="bio">Биография не указана</div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-primary" id="edit-btn">Редактировать</button>
+                                <button class="btn btn-secondary" id="logout-btn">Выйти</button>
+                            </div>
+                        </div>
+
+                        <div class="edit-form" id="edit-form">
+                            <div class="card-header">
+                                <h3 class="card-title">Редактирование профиля</h3>
+                            </div>
+
+                            <div id="edit-message"></div>
+
+                            <div class="form-group">
+                                <label>Отображаемое имя</label>
+                                <input type="text" id="edit-name" placeholder="Ваше имя">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Биография</label>
+                                <textarea id="edit-bio" placeholder="Расскажите о себе..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+    <label>Аватарка</label>
+    <input type="file" id="avatar-input" accept="image/jpeg,image/png,image/gif,image/webp">
+    <button type="button" class="btn btn-secondary" id="remove-avatar-btn" style="margin-top: 0.5rem;">Удалить аватарку</button>
+</div>
+
+                            <div class="form-group">
+                                <label>Новый пароль (оставьте пустым, если не меняете)</label>
+                                <input type="password" id="edit-password" placeholder="Минимум 8 символов">
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-primary" id="save-btn">Сохранить</button>
+                                <button class="btn btn-secondary" id="cancel-btn">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 2rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">Статистика</h3>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="user-rank">-</div>
+                                <div class="stat-label">Место в рейтинге</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="total-users">-</div>
+                                <div class="stat-label">Всего участников</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая колонка - Активность -->
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Последняя активность</h3>
+                        </div>
+                        <ul class="activity-list" id="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-info">
+                                    <div class="activity-type">Загрузка...</div>
+                                    <div class="activity-time">...</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© Дом Фальконе — 2025. Все права защищены.</small>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+        let token = localStorage.getItem('auth_token') || "";
+        let userData = null;
+        let isLoading = false; // Флаг для предотвращения множественных запросов
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Dashboard loaded, token exists:', !!token);
+            
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = '../login';
+                return;
+            }
+
+            setupEventListeners();
+            
+            // Загружаем данные с обработкой ошибок
+            try {
+                await loadProfile();
+                await loadStats();
+            } catch (err) {
+                console.error('Failed to load dashboard data:', err);
+            }
+        });
+
+        function setupEventListeners() {
+    document.getElementById('edit-btn').addEventListener('click', showEditForm);
+    document.getElementById('cancel-btn').addEventListener('click', hideEditForm);
+    document.getElementById('save-btn').addEventListener('click', saveProfile);
+    document.getElementById('logout-btn').addEventListener('click', logout);
+    
+    // Эти две строки ОБЯЗАТЕЛЬНЫ:
+    document.getElementById('avatar-input').addEventListener('change', uploadAvatar);
+    document.getElementById('remove-avatar-btn').addEventListener('click', deleteAvatar);
+}
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('active', show);
+        }
+
+        async function loadProfile() {
+            if (isLoading) {
+                console.log('Already loading, skipping duplicate request');
+                return;
+            }
+
+            isLoading = true;
+            showLoading(true);
+            
+            try {
+                console.log('=== LOADING PROFILE ===');
+                console.log('Token:', token.substring(0, 20) + '...');
+                console.log('API URL:', API_BASE + "/me");
+                
+                const res = await fetch(API_BASE + "/me", {
+                    headers: { 
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                console.log('Response status:', res.status);
+                console.log('Response headers:', Object.fromEntries(res.headers.entries()));
+
+                // Читаем ответ как текст сначала для диагностики
+                const responseText = await res.text();
+                console.log('Response body (raw):', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                    console.log('Response body (parsed):', data);
+                } catch (parseErr) {
+                    console.error('JSON parse error:', parseErr);
+                    throw new Error('Сервер вернул некорректный JSON: ' + responseText.substring(0, 100));
+                }
+
+                if (!res.ok) {
+                    const errorMsg = data.error || data.message || res.statusText;
+                    console.error('Request failed:', errorMsg);
+                    throw new Error(`Ошибка ${res.status}: ${errorMsg}`);
+                }
+                
+                if (!data || !data.email) {
+                    console.error('Invalid data structure:', data);
+                    throw new Error('Сервер вернул неполные данные профиля');
+                }
+
+                console.log('=== PROFILE LOADED SUCCESSFULLY ===');
+                userData = data;
+                console.log('=== PROFILE LOADED SUCCESSFULLY ===');
+    console.log('Avatar URL from API:', data.avatar_url); // ДОБАВЬ ЭТО
+    userData = data;
+                displayProfile(data);
+            } catch (err) {
+                console.error('=== PROFILE LOAD ERROR ===');
+                console.error('Error type:', err.name);
+                console.error('Error message:', err.message);
+                console.error('Error stack:', err.stack);
+                
+                // Показываем подробное сообщение
+                const errorDetails = `
+Ошибка загрузки профиля:
+${err.message}
+
+Проверьте консоль браузера (F12) для подробностей.
+Вы будете перенаправлены на страницу входа.
+                `;
+                alert(errorDetails.trim());
+                
+                // Удаляем невалидный токен
+                localStorage.removeItem('auth_token');
+                
+                // Даём время прочитать ошибку
+                setTimeout(() => {
+                    window.location.href = '../login';
+                }, 2000);
+            } finally {
+                showLoading(false);
+                isLoading = false;
+            }
+        }
+        
+        async function uploadAvatar(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Проверка типа
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        showMessage('Неподдерживаемый формат. Используйте JPEG, PNG, GIF или WebP', 'error');
+        return;
+    }
+
+    showLoading(true);
+    try {
+        // Сжимаем изображение до 500KB
+        const compressedBlob = await compressImage(file, 500 * 1024);
+        
+        const arrayBuffer = await compressedBlob.arrayBuffer();
+        
+        const res = await fetch(API_BASE + "/avatar", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": compressedBlob.type
+            },
+            body: arrayBuffer
+        });
+
+        console.log('Upload response status:', res.status);
+        const data = await res.json();
+        console.log('Upload response data:', data);
+
+        if (res.ok) {
+            showMessage(data.message, 'success');
+            await loadProfile();
+            hideEditForm();
+        } else {
+            showMessage(data.error || 'Ошибка загрузки', 'error');
+        }
+    } catch (err) {
+        showMessage('Ошибка подключения к серверу', 'error');
+        console.error('Upload error:', err);
+    } finally {
+        showLoading(false);
+        event.target.value = '';
+    }
+}
+
+// НОВАЯ функция для сжатия изображения
+async function compressImage(file, maxSizeBytes) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            const img = new Image();
+            
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Уменьшаем размеры если слишком большие
+                const MAX_WIDTH = 400;
+                const MAX_HEIGHT = 400;
+                
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Начинаем с качества 0.9 и уменьшаем пока не влезет
+                let quality = 0.9;
+                
+                const tryCompress = () => {
+                    canvas.toBlob((blob) => {
+                        if (blob.size <= maxSizeBytes || quality <= 0.1) {
+                            resolve(blob);
+                        } else {
+                            quality -= 0.1;
+                            tryCompress();
+                        }
+                    }, 'image/jpeg', quality);
+                };
+                
+                tryCompress();
+            };
+            
+            img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+            img.src = e.target.result;
+        };
+        
+        reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+        reader.readAsDataURL(file);
+    });
+}
+
+
+async function deleteAvatar() {
+    if (!confirm('Удалить аватарку?')) return;
+
+    showLoading(true);
+    try {
+        const res = await fetch(API_BASE + "/avatar", {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showMessage(data.message, 'success');
+            await loadProfile();
+        } else {
+            showMessage(data.error || 'Ошибка удаления', 'error');
+        }
+    } catch (err) {
+        showMessage('Ошибка подключения к серверу', 'error');
+        console.error(err);
+    } finally {
+        showLoading(false);
+    }
+}
+
+        async function loadStats() {
+            try {
+                console.log('Loading stats...');
+                const res = await fetch(API_BASE + "/stats", {
+                    headers: { 
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log('Stats data received:', data);
+                    document.getElementById('user-rank').textContent = data.user_rank || '-';
+                    document.getElementById('total-users').textContent = data.total_users || '-';
+                } else {
+                    console.warn('Stats request failed:', res.status);
+                }
+            } catch (err) {
+                console.error('Stats load error:', err);
+                // Не критичная ошибка, продолжаем работу
+            }
+        }
+
+        function displayProfile(data) {
+    console.log('Displaying profile for:', data.email);
+    console.log('Avatar URL:', data.avatar_url); // Для отладки
+    
+    // Аватарка с изображением или инициалами
+    const avatarImg = document.getElementById('avatar-img');
+    const avatarInitials = document.getElementById('avatar-initials');
+    
+    // Проверяем наличие аватарки (может быть URL или Base64)
+    if (data.avatar_url && data.avatar_url.trim()) {
+        avatarImg.src = data.avatar_url;
+        avatarImg.style.display = 'block';
+        avatarInitials.style.display = 'none';
+        avatarImg.onerror = function() {
+            // Если изображение не загрузилось, показываем инициалы
+            console.error('Failed to load avatar image');
+            avatarImg.style.display = 'none';
+            avatarInitials.style.display = 'block';
+        };
+    } else {
+        const initials = data.display_name ? data.display_name[0].toUpperCase() : '?';
+        avatarInitials.textContent = initials;
+        avatarImg.style.display = 'none';
+        avatarInitials.style.display = 'block';
+    }
+
+    // Основная информация
+    document.getElementById('display-name').textContent = data.display_name || 'Аноним';
+    document.getElementById('email').textContent = data.email;
+    document.getElementById('rank-name').textContent = data.rank || 'Новичок';
+    document.getElementById('points').textContent = `${data.points || 0} очков`;
+    document.getElementById('header-points').textContent = data.points || 0;
+
+    // Прогресс
+    if (data.progress) {
+        document.getElementById('progress-bar').style.width = data.progress.progress + '%';
+        document.getElementById('progress-current').textContent = data.progress.current;
+        document.getElementById('progress-next').textContent = 
+            data.progress.next === Infinity ? '∞' : data.progress.next;
+    }
+
+    // Биография
+    document.getElementById('bio').textContent = data.bio || 'Биография не указана';
+
+    // Активность
+    displayActivity(data.recent_activity || []);
+}
+
+        function displayActivity(activities) {
+            const list = document.getElementById('activity-list');
+            
+            if (activities.length === 0) {
+                list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Активность не найдена</div></div></li>';
+                return;
+            }
+
+            const activityNames = {
+                'registration': 'Регистрация',
+                'daily_visit': 'Ежедневное посещение',
+                'post': 'Создание поста',
+                'comment': 'Комментарий',
+                'like': 'Лайк'
+            };
+
+            list.innerHTML = activities.map(activity => {
+                const date = new Date(activity.created_at).toLocaleString('ru-RU');
+                const name = activityNames[activity.activity_type] || activity.activity_type;
+                
+                return `
+                    <li class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-type">${name}</div>
+                            <div class="activity-time">${date}</div>
+                        </div>
+                        <div class="activity-points">+${activity.points_earned}</div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function showEditForm() {
+            document.getElementById('profile-view').style.display = 'none';
+            document.getElementById('edit-form').classList.add('active');
+
+            // Заполняем форму текущими данными
+            document.getElementById('edit-name').value = userData.display_name || '';
+            document.getElementById('edit-bio').value = userData.bio || '';
+            document.getElementById('edit-password').value = '';
+            document.getElementById('edit-message').innerHTML = '';
+        }
+
+        function hideEditForm() {
+            document.getElementById('profile-view').style.display = 'block';
+            document.getElementById('edit-form').classList.remove('active');
+        }
+
+        async function saveProfile() {
+            const displayName = document.getElementById('edit-name').value.trim();
+            const bio = document.getElementById('edit-bio').value.trim();
+            const newPassword = document.getElementById('edit-password').value;
+
+            const updates = {};
+            if (displayName) updates.displayName = displayName;
+            if (bio) updates.bio = bio;
+            if (newPassword) {
+                if (newPassword.length < 8) {
+                    showMessage('Пароль должен содержать минимум 8 символов', 'error');
+                    return;
+                }
+                updates.newPassword = newPassword;
+            }
+
+            if (Object.keys(updates).length === 0) {
+                showMessage('Нечего сохранять', 'error');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const res = await fetch(API_BASE + "/me", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showMessage('Профиль успешно обновлен!', 'success');
+                    setTimeout(async () => {
+                        await loadProfile();
+                        hideEditForm();
+                    }, 1500);
+                } else {
+                    showMessage(data.error || 'Ошибка обновления', 'error');
+                }
+            } catch (err) {
+                showMessage('Ошибка подключения к серверу', 'error');
+                console.error(err);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('edit-message');
+            messageDiv.className = 'message ' + type;
+            messageDiv.textContent = text;
+        }
+
+        function logout() {
+            console.log('Logging out...');
+            localStorage.removeItem('auth_token');
+            window.location.href = '../login';
+        }
+    </script>
+</body>
 </html>
