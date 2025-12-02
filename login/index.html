@@ -520,13 +520,13 @@
                 </a>
             </div>
             <nav class="nav">
-                <a href="about.html">О доме</a>
-                <a href="history.html">История</a>
-                <a href="enemies.html">Противники</a>
-                <a href="news.html">Новости</a>
+                <a href="../about">О доме</a>
+                <a href="../history">История</a>
+                <a href="../enemies">Противники</a>
+                <a href="../news" class="active">Новости</a>
             </nav>
             <div class="auth-action">
-                <a href="login.html" class="btn-login active" id="auth-btn">Войти</a>
+                <a href="../login" class="btn-login" id="auth-btn">Войти</a>
             </div>
         </div>
     </header>
@@ -647,7 +647,7 @@
                 });
 
                 if (res.ok) {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '../dashboard';
                 } else {
                     localStorage.removeItem('auth_token');
                     token = "";
@@ -796,7 +796,7 @@
                     localStorage.setItem('auth_token', token);
                     
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '../dashboard';
                     }, 100);
                 } else {
                     document.getElementById('login-error').textContent = data.error || 'Неверный email или пароль';
