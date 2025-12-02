@@ -534,3 +534,67 @@ function updateStrangerTimer() {
 
 setInterval(updateStrangerTimer, 1000);
 document.addEventListener('DOMContentLoaded', updateStrangerTimer);
+
+// Add Site Version Label
+document.addEventListener('DOMContentLoaded', () => {
+    const footerContainer = document.querySelector('.site-footer .container');
+    if (footerContainer) {
+        const versionDiv = document.createElement('div');
+        versionDiv.className = 'site-version';
+        versionDiv.textContent = 'Версия сайта: 1.3.2';
+        footerContainer.appendChild(versionDiv);
+    }
+});
+// --- Page Loader Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('page-loader');
+
+    if (loader) {
+        // Minimum load time set to 0 for immediate dismissal
+        const minLoadTime = 0;
+        const startTime = Date.now();
+
+        window.addEventListener('load', () => {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, minLoadTime - elapsedTime);
+
+            setTimeout(() => {
+                loader.classList.add('loaded');
+                // Stop loader audio if playing
+                const loaderAudio = document.getElementById('loader-audio');
+                if (loaderAudio) {
+                    loaderAudio.pause();
+                    loaderAudio.currentTime = 0; // Optional: reset to start
+                }
+            }, remainingTime);
+        });
+
+        // Loader Hymn Player
+        const loaderAudio = document.getElementById('loader-audio');
+        const loaderPlayBtn = document.getElementById('loader-play-btn');
+        const loaderProgress = document.getElementById('loader-progress');
+        const loaderPlayerContainer = document.querySelector('.loader-player-container');
+
+        if (loaderAudio && loaderPlayBtn && loaderProgress) {
+            loaderPlayBtn.addEventListener('click', () => {
+                if (loaderAudio.paused) {
+                    loaderAudio.play();
+                    loaderPlayerContainer.classList.add('playing');
+                } else {
+                    loaderAudio.pause();
+                    loaderPlayerContainer.classList.remove('playing');
+                }
+            });
+
+            loaderAudio.addEventListener('timeupdate', () => {
+                const percent = (loaderAudio.currentTime / loaderAudio.duration) * 100;
+                loaderProgress.style.width = percent + '%';
+            });
+
+            loaderAudio.addEventListener('ended', () => {
+                loaderPlayerContainer.classList.remove('playing');
+                loaderProgress.style.width = '0%';
+            });
+        }
+    }
+});
