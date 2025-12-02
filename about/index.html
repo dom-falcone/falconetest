@@ -31,6 +31,7 @@
             </div>
         </div>
     </div>
+    
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
@@ -46,18 +47,10 @@
                 <a href="../history">История</a>
                 <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
-                <div class="user-menu" id="user-menu" style="display: none;">
-    <div class="user-menu" id="user-menu" style="display: none;">
-    <div class="user-badge">
-        <span>⭐</span>
-        <span id="header-points">0</span>
-    </div>
-    <a href="../dashboard">Кабинет</a>
-    <a href="../login" onclick="localStorage.removeItem('auth_token')">Выход</a>
-</div>
             </nav>
             <div class="auth-action">
-                <a href="../login" class="btn-login" id="auth-btn">Войти</a>
+                <!-- Динамически заполняется скриптом auth-header.js -->
+                <a href="../login" class="btn-login">Войти</a>
             </div>
         </div>
     </header>
@@ -152,34 +145,11 @@
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
+    <!-- Основные скрипты сайта -->
     <script src="../assets/js/main.js"></script>
+    
+    <!-- Скрипт для проверки авторизации и отображения профиля в шапке -->
+    <script src="../assets/js/auth-header.js"></script>
 </body>
 
-<script>
-
-const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-    
-    // Проверка авторизации для показа кнопки личного кабинета
-const token = localStorage.getItem('auth_token');
-if (token) {
-    document.getElementById('user-menu').style.display = 'flex';
-    
-    // Загрузить очки пользователя
-    fetch('https://dom-falcone-auth.dom-falcone-official.workers.dev/api/me', {
-        headers: { 'Authorization': 'Bearer ' + token }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.points) {
-            document.getElementById('header-points').textContent = data.points;
-        }
-    })
-    .catch(() => {
-        localStorage.removeItem('auth_token');
-        document.getElementById('user-menu').style.display = 'none';
-    });
-}
-    
-</script>
-    
 </html>
