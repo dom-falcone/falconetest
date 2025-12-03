@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=3">
+    <link rel="stylesheet" href="../assets/css/style.css?v=1">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
 </head>
 
@@ -79,91 +79,92 @@
                 </div>
             </div>
         </div>
-        <!-- Footer -->
-        <footer class="site-footer">
-            <div class="container">
-                <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
-                <div class="site-version"></div>
-                <div class="footer-links">
-                    <a href="../privacy">Политика конфиденциальности</a>
-                    <a href="../agreement">Пользовательское соглашение</a>
-                    <a href="../imprint">Сведения о владельце сайта</a>
-                    <a href="../hymn">Логотип и Гимн</a>
-                </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <div class="site-version"></div>
+            <div class="footer-links">
+                <a href="../privacy">Политика конфиденциальности</a>
+                <a href="../agreement">Пользовательское соглашение</a>
+                <a href="../imprint">Сведения о владельце сайта</a>
+                <a href="../hymn">Логотип и Гимн</a>
             </div>
-        </footer>
-        <script src="../assets/js/main.js?v=3"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const audio = document.getElementById('hymn-audio');
-                const playBtn = document.getElementById('playBtn');
-                const progressLine = document.getElementById('progressLine');
-                const playerContainer = document.querySelector('.triangle-player');
-                const volumeSlider = document.getElementById('volumeSlider');
-                const progressContainer = document.querySelector('.player-line-container');
+        </div>
+    </footer>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('hymn-audio');
+            const playBtn = document.getElementById('playBtn');
+            const progressLine = document.getElementById('progressLine');
+            const playerContainer = document.querySelector('.triangle-player');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const progressContainer = document.querySelector('.player-line-container');
 
-                // Set initial volume
-                audio.volume = 0.5;
+            // Set initial volume
+            audio.volume = 0.5;
 
-                playBtn.addEventListener('click', () => {
-                    if (audio.paused) {
-                        audio.play();
-                        playerContainer.classList.add('playing');
-                    } else {
-                        audio.pause();
-                        playerContainer.classList.remove('playing');
-                    }
-                });
-
-                audio.addEventListener('timeupdate', () => {
-                    const percent = (audio.currentTime / audio.duration) * 100;
-                    progressLine.style.width = percent + '%';
-                });
-
-                audio.addEventListener('ended', () => {
+            playBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    playerContainer.classList.add('playing');
+                } else {
+                    audio.pause();
                     playerContainer.classList.remove('playing');
-                    progressLine.style.width = '0%';
-                });
-
-                // Volume Control
-                volumeSlider.addEventListener('input', (e) => {
-                    audio.volume = e.target.value;
-                });
-
-                // Interactive Progress Bar (Seeking & Dragging)
-                progressContainer.style.cursor = 'pointer';
-
-                const updateProgress = (e) => {
-                    const rect = progressContainer.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const width = rect.width;
-                    const duration = audio.duration;
-
-                    // Clamp between 0 and duration
-                    let newTime = (clickX / width) * duration;
-                    newTime = Math.max(0, Math.min(newTime, duration));
-
-                    audio.currentTime = newTime;
-                };
-
-                let isDragging = false;
-
-                progressContainer.addEventListener('mousedown', (e) => {
-                    isDragging = true;
-                    updateProgress(e);
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging) {
-                        updateProgress(e);
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    isDragging = false;
-                });
+                }
             });
-        </script>
+
+            audio.addEventListener('timeupdate', () => {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressLine.style.width = percent + '%';
+            });
+
+            audio.addEventListener('ended', () => {
+                playerContainer.classList.remove('playing');
+                progressLine.style.width = '0%';
+            });
+
+            // Volume Control
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value;
+            });
+
+            // Interactive Progress Bar (Seeking & Dragging)
+            progressContainer.style.cursor = 'pointer';
+
+            const updateProgress = (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const duration = audio.duration;
+
+                // Clamp between 0 and duration
+                let newTime = (clickX / width) * duration;
+                newTime = Math.max(0, Math.min(newTime, duration));
+
+                audio.currentTime = newTime;
+            };
+
+            let isDragging = false;
+
+            progressContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateProgress(e);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    updateProgress(e);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        });
+    </script>
 </body>
 
 </html>
