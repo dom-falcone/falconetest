@@ -376,6 +376,69 @@
             flex: 1;
         }
 
+            /* Floating Contact Button */
+.floating-contact-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--gradient-primary);
+    border-radius: 50px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    text-decoration: none;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+}
+
+.floating-contact-btn img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+    transition: transform 0.6s ease;
+}
+
+.floating-contact-btn .btn-text {
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.6s ease;
+    width: 0;
+    overflow: hidden;
+    margin-top: -1px;
+    margin-left: -8px;
+}
+
+.floating-contact-btn:hover {
+    width: 245px;
+    padding: 12px 20px;
+    gap: 12px;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(255, 23, 68, 0.5);
+}
+
+.floating-contact-btn:hover img {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.floating-contact-btn:hover .btn-text {
+    opacity: 1;
+    transform: translateX(0);
+    width: auto;
+}
+
         .edit-form {
             display: none;
         }
@@ -658,9 +721,21 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© Дом Фальконе — 2025. Все права защищены.</small>
+            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <div class="site-version"></div>
+            <div class="footer-links">
+                <a href="../privacy">Политика конфиденциальности</a>
+                <a href="../agreement">Пользовательское соглашение</a>
+                <a href="../imprint">Сведения о владельце сайта</a>
+                <a href="../hymn">Герб и Гимн</a>
+            </div>
         </div>
     </footer>
+
+    <a href="../contact" class="floating-contact-btn">
+        <img src="../assets/images/phone-icon.png" alt="Contact">
+        <span class="btn-text">Связаться с Домом</span>
+    </a>
 
     <script>
         const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
