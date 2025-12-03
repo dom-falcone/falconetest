@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ru">
-
+    
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -639,7 +639,7 @@
                 });
 
                 if (res.ok) {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '../dashboard';
                 } else {
                     localStorage.removeItem('auth_token');
                     token = "";
@@ -799,7 +799,7 @@
                     localStorage.setItem('auth_token', token);
                     
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '../dashboard';
                     }, 100);
                 } else {
                     document.getElementById('named-error').textContent = data.error || 'Неверный пароль';
@@ -840,7 +840,7 @@
                     localStorage.setItem('auth_token', token);
                     
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '../dashboard';
                     }, 100);
                 } else {
                     document.getElementById('login-error').textContent = data.error || 'Неверный email или пароль';
