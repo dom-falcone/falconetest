@@ -275,10 +275,10 @@
                 <h2 class="section-title underline-text">Выберите личность</h2>
 
                 <div class="user-selection-grid">
-                    <button class="user-btn" data-user="Don Falcone" data-email="don@falcone.family">Don Falcone</button>
-                    <button class="user-btn" data-user="Antone Snusone" data-email="antone@falcone.family">Antone Snusone</button>
-                    <button class="user-btn" data-user="Dimone de Patrone" data-email="dimone@falcone.family">Dimone de Patrone</button>
-                    <button class="user-btn" data-user="Maxone Povarone" data-email="maxone@falcone.family">Maxone Povarone</button>
+                    <button class="user-btn" data-user="Don Falcone" data-user-id="3">Don Falcone</button>
+                    <button class="user-btn" data-user="Antone Snusone" data-user-id="5">Antone Snusone</button>
+                    <button class="user-btn" data-user="Dimone de Patrone" data-user-id="1">Dimone de Patrone</button>
+                    <button class="user-btn" data-user="Maxone Povarone" data-user-id="4">Maxone Povarone</button>
                     <button class="user-btn" data-user="Gast">Gast</button>
                 </div>
 
@@ -362,7 +362,7 @@
         // ВАЖНО: Замените на URL вашего Cloudflare Worker
         const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
 
-        let selectedUserEmail = null;
+        let selectedUserId = null;
 
         // Обработчики для выбора пользователя
         document.querySelectorAll('.user-btn').forEach(btn => {
