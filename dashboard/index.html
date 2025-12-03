@@ -645,6 +645,16 @@
     border: 1px solid rgba(255, 23, 68, 0.3);
     border-radius: 30px;
     position: relative;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.user-profile-info:hover {
+    background: rgba(255, 23, 68, 0.2);
+    border-color: rgba(255, 23, 68, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
 }
 
 .user-profile-info::before {
@@ -739,16 +749,16 @@
                 <a href="../news">Новости</a>
             </nav>
             <div class="user-menu" id="user-menu" style="display: none;">
-    <div class="user-profile-info">
-        <img src="" alt="Avatar" id="header-avatar" class="header-avatar" href="../login">
+    <a href="../dashboard" class="user-profile-info">
+        <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
         <div class="user-details">
-            <span class="user-display-name" id="header-display-name" href="../login">User</span>
+            <span class="user-display-name" id="header-display-name">User</span>
             <div class="user-points-badge">
                 <span>⭐</span>
                 <span id="header-points">0</span>
             </div>
         </div>
-    </div>
+    </a>
 </div>
         </div>
     </header>
