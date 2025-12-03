@@ -1,22 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Contact - Dom Falcone</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сведения о владельце сайта | Dom Falcone</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
-    <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function () {
-            // https://dashboard.emailjs.com/admin/account
-            emailjs.init("I1EQ9ZhEOav8ZeREO");
-        })();
-    </script>
+
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -38,6 +31,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Header -->
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
@@ -60,39 +55,44 @@
         </div>
     </header>
 
-    <div class="page-header">
-        <div class="container">
-            <h1>Связаться с Домом</h1>
-            <p>Отправь свое послание Дону Фальконе и его семье</p>
-        </div>
-    </div>
+    <!-- Main Content -->
+    <main class="agreement-section">
+        <div class="agreement-container" style="text-align: center;">
+            <h1 class="page-title"
+                style="display: inline-block; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; margin-bottom: 3rem;">
+                Сведения о владельце сайта</h1>
 
-    <main class="content-section">
-        <div class="container">
-            <div class="content-block animate-fade-up" style="max-width: 1000px; margin: 0 auto;">
-                <form class="contact-form" id="contactForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="birth-name">Имя, данное при рождении:</label>
-                            <input type="text" id="birth-name" name="birth-name" placeholder="Введите ваше имя"
-                                required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="official-letter">Официальное письмо в Дом (соблюдаем структуру):</label>
-                            <textarea id="official-letter" name="official-letter" rows="10"
-                                placeholder="Изложите суть вашего обращения..." required></textarea>
-                        </div>
+            <div class="agreement-text">
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 2rem;">
+                    <div class="logo-mark"
+                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover; width: 60px; height: 60px;">
                     </div>
+                    <span
+                        style="font-family: 'Edwardian Script ITC', 'Snell Roundhand', 'Savoye LET', 'Brush Script MT', cursive; font-size: 3.5rem; color: #fff; line-height: 1;">Dom
+                        Falcone</span>
+                </div>
 
-                    <div style="text-align: center; margin-top: 2rem;">
-                        <button type="submit" class="btn btn-primary">Отправить послание</button>
-                    </div>
-                </form>
+                <h2>Представители</h2>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>Гуменюк Аркадий Павлович</li>
+                    <li>Мунтян Дмитрий Андреевич</li>
+                    <li>Агешин Антон Валерьевич</li>
+                    <li>Максим Кудыш Олександрович</li>
+                </ul>
+
+                <h2>Адрес</h2>
+                <p>Ул. Деревянко 4,<br>
+                    г. Харьков 61000, Украина</p>
+
+                <h2>Контакты</h2>
+                <p>Связаться с Домом вы можете на странице <a href="../contact"
+                        style="color: var(--color-primary); text-decoration: none;">«Связаться с Домом»</a>.</p>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
             <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
@@ -105,6 +105,12 @@
             </div>
         </div>
     </footer>
+
+    <a href="../contact" class="floating-contact-btn">
+        <img src="../assets/images/phone-icon.png" alt="Contact">
+        <span class="btn-text">Связаться с Домом</span>
+    </a>
+
     <script src="../assets/js/main.js?v=3"></script>
 </body>
 

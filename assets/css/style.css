@@ -438,7 +438,7 @@ a {
 .site-footer {
     background: #000;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 4rem 0;
+    padding: 1.5rem 0 1rem 0;
     text-align: center;
     margin-top: 4rem;
 }
@@ -446,6 +446,40 @@ a {
 .site-footer small {
     color: var(--color-text-muted);
     font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--color-primary);
+}
+
+.site-version {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-bottom: 0;
 }
 
 /* Animations */
@@ -2179,4 +2213,113 @@ a {
     background: #d50000;
     box-shadow: 0 0 10px #d50000;
     transition: width 0.1s linear;
+}
+
+/* User Agreement Page - Integrated Design */
+.agreement-section {
+    padding: 120px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    /* Removed heavy gradient background */
+}
+
+.agreement-container {
+    background: var(--color-surface);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 900px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    color: #e0e0e0;
+    /* Removed animations and heavy glassmorphism */
+}
+
+.agreement-container .page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 1.4;
+    /* Removed gradient text */
+}
+
+.agreement-text {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+.agreement-text h2 {
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+    /* Removed decorative ::after */
+}
+
+.agreement-text h3 {
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.agreement-text p {
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.agreement-text ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    list-style: decimal;
+    /* Reverted to standard numbers */
+}
+
+.agreement-text li {
+    margin-bottom: 0.5rem;
+    color: #ccc;
+    /* Removed custom bullet styling */
+}
+
+.agreement-text .quote {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    border: 1px solid rgba(213, 0, 0, 0.3);
+    border-radius: 10px;
+    background: rgba(213, 0, 0, 0.05);
+    color: #fff;
+    /* Simplified quote style */
+}
+
+.agreement-actions {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.agree-btn {
+    min-width: 240px;
+    font-size: 1.2rem;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(135deg, var(--color-primary), #8b0000);
+    border: none;
+    box-shadow: 0 10px 30px rgba(213, 0, 0, 0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+}
+
+.agree-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(213, 0, 0, 0.5);
+    background: linear-gradient(135deg, #ff1a1a, #b30000);
 }

@@ -8,220 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=1">
+    <link rel="stylesheet" href="../assets/css/style.css?v=3">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
-    <style>
-        .user-selection-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .user-btn {
-            padding: 15px 20px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-        }
-
-        .user-btn:hover {
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-        }
-
-        .user-btn.selected {
-            background: #d4af37;
-            color: #1a1a1a;
-        }
-
-        .guest-auth-container {
-            display: none;
-            margin-top: 30px;
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            border: 1px solid #d4af37;
-        }
-
-        .guest-auth-container.active {
-            display: block;
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #d4af37;
-        }
-
-        .tab-btn {
-            padding: 12px 25px;
-            background: transparent;
-            border: none;
-            color: #999;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-        }
-
-        .tab-btn.active {
-            color: #d4af37;
-            border-bottom-color: #d4af37;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #d4af37;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #555;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #d4af37;
-        }
-
-        .error-message {
-            color: #ff4444;
-            font-size: 14px;
-            margin: 10px 0;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        .success-message {
-            color: #44ff44;
-            font-size: 14px;
-            margin: 10px 0;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
-            color: #1a1a1a;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.5);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-back {
-            margin-top: 20px;
-            width: auto;
-            background: transparent;
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-back:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        .login-form-group {
-            display: none;
-            margin-top: 30px;
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            border: 1px solid #d4af37;
-        }
-
-        .login-form-group.active {
-            display: block;
-        }
-
-        .selected-user-display {
-            text-align: center;
-            margin: 20px 0 0 0;
-            padding: 15px;
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 8px;
-            display: none;
-        }
-
-        .selected-user-display.active {
-            display: block;
-        }
-
-        .selected-user-display h3 {
-            color: #d4af37;
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-    </style>
 </head>
 
 <body>
+    <!-- Page Loader -->
     <div id="page-loader">
         <div class="loader-content">
             <div class="loader-text">Ждать. Идет загрузка.</div>
@@ -275,14 +67,14 @@
                 <h2 class="section-title underline-text">Выберите личность</h2>
 
                 <div class="user-selection-grid">
-                    <button class="user-btn" data-user="Don Falcone" data-user-id="3">Don Falcone</button>
-                    <button class="user-btn" data-user="Antone Snusone" data-user-id="5">Antone Snusone</button>
-                    <button class="user-btn" data-user="Dimone de Patrone" data-user-id="1">Dimone de Patrone</button>
-                    <button class="user-btn" data-user="Maxone Povarone" data-user-id="4">Maxone Povarone</button>
+                    <button class="user-btn" data-user="Don Falcone">Don Falcone</button>
+                    <button class="user-btn" data-user="Antone Snusone">Antone Snusone</button>
+                    <button class="user-btn" data-user="Dimone de Patrone">Dimone de Patrone</button>
+                    <button class="user-btn" data-user="Maxone Povarone">Maxone Povarone</button>
                     <button class="user-btn" data-user="Gast">Gast</button>
                 </div>
 
-                <!-- Guest Auth Container -->
+                <!-- Guest Auth Container (Hidden by default) -->
                 <div class="guest-auth-container" id="guest-auth-container">
                     <div class="auth-tabs">
                         <button class="tab-btn active" data-tab="login">Вход</button>
@@ -313,7 +105,7 @@
                             <input type="email" id="reg-email" placeholder="your@email.com" autocomplete="email">
                         </div>
                         <div class="form-group">
-                            <label for="reg-password">Пароль (минимум 8 символов)</label>
+                            <label for="reg-password">Пароль</label>
                             <input type="password" id="reg-password" placeholder="Создайте пароль"
                                 autocomplete="new-password">
                         </div>
@@ -327,21 +119,14 @@
                         <button class="btn btn-primary" id="register-btn">Зарегистрироваться</button>
                     </div>
 
-                    <button class="btn-back" id="back-to-selection">← Назад к выбору</button>
+                    <button class="btn-back" id="back-to-selection">← Назад</button>
                 </div>
 
-                <!-- Legacy Password Input -->
-                <div class="selected-user-display" id="selected-user-display">
-                    <h3 id="selected-user-name"></h3>
-                </div>
+                <!-- Legacy Password Input (For other users) -->
                 <div class="login-form-group" id="legacy-login-group">
-                    <div class="form-group">
-                        <label for="password-input">Пароль</label>
-                        <input type="password" id="password-input" placeholder="Введите пароль" disabled>
-                    </div>
+                    <input type="password" id="password-input" placeholder="Введите пароль" disabled>
                     <div class="error-message" id="legacy-login-error"></div>
                     <button id="login-submit-btn" class="btn btn-primary" disabled>Войти</button>
-                    <button class="btn-back" id="legacy-back-btn">← Назад к выбору</button>
                 </div>
             </div>
         </div>
@@ -350,6 +135,13 @@
     <footer class="site-footer">
         <div class="container">
             <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <div class="site-version"></div>
+            <div class="footer-links">
+                <a href="../privacy">Политика конфиденциальности</a>
+                <a href="../agreement">Пользовательское соглашение</a>
+                <a href="../imprint">Сведения о владельце сайта</a>
+                <a href="../hymn">Логотип и Гимн</a>
+            </div>
         </div>
     </footer>
 
@@ -358,288 +150,7 @@
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
-    <script>
-        // ВАЖНО: Замените на URL вашего Cloudflare Worker
-        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-
-        let selectedUserId = null;
-
-        // Обработчики для выбора пользователя
-        document.querySelectorAll('.user-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const userName = this.getAttribute('data-user');
-                const userEmail = this.getAttribute('data-email');
-                
-                document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                document.getElementById('guest-auth-container').classList.remove('active');
-                document.getElementById('legacy-login-group').classList.remove('active');
-                document.getElementById('selected-user-display').classList.remove('active');
-                
-                if (userName === 'Gast') {
-                    document.getElementById('guest-auth-container').classList.add('active');
-                    selectedUserEmail = null;
-                } else {
-                    selectedUserEmail = userEmail;
-                    document.getElementById('selected-user-name').textContent = `Вход как ${userName}`;
-                    document.getElementById('selected-user-display').classList.add('active');
-                    document.getElementById('legacy-login-group').classList.add('active');
-                    document.getElementById('password-input').disabled = false;
-                    document.getElementById('login-submit-btn').disabled = false;
-                    document.getElementById('password-input').focus();
-                }
-            });
-        });
-
-        // Вход для известных пользователей (Don Falcone и др.)
-        document.getElementById('login-submit-btn').addEventListener('click', async function() {
-            const password = document.getElementById('password-input').value;
-            const errorDiv = document.getElementById('legacy-login-error');
-            const submitBtn = this;
-            
-            errorDiv.classList.remove('show');
-            
-            if (!password) {
-                errorDiv.textContent = 'Введите пароль';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Вход...';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: selectedUserEmail,
-                        password: password
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Сохраняем токен и данные пользователя
-                    localStorage.setItem('authToken', data.token);
-                    localStorage.setItem('userEmail', data.user.email);
-                    localStorage.setItem('userName', data.user.display_name);
-                    localStorage.setItem('userRole', data.user.role);
-                    
-                    // Перенаправляем на главную страницу
-                    window.location.href = '../dashboard';
-                } else {
-                    errorDiv.textContent = data.error || 'Неверный пароль';
-                    errorDiv.classList.add('show');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                errorDiv.textContent = 'Ошибка подключения к серверу';
-                errorDiv.classList.add('show');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Войти';
-            }
-        });
-
-        // Переключение табов для гостей
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tab = this.getAttribute('data-tab');
-                
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-                document.querySelectorAll('.error-message').forEach(err => err.classList.remove('show'));
-                document.querySelectorAll('.success-message').forEach(msg => msg.classList.remove('show'));
-                
-                if (tab === 'login') {
-                    document.getElementById('login-form').classList.add('active');
-                } else {
-                    document.getElementById('register-form').classList.add('active');
-                }
-            });
-        });
-
-        // Вход для гостей
-        document.getElementById('login-btn').addEventListener('click', async function() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            const errorDiv = document.getElementById('login-error');
-            const loginBtn = this;
-            
-            errorDiv.classList.remove('show');
-            
-            if (!email || !password) {
-                errorDiv.textContent = 'Заполните все поля';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Вход...';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    localStorage.setItem('authToken', data.token);
-                    localStorage.setItem('userEmail', data.user.email);
-                    localStorage.setItem('userName', data.user.display_name);
-                    localStorage.setItem('userRole', data.user.role);
-                    window.location.href = '../dashboard';
-                } else {
-                    errorDiv.textContent = data.error || 'Неверный email или пароль';
-                    errorDiv.classList.add('show');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                errorDiv.textContent = 'Ошибка подключения к серверу';
-                errorDiv.classList.add('show');
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'Войти';
-            }
-        });
-
-        // Регистрация для гостей
-        document.getElementById('register-btn').addEventListener('click', async function() {
-            const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-password-confirm').value;
-            const errorDiv = document.getElementById('register-error');
-            const successDiv = document.getElementById('register-success');
-            const registerBtn = this;
-            
-            errorDiv.classList.remove('show');
-            successDiv.classList.remove('show');
-            
-            if (!name || !email || !password || !confirmPassword) {
-                errorDiv.textContent = 'Заполните все поля';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                errorDiv.textContent = 'Пароли не совпадают';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            if (password.length < 8) {
-                errorDiv.textContent = 'Пароль должен быть минимум 8 символов';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            registerBtn.disabled = true;
-            registerBtn.textContent = 'Регистрация...';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        email, 
-                        password,
-                        displayName: name
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    successDiv.textContent = data.message || 'Регистрация успешна! Теперь можете войти';
-                    successDiv.classList.add('show');
-                    
-                    // Очищаем поля
-                    document.getElementById('reg-name').value = '';
-                    document.getElementById('reg-email').value = '';
-                    document.getElementById('reg-password').value = '';
-                    document.getElementById('reg-password-confirm').value = '';
-                    
-                    // Переключаемся на вход через 2 секунды
-                    setTimeout(() => {
-                        document.querySelector('.tab-btn[data-tab="login"]').click();
-                    }, 2000);
-                } else {
-                    errorDiv.textContent = data.error || 'Ошибка регистрации';
-                    errorDiv.classList.add('show');
-                }
-            } catch (error) {
-                console.error('Register error:', error);
-                errorDiv.textContent = 'Ошибка подключения к серверу';
-                errorDiv.classList.add('show');
-            } finally {
-                registerBtn.disabled = false;
-                registerBtn.textContent = 'Зарегистрироваться';
-            }
-        });
-
-        // Кнопки "Назад"
-        document.getElementById('back-to-selection').addEventListener('click', function() {
-            document.getElementById('guest-auth-container').classList.remove('active');
-            document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
-            document.querySelectorAll('.error-message').forEach(err => err.classList.remove('show'));
-            document.querySelectorAll('.success-message').forEach(msg => msg.classList.remove('show'));
-            document.getElementById('login-email').value = '';
-            document.getElementById('login-password').value = '';
-        });
-
-        document.getElementById('legacy-back-btn').addEventListener('click', function() {
-            document.getElementById('legacy-login-group').classList.remove('active');
-            document.getElementById('selected-user-display').classList.remove('active');
-            document.getElementById('password-input').value = '';
-            document.getElementById('legacy-login-error').classList.remove('show');
-            document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
-            selectedUserEmail = null;
-        });
-
-        // Обработка Enter
-        document.getElementById('password-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !this.disabled) {
-                document.getElementById('login-submit-btn').click();
-            }
-        });
-
-        document.getElementById('login-password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('login-btn').click();
-            }
-        });
-
-        document.getElementById('reg-password-confirm').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('register-btn').click();
-            }
-        });
-
-        // Проверка авторизации при загрузке
-        window.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                // Если уже авторизован, перенаправляем на главную
-                window.location.href = '../dashboard';
-            }
-        });
-    </script>
-    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/main.js?v=3"></script>
 </body>
 
 </html>

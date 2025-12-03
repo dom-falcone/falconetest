@@ -1,22 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Contact - Dom Falcone</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доступ закрыт | Dom Falcone</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
-    <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function () {
-            // https://dashboard.emailjs.com/admin/account
-            emailjs.init("I1EQ9ZhEOav8ZeREO");
-        })();
-    </script>
+
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -38,6 +31,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Header -->
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
@@ -60,39 +55,34 @@
         </div>
     </header>
 
-    <div class="page-header">
-        <div class="container">
-            <h1>Связаться с Домом</h1>
-            <p>Отправь свое послание Дону Фальконе и его семье</p>
-        </div>
-    </div>
+    <!-- Main Content -->
+    <main class="agreement-section">
+        <div class="agreement-container" style="text-align: center;">
+            <div style="text-align: center;">
+                <h1 class="page-title"
+                    style="display: inline-block; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; margin-bottom: 3rem;">
+                    Доступ закрыт</h1>
+            </div>
 
-    <main class="content-section">
-        <div class="container">
-            <div class="content-block animate-fade-up" style="max-width: 1000px; margin: 0 auto;">
-                <form class="contact-form" id="contactForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="birth-name">Имя, данное при рождении:</label>
-                            <input type="text" id="birth-name" name="birth-name" placeholder="Введите ваше имя"
-                                required>
-                        </div>
+            <div class="agreement-text">
+                <p style="font-size: 1.2rem; margin-bottom: 3rem;">Если вы отказались принять Соглашение, то путь на
+                    сайт для вас закрыт. Но, раз уж вы столь храбро нажали «Нет», наслаждайтесь этим мультфильмом. Дом
+                    Фальконе великодушен даже к тем, кто делает странные выборы.</p>
 
-                        <div class="form-group">
-                            <label for="official-letter">Официальное письмо в Дом (соблюдаем структуру):</label>
-                            <textarea id="official-letter" name="official-letter" rows="10"
-                                placeholder="Изложите суть вашего обращения..." required></textarea>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 2rem;">
-                        <button type="submit" class="btn btn-primary">Отправить послание</button>
-                    </div>
-                </form>
+                <div
+                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);">
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                        src="https://www.youtube.com/embed/MpovOWBY50Q?si=-OELtzNNw2T28U6H" title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
+                </div>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
             <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
@@ -105,6 +95,12 @@
             </div>
         </div>
     </footer>
+
+    <a href="../contact" class="floating-contact-btn">
+        <img src="../assets/images/phone-icon.png" alt="Contact">
+        <span class="btn-text">Связаться с Домом</span>
+    </a>
+
     <script src="../assets/js/main.js?v=3"></script>
 </body>
 
