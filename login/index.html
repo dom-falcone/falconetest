@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ru">
-    
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,106 +10,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
-<style>
-        :root {
-            --color-bg: #050505;
-            --color-surface: #121212;
-            --color-text: #ffffff;
-            --color-text-muted: #a0a0a0;
-            --color-primary: #ff1744;
-            --color-primary-dark: #d50000;
-            --color-accent: #ff6e40;
-            --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 20px rgba(255, 23, 68, 0.3);
-            --font-main: 'Titillium Web', sans-serif;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            font-family: var(--font-main);
-            line-height: 1.6;
-            font-weight: 400;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .topbar {
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 0.8rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .topbar-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 2.2rem;
-            font-weight: normal;
-            text-decoration: none;
-            color: white;
-            font-family: 'Edwardian Script ITC', 'Snell Roundhand', cursive;
-        }
-
-        .logo-mark {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .nav {
-            display: flex;
-            gap: 2.5rem;
-            margin-left: auto;
-            margin-right: 2.5rem;
-        }
-
-        .nav a {
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            position: relative;
-            opacity: 0.8;
-            text-decoration: none;
-            color: white;
-            transition: var(--transition);
-        }
-
-        .nav a:hover {
-            color: var(--color-primary);
-            opacity: 1;
-        }
-
+    <style>
+        /* Login-specific styles only - global styles are in style.css */
         .page-header {
             height: 50vh;
             display: flex;
@@ -117,8 +19,20 @@
             justify-content: center;
             text-align: center;
             position: relative;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            background-position: center;
             margin-bottom: 4rem;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(5, 5, 5, 0.3), var(--color-bg));
         }
 
         .page-header h1 {
@@ -142,10 +56,10 @@
 
         .login-container {
             background: var(--color-surface);
-            padding: 3rem;
+            padding: 2rem 3rem;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
             text-align: center;
             box-shadow: var(--shadow-lg);
@@ -157,95 +71,218 @@
             font-size: 2rem;
         }
 
-        /* User Selection Grid */
-.user-selection-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    justify-content: center;
-    margin-bottom: 3rem;
-}
+        /* User Selection Grid - Flex Layout */
+        .user-selection-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 3rem;
+            transition: all 0.5s ease-out;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
         .user-btn {
-    background: transparent;
-    border: 2px solid var(--color-accent);
-    color: var(--color-accent);
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-main);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+            background: transparent;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
 
-.user-btn:hover {
-    background: var(--color-accent);
-    color: white;
-    box-shadow: 0 0 15px rgba(255, 110, 64, 0.4);
-    transform: translateY(-3px);
-}
+        .user-btn:hover {
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 110, 64, 0.4);
+            transform: translateY(-3px);
+        }
 
-.user-btn[data-user="Gast"] {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
+        .user-btn[data-user="Gast"] {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
 
-.user-btn[data-user="Gast"]:hover {
-    background: var(--color-primary);
-    color: white;
-    box-shadow: 0 0 15px rgba(255, 23, 68, 0.4);
-}
+        .user-btn[data-user="Gast"]:hover {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.4);
+        }
 
-.user-btn.selected {
-    background: var(--gradient-primary);
-    border-color: transparent;
-    color: white;
-    box-shadow: var(--shadow-glow);
-    transform: scale(1.05);
-}
+        .user-btn.selected {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: white;
+            box-shadow: var(--shadow-glow);
+            transform: scale(1.05);
+        }
 
-.user-btn[data-user="Gast"].selected {
-    background: var(--color-primary);
-    box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
-}
+        .user-btn[data-user="Gast"].selected {
+            background: var(--color-primary);
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
+        }
 
-/* Режим гостя - показываем кнопку Gast вверху */
-.login-container.guest-mode .user-selection-grid {
-    position: relative;
-    height: 60px;
-    margin-bottom: 3rem;
-}
+        /* Режим гостя - показываем кнопку Gast вверху */
+        .login-container.guest-mode .user-selection-grid {
+            position: relative;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
 
-.login-container.guest-mode .user-btn:not([data-user="Gast"]) {
-    display: none;
-}
+        .login-container.guest-mode .user-btn:not([data-user="Gast"]) {
+            display: none;
+        }
 
-.login-container.guest-mode .user-btn[data-user="Gast"] {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    background: var(--color-primary);
-    color: white;
-    box-shadow: 0 0 30px rgba(213, 0, 0, 0.5);
-    border-color: transparent;
-    pointer-events: none;
-    width: 100%;
-    max-width: 100%;
-}
+        .login-container.guest-mode .user-btn[data-user="Gast"] {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 0 30px rgba(213, 0, 0, 0.5);
+            border-color: transparent;
+            pointer-events: auto;
+            cursor: pointer;
+            width: auto;
+            max-width: none;
+            animation: guestButtonRise 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                guestGlowPulse 2s ease-in-out infinite 0.7s;
+        }
 
-.login-container.guest-mode .section-title {
-    display: none;
-}
+        @keyframes guestButtonRise {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(80px) scale(0.7);
+                filter: blur(4px);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-10px) scale(1.05);
+                filter: blur(0);
+            }
+
+            70% {
+                transform: translateX(-50%) translateY(5px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes guestGlowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(213, 0, 0, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(255, 23, 68, 0.8), 0 0 80px rgba(213, 0, 0, 0.4);
+            }
+        }
+
+        .login-container.guest-mode .section-title {
+            display: none;
+        }
+
+        /* Режим пользователя - показываем выбранную кнопку вверху */
+        .login-container.user-mode .user-selection-grid {
+            position: relative;
+            height: 75px;
+            margin-bottom: 1rem;
+        }
+
+        .login-container.user-mode .user-btn {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-container.user-mode .user-btn.selected-user {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 110, 64, 0.5);
+            border-color: transparent;
+            cursor: pointer;
+            width: auto;
+            max-width: none;
+            padding: 1.1rem 2.5rem;
+            animation: userButtonRise 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                glowPulse 2s ease-in-out infinite 0.7s;
+        }
+
+        .login-container.user-mode .section-title {
+            display: none;
+        }
+
+        @keyframes userButtonRise {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(80px) scale(0.7);
+                filter: blur(4px);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-10px) scale(1.05);
+                filter: blur(0);
+            }
+
+            70% {
+                transform: translateX(-50%) translateY(5px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(255, 110, 64, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(255, 110, 64, 0.8), 0 0 80px rgba(255, 23, 68, 0.4);
+            }
+        }
 
         /* Named User Password Form */
         .named-user-form {
             display: none;
-            max-width: 450px;
-            margin: 2rem auto 0;
+            width: 100%;
+            max-width: none;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 0 2rem;
             animation: fadeInUp 0.5s ease-out;
         }
 
@@ -253,24 +290,21 @@
             display: block;
         }
 
-        .named-user-info {
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
+        .named-user-form .form-group input {
+            padding: 1.3rem 1.2rem;
+            font-size: 1.1rem;
+            min-width: 350px;
         }
 
-        .named-user-info p {
-            color: var(--color-primary);
-            font-weight: 600;
-            font-size: 1rem;
+        .named-user-info {
+            display: none;
         }
 
         /* Guest Auth Container */
         .guest-auth-container {
             display: none;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeInUp 0.6s ease-out;
+            transition: all 0.5s ease-out;
         }
 
         .guest-auth-container.active {
@@ -281,7 +315,7 @@
             display: flex;
             gap: 1rem;
             justify-content: center;
-            margin: 2rem 0;
+            margin: -2rem 0 1.5rem 0;
         }
 
         .tab-btn {
@@ -317,7 +351,7 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             text-align: left;
         }
 
@@ -351,16 +385,18 @@
         .error-message {
             color: var(--color-primary);
             font-size: 0.9rem;
-            min-height: 1.5em;
-            margin-top: 1rem;
+            min-height: 1.2em;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
             text-align: center;
         }
 
         .success-message {
             color: #4caf50;
             font-size: 0.9rem;
-            min-height: 1.5em;
-            margin-top: 1rem;
+            min-height: 1.2em;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
             text-align: center;
         }
 
@@ -381,6 +417,7 @@
             min-width: 200px;
             font-family: var(--font-main);
             font-size: 1rem;
+            margin-top: 0.5rem;
         }
 
         .btn-primary {
@@ -403,14 +440,14 @@
             background: transparent;
             border: 2px solid rgba(255, 255, 255, 0.2);
             color: var(--color-text-muted);
-            padding: 0.8rem 2rem;
+            padding: 0.3rem 1.5rem;
             border-radius: 50px;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             font-family: var(--font-main);
-            margin-top: 2rem;
+            margin-top: 0.5rem;
         }
 
         .btn-back:hover {
@@ -418,87 +455,75 @@
             color: var(--color-primary);
         }
 
-        .site-footer {
-            background: #000;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 4rem 0;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        .site-footer small {
-            color: var(--color-text-muted);
-            font-size: 0.9rem;
-        }
-
         /* Floating Contact Button */
-.floating-contact-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: var(--gradient-primary);
-    border-radius: 50px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    text-decoration: none;
-    box-shadow: var(--shadow-lg);
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 1000;
-    overflow: hidden;
-    width: 50px;
-    height: 50px;
-}
+        .floating-contact-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gradient-primary);
+            border-radius: 50px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            overflow: hidden;
+            width: 50px;
+            height: 50px;
+        }
 
-.floating-contact-btn img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    flex-shrink: 0;
-    filter: brightness(0) invert(1);
-    transition: transform 0.6s ease;
-}
+        .floating-contact-btn img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: brightness(0) invert(1);
+            transition: transform 0.6s ease;
+        }
 
-.floating-contact-btn .btn-text {
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(20px);
-    transition: all 0.6s ease;
-    width: 0;
-    overflow: hidden;
-    margin-top: -1px;
-    margin-left: -8px;
-}
+        .floating-contact-btn .btn-text {
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.6s ease;
+            width: 0;
+            overflow: hidden;
+            margin-top: -1px;
+            margin-left: -8px;
+        }
 
-.floating-contact-btn:hover {
-    width: 245px;
-    padding: 12px 20px;
-    gap: 12px;
-    justify-content: center;
-    box-shadow: 0 0 25px rgba(255, 23, 68, 0.5);
-}
+        .floating-contact-btn:hover {
+            width: 245px;
+            padding: 12px 20px;
+            gap: 12px;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(255, 23, 68, 0.5);
+        }
 
-.floating-contact-btn:hover img {
-    transform: rotate(15deg) scale(1.1);
-}
+        .floating-contact-btn:hover img {
+            transform: rotate(15deg) scale(1.1);
+        }
 
-.floating-contact-btn:hover .btn-text {
-    opacity: 1;
-    transform: translateX(0);
-    width: auto;
-}
+        .floating-contact-btn:hover .btn-text {
+            opacity: 1;
+            transform: translateX(0);
+            width: auto;
+        }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -518,11 +543,11 @@
             .nav {
                 display: none;
             }
-            
+
             .page-header h1 {
                 font-size: 2.5rem;
             }
-            
+
             .login-container {
                 padding: 2rem;
             }
@@ -537,7 +562,26 @@
         }
     </style>
 </head>
+
 <body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-text">Ждать. Идет загрузка.</div>
+            <div class="loader-hymn-section">
+                <div class="loader-hymn-label">Гимн Дома Фальконе</div>
+                <div class="loader-player-container">
+                    <div class="loader-play-btn" id="loader-play-btn">
+                        <div class="loader-play-icon"></div>
+                    </div>
+                    <div class="loader-progress-container">
+                        <div class="loader-progress-bar" id="loader-progress"></div>
+                    </div>
+                </div>
+                <audio id="loader-audio" src="../assets/audio/hymn.mp3"></audio>
+            </div>
+        </div>
+    </div>
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
@@ -551,13 +595,17 @@
             <nav class="nav">
                 <a href="../about">О доме</a>
                 <a href="../history">История</a>
-                <a href="../enemies" class="active">Противники</a>
+                <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
             </nav>
+            <div class="auth-action">
+                <a href="../login" class="btn-login active" id="auth-btn">Войти</a>
+            </div>
         </div>
     </header>
 
-    <div class="page-header">
+    <div class="page-header"
+        style="background-image: url('../assets/images/q1-background.jpg'); background-position: center 18%;">
         <div class="container">
             <h1>Идентификация</h1>
             <p>Назовите себя, чтобы войти в Дом</p>
@@ -571,11 +619,19 @@
 
                 <!-- User Selection Grid -->
                 <div class="user-selection-grid" id="user-selection">
-                    <button class="user-btn" data-user="Don Falcone" data-email="kolyanchik497@gmail.com">Don Falcone</button>
-                    <button class="user-btn" data-user="Antone Snusone" data-email="antonprivate762@gmail.com">Antone Snusone</button>
-                    <button class="user-btn" data-user="Dimone de Patrone" data-email="dmuntyan777@gmail.com">Dimone de Patrone</button>
-                    <button class="user-btn" data-user="Maxone Povarone" data-email="hitstar228@gmail.com">Maxone Povarone</button>
-                    <button class="user-btn" data-user="Gast" data-email="">Gast</button>
+                    <div class="button-row">
+                        <button class="user-btn" data-user="Don Falcone" data-email="kolyanchik497@gmail.com">Don
+                            Falcone</button>
+                        <button class="user-btn" data-user="Antone Snusone"
+                            data-email="antonprivate762@gmail.com">Antone Snusone</button>
+                    </div>
+                    <div class="button-row">
+                        <button class="user-btn" data-user="Dimone de Patrone" data-email="dmuntyan777@gmail.com">Dimone
+                            de Patrone</button>
+                        <button class="user-btn" data-user="Maxone Povarone" data-email="hitstar228@gmail.com">Maxone
+                            Povarone</button>
+                        <button class="user-btn" data-user="Gast" data-email="">Gast</button>
+                    </div>
                 </div>
 
                 <!-- Named User Password Form -->
@@ -585,7 +641,8 @@
                     </div>
                     <div class="form-group">
                         <label for="named-password">Пароль</label>
-                        <input type="password" id="named-password" placeholder="Введите пароль" autocomplete="current-password">
+                        <input type="password" id="named-password" placeholder="Введите пароль"
+                            autocomplete="current-password">
                     </div>
                     <div class="error-message" id="named-error"></div>
                     <button class="btn btn-primary" id="named-login-btn">Войти</button>
@@ -606,7 +663,8 @@
                         </div>
                         <div class="form-group">
                             <label for="login-password">Пароль</label>
-                            <input type="password" id="login-password" placeholder="Введите пароль" autocomplete="current-password">
+                            <input type="password" id="login-password" placeholder="Введите пароль"
+                                autocomplete="current-password">
                         </div>
                         <div class="error-message" id="login-error"></div>
                         <button class="btn btn-primary" id="login-btn">Войти</button>
@@ -623,11 +681,13 @@
                         </div>
                         <div class="form-group">
                             <label for="reg-password">Пароль</label>
-                            <input type="password" id="reg-password" placeholder="Создайте пароль" autocomplete="new-password">
+                            <input type="password" id="reg-password" placeholder="Создайте пароль"
+                                autocomplete="new-password">
                         </div>
                         <div class="form-group">
                             <label for="reg-password-confirm">Подтвердите пароль</label>
-                            <input type="password" id="reg-password-confirm" placeholder="Повторите пароль" autocomplete="new-password">
+                            <input type="password" id="reg-password-confirm" placeholder="Повторите пароль"
+                                autocomplete="new-password">
                         </div>
                         <div class="error-message" id="register-error"></div>
                         <div class="success-message" id="register-success"></div>
@@ -659,7 +719,7 @@
 
     <script src="../assets/js/main.js?v=3"></script>
 
-     <script>
+    <script>
         const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
         let token = localStorage.getItem('auth_token') || "";
         let selectedEmail = "";
@@ -725,40 +785,69 @@
         }
 
         function selectUser(btn) {
-    const username = btn.dataset.user;
-    const email = btn.dataset.email;
+            const username = btn.dataset.user;
+            const email = btn.dataset.email;
+            const loginContainer = document.querySelector('.login-container');
 
-    // Highlight selected button
-    document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+            // If already in guest-mode and clicking Gast again, go back
+            if (username === 'Gast' && loginContainer.classList.contains('guest-mode')) {
+                resetToSelection();
+                return;
+            }
 
-    // НЕ скрываем grid, только добавляем класс
-    // document.getElementById('user-selection').style.display = 'none'; // УБЕРИ ЭТУ СТРОКУ
+            // If already in user-mode and clicking the selected user again, go back
+            if (username !== 'Gast' && loginContainer.classList.contains('user-mode') && btn.classList.contains('selected-user')) {
+                resetToSelection();
+                return;
+            }
 
-    if (username === 'Gast') {
-        // Show guest auth forms
-        document.querySelector('.login-container').classList.add('guest-mode');
-        document.getElementById('guest-auth-container').classList.add('active');
-    } else {
-        // Show named user password form
-        document.getElementById('user-selection').style.display = 'none'; // Только для именных
-        selectedEmail = email;
-        selectedUsername = username;
-        document.getElementById('selected-username').textContent = username;
-        document.getElementById('named-user-form').classList.add('active');
-        document.getElementById('named-password').focus();
-    }
-}
+            // Reset all buttons
+            document.querySelectorAll('.user-btn').forEach(b => {
+                b.classList.remove('selected');
+                b.classList.remove('selected-user');
+            });
+
+            if (username === 'Gast') {
+                // Show guest auth forms
+                btn.classList.add('selected');
+                loginContainer.classList.remove('user-mode');
+                loginContainer.classList.add('guest-mode');
+                document.getElementById('guest-auth-container').classList.add('active');
+                document.getElementById('named-user-form').classList.remove('active');
+            } else {
+                // Show named user password form with fly-up animation
+                btn.classList.add('selected-user');
+                loginContainer.classList.remove('guest-mode');
+                loginContainer.classList.add('user-mode');
+
+                selectedEmail = email;
+                selectedUsername = username;
+                document.getElementById('selected-username').textContent = username;
+
+                // Show the password form with animation
+                document.getElementById('guest-auth-container').classList.remove('active');
+                document.getElementById('named-user-form').classList.add('active');
+
+                // Focus on password after animation
+                setTimeout(() => {
+                    document.getElementById('named-password').focus();
+                }, 500);
+            }
+        }
 
         function resetToSelection() {
             // Clear selections
-            document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.user-btn').forEach(b => {
+                b.classList.remove('selected');
+                b.classList.remove('selected-user');
+            });
             selectedEmail = "";
             selectedUsername = "";
 
-            // Show selection grid
-            document.getElementById('user-selection').style.display = 'grid';
-            document.querySelector('.login-container').classList.remove('guest-mode');
+            // Remove mode classes
+            const loginContainer = document.querySelector('.login-container');
+            loginContainer.classList.remove('guest-mode');
+            loginContainer.classList.remove('user-mode');
 
             // Hide all forms
             document.getElementById('named-user-form').classList.remove('active');
@@ -799,7 +888,7 @@
 
         function setLoading(btnId, loading) {
             const btn = document.getElementById(btnId);
-            
+
             if (loading) {
                 btn.disabled = true;
                 btn.textContent = 'Загрузка...';
@@ -816,7 +905,7 @@
         // Named user login (predefined email)
         async function namedUserLogin() {
             clearMessages();
-            
+
             const password = document.getElementById('named-password').value;
 
             if (!password) {
@@ -838,7 +927,7 @@
                 if (res.ok && data.token) {
                     token = data.token;
                     localStorage.setItem('auth_token', token);
-                    
+
                     setTimeout(() => {
                         window.location.href = '../dashboard';
                     }, 100);
@@ -856,7 +945,7 @@
         // Guest login (custom email)
         async function guestLogin() {
             clearMessages();
-            
+
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
 
@@ -879,7 +968,7 @@
                 if (res.ok && data.token) {
                     token = data.token;
                     localStorage.setItem('auth_token', token);
-                    
+
                     setTimeout(() => {
                         window.location.href = '../dashboard';
                     }, 100);
@@ -897,7 +986,7 @@
         // Guest registration
         async function register() {
             clearMessages();
-            
+
             const displayName = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
@@ -937,7 +1026,7 @@
                 if (res.ok && data.success) {
                     document.getElementById('register-success').textContent = data.message || 'Регистрация успешна!';
                     clearInputs();
-                    
+
                     setTimeout(() => {
                         switchTab('login');
                         document.getElementById('login-email').value = email;
@@ -953,6 +1042,6 @@
             }
         }
     </script>
-    <script src="../assets/js/main.js?v=3"></script>
 </body>
+
 </html>

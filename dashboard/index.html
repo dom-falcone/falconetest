@@ -1,112 +1,23 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Личный кабинет - Dom Falcone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
     <style>
-        :root {
-            --color-bg: #050505;
-            --color-surface: #121212;
-            --color-text: #ffffff;
-            --color-text-muted: #a0a0a0;
-            --color-primary: #ff1744;
-            --color-primary-dark: #d50000;
-            --color-accent: #ff6e40;
-            --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 20px rgba(255, 23, 68, 0.3);
-            --font-main: 'Titillium Web', sans-serif;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        /* Dashboard-specific styles only - global styles are in style.css */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            font-family: var(--font-main);
-            line-height: 1.6;
-            font-weight: 400;
-            overflow-x: hidden;
-        }
-
-        .container {
+        /* Override container max-width for dashboard */
+        .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
-        }
-
-        .topbar {
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 0.8rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .topbar-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 2.2rem;
-            font-weight: normal;
-            text-decoration: none;
-            color: white;
-            font-family: 'Edwardian Script ITC', 'Snell Roundhand', cursive;
-        }
-
-        .logo-mark {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .nav {
-            display: flex;
-            gap: 2.5rem;
-            margin-left: auto;
-            margin-right: 2.5rem;
-            align-items: center;
-        }
-
-        .nav a {
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            position: relative;
-            opacity: 0.8;
-            text-decoration: none;
-            color: white;
-            transition: var(--transition);
-        }
-
-        .nav a:hover, .nav a.active {
-            color: var(--color-primary);
-            opacity: 1;
         }
 
         .user-menu {
@@ -152,8 +63,17 @@
         }
 
         @keyframes pulse-online {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
         }
 
         .header-avatar {
@@ -186,74 +106,107 @@
             color: var(--color-primary);
         }
 
-        .page-header {
-            padding: 4rem 0 2rem;
+        /* Dashboard uses custom page-header without background image */
+        .dashboard-page-header {
+            padding: 3rem 0 2rem;
             text-align: center;
+            background: linear-gradient(to bottom, rgba(255, 23, 68, 0.05), transparent);
+            border-bottom: 1px solid rgba(255, 23, 68, 0.1);
+            margin-bottom: 2rem;
         }
 
-        .page-header h1 {
-            font-size: 3rem;
+        .dashboard-page-header h1 {
+            font-size: 2.8rem;
             margin-bottom: 0.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
+        }
+
+        .dashboard-page-header p {
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .dashboard-tabs {
             display: flex;
-            gap: 1rem;
-            margin: 2rem 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0;
+            gap: 0.5rem;
+            margin: 0 0 2rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .tab-btn {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             background: transparent;
             border: none;
             color: var(--color-text-muted);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: var(--transition);
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
+            border-radius: 8px;
             font-family: var(--font-main);
         }
 
         .tab-btn:hover {
             color: var(--color-primary);
+            background: rgba(255, 23, 68, 0.1);
         }
 
         .tab-btn.active {
-            color: var(--color-primary);
-            border-bottom-color: var(--color-primary);
+            color: white;
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+            transform: scale(1.02);
         }
 
         .tab-content {
             display: none;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         .tab-content.active {
             display: block;
+            animation: fadeSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 2rem;
-            margin: 3rem 0;
+            margin: 2rem 0;
         }
 
         .card {
             background: var(--color-surface);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 23, 68, 0.1);
             border-radius: 16px;
             padding: 2rem;
             box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: rgba(255, 23, 68, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 23, 68, 0.05);
         }
 
         .card-header {
@@ -262,13 +215,16 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 23, 68, 0.1);
         }
 
         .card-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .profile-avatar {
@@ -476,46 +432,7 @@
             gap: 0.5rem;
         }
 
-        .btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            outline: none;
-            text-align: center;
-            font-family: var(--font-main);
-            font-size: 0.85rem;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 23, 68, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--color-primary);
-            color: white;
-        }
+        /* .btn, .btn-primary, .btn-secondary styles are in style.css */
 
         .btn-small {
             padding: 8px 16px;
@@ -662,35 +579,7 @@
             border: 1px solid #4caf50;
         }
 
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--color-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        /* Loading styles are in style.css for #page-loader */
 
         .empty-state {
             text-align: center;
@@ -703,18 +592,7 @@
             margin-bottom: 1rem;
         }
 
-        .site-footer {
-            background: #000;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 4rem 0;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        .site-footer small {
-            color: var(--color-text-muted);
-            font-size: 0.9rem;
-        }
+        /* site-footer styles are in style.css */
 
         @media (max-width: 968px) {
             .dashboard-grid {
@@ -735,19 +613,39 @@
         }
     </style>
 </head>
+
 <body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-text">Ждать. Идет загрузка.</div>
+            <div class="loader-hymn-section">
+                <div class="loader-hymn-label">Гимн Дома Фальконе</div>
+                <div class="loader-player-container">
+                    <div class="loader-play-btn" id="loader-play-btn">
+                        <div class="loader-play-icon"></div>
+                    </div>
+                    <div class="loader-progress-container">
+                        <div class="loader-progress-bar" id="loader-progress"></div>
+                    </div>
+                </div>
+                <audio id="loader-audio" src="../assets/audio/hymn.mp3"></audio>
+            </div>
+        </div>
+    </div>
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
                 <a href="../homepage">
-                    <div class="logo-mark" style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                    <div class="logo-mark"
+                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
                     <span class="brand-title">Dom Falcone</span>
                 </a>
             </div>
             <nav class="nav">
                 <a href="../about">О доме</a>
                 <a href="../history">История</a>
-                <a href="../enemies" class="active">Противники</a>
+                <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
             </nav>
             <div class="user-menu" id="user-menu" style="display: none;">
@@ -762,18 +660,13 @@
                     </div>
                 </a>
             </div>
-        </div>
     </header>
 
-    <div class="loading-overlay" id="loading">
-        <div class="loader"></div>
-    </div>
-
     <main>
-        <div class="page-header">
+        <div class="dashboard-page-header">
             <div class="container">
                 <h1>Личный кабинет</h1>
-                <p style="color: var(--color-text-muted);">Управление профилем и друзьями</p>
+                <p>Место, где вы правите своим профилем и держите друзей под наблюдением.</p>
             </div>
         </div>
 
@@ -843,8 +736,10 @@
 
                                 <div class="form-group">
                                     <label>Аватарка</label>
-                                    <input type="file" id="avatar-input" accept="image/jpeg,image/png,image/gif,image/webp">
-                                    <button type="button" class="btn btn-secondary btn-small" id="remove-avatar-btn" style="margin-top: 0.5rem;">Удалить аватарку</button>
+                                    <input type="file" id="avatar-input"
+                                        accept="image/jpeg,image/png,image/gif,image/webp">
+                                    <button type="button" class="btn btn-secondary btn-small" id="remove-avatar-btn"
+                                        style="margin-top: 0.5rem;">Удалить аватарку</button>
                                 </div>
 
                                 <div class="form-group">
@@ -1007,7 +902,14 @@
         }
 
         function showLoading(show) {
-            document.getElementById('loading').classList.toggle('active', show);
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                if (show) {
+                    loader.classList.remove('loaded');
+                } else {
+                    loader.classList.add('loaded');
+                }
+            }
         }
 
         async function loadProfile() {
@@ -1044,11 +946,11 @@
 
                 if (res.ok) {
                     const userData = await res.json();
-                    
+
                     document.getElementById('user-menu').style.display = 'flex';
                     document.getElementById('header-display-name').textContent = userData.display_name || userData.email.split('@')[0];
                     document.getElementById('header-points').textContent = userData.points || 0;
-                    
+
                     const avatar = document.getElementById('header-avatar');
                     if (userData.avatar_url) {
                         avatar.src = userData.avatar_url;
@@ -1082,12 +984,12 @@
             // Аватарка
             const avatarImg = document.getElementById('avatar-img');
             const avatarInitials = document.getElementById('avatar-initials');
-            
+
             if (data.avatar_url && data.avatar_url.trim()) {
                 avatarImg.src = data.avatar_url;
                 avatarImg.style.display = 'block';
                 avatarInitials.style.display = 'none';
-                avatarImg.onerror = function() {
+                avatarImg.onerror = function () {
                     avatarImg.style.display = 'none';
                     avatarInitials.style.display = 'block';
                 };
@@ -1110,9 +1012,9 @@
                 setTimeout(() => {
                     progressBar.style.width = (data.progress.progress || 0) + '%';
                 }, 100);
-                
+
                 document.getElementById('progress-current').textContent = data.progress.current || 0;
-                document.getElementById('progress-next').textContent = 
+                document.getElementById('progress-next').textContent =
                     data.progress.next === Infinity ? '∞' : data.progress.next;
             }
 
@@ -1125,7 +1027,7 @@
 
         function displayActivity(activities) {
             const list = document.getElementById('activity-list');
-            
+
             if (activities.length === 0) {
                 list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Активность не найдена</div></div></li>';
                 return;
@@ -1144,7 +1046,7 @@
             list.innerHTML = activities.map(activity => {
                 const date = new Date(activity.created_at).toLocaleString('ru-RU');
                 const name = activityNames[activity.activity_type] || activity.activity_type;
-                
+
                 return `
                     <li class="activity-item">
                         <div class="activity-info">
@@ -1161,7 +1063,7 @@
 
         async function searchUsers(query) {
             const resultsDiv = document.getElementById('search-results');
-            
+
             if (!query || query.length < 2) {
                 resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p>Введите минимум 2 символа для поиска</p></div>';
                 return;
@@ -1230,21 +1132,21 @@
         }
 
         function createUserCard(user, type) {
-    const avatarSrc = user.avatar_url || `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect fill="%23ff1744" width="50" height="50" rx="25"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="24" font-family="Arial"%3E${user.display_name ? user.display_name[0].toUpperCase() : 'U'}%3C/text%3E%3C/svg%3E`;
+            const avatarSrc = user.avatar_url || `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect fill="%23ff1744" width="50" height="50" rx="25"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="24" font-family="Arial"%3E${user.display_name ? user.display_name[0].toUpperCase() : 'U'}%3C/text%3E%3C/svg%3E`;
 
-    let actions = '';
-    if (type === 'search') {
-        actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Добавить</button>`;
-    } else if (type === 'request') {
-        actions = `
+            let actions = '';
+            if (type === 'search') {
+                actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Добавить</button>`;
+            } else if (type === 'request') {
+                actions = `
             <button class="btn btn-primary btn-small" onclick="acceptFriendRequest(${user.id})">Принять</button>
             <button class="btn btn-danger btn-small" onclick="rejectFriendRequest(${user.id})">Отклонить</button>
         `;
-    } else if (type === 'friend') {
-        actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Удалить</button>`;
-    }
+            } else if (type === 'friend') {
+                actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Удалить</button>`;
+            }
 
-    return `
+            return `
         <div class="user-card">
             <img src="${avatarSrc}" alt="${user.display_name}" class="user-avatar" style="cursor: pointer;" onclick="viewProfile(${user.id})">
             <div class="user-info" style="cursor: pointer;" onclick="viewProfile(${user.id})">
@@ -1256,7 +1158,7 @@
             </div>
         </div>
     `;
-}
+        }
 
         async function sendFriendRequest(friendId) {
             showLoading(true);
@@ -1319,7 +1221,7 @@
 
         async function rejectFriendRequest(friendId) {
             if (!confirm('Отклонить запрос в друзья?')) return;
-            
+
             await removeFriend(friendId);
             await loadFriendRequests();
             await loadProfile();
@@ -1436,7 +1338,7 @@
             try {
                 const compressedBlob = await compressImage(file, 500 * 1024);
                 const arrayBuffer = await compressedBlob.arrayBuffer();
-                
+
                 const res = await fetch(API_BASE + "/avatar", {
                     method: "POST",
                     headers: {
@@ -1467,18 +1369,18 @@
         async function compressImage(file, maxSizeBytes) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                
+
                 reader.onload = (e) => {
                     const img = new Image();
-                    
+
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        
+
                         const MAX_WIDTH = 400;
                         const MAX_HEIGHT = 400;
-                        
+
                         if (width > height) {
                             if (width > MAX_WIDTH) {
                                 height *= MAX_WIDTH / width;
@@ -1490,15 +1392,15 @@
                                 height = MAX_HEIGHT;
                             }
                         }
-                        
+
                         canvas.width = width;
                         canvas.height = height;
-                        
+
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        
+
                         let quality = 0.9;
-                        
+
                         const tryCompress = () => {
                             canvas.toBlob((blob) => {
                                 if (blob.size <= maxSizeBytes || quality <= 0.1) {
@@ -1509,14 +1411,14 @@
                                 }
                             }, 'image/jpeg', quality);
                         };
-                        
+
                         tryCompress();
                     };
-                    
+
                     img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
                     img.src = e.target.result;
                 };
-                
+
                 reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
                 reader.readAsDataURL(file);
             });
@@ -1562,11 +1464,12 @@
         }
 
         // Добавьте эту функцию для перехода к профилю
-function viewProfile(userId) {
-    window.location.href = `../profile?id=${userId}`;
-}
-        
+        function viewProfile(userId) {
+            window.location.href = `../profile?id=${userId}`;
+        }
+
     </script>
-        <script src="../assets/js/main.js?v=3"></script>
+    <script src="../assets/js/main.js?v=3"></script>
 </body>
+
 </html>

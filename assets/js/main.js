@@ -188,71 +188,7 @@ if (lightbox) {
     });
 }
 
-// Login System
-const loginSection = document.querySelector('.login-section');
-if (loginSection) {
-    const userBtns = document.querySelectorAll('.user-btn');
-    const passwordInput = document.getElementById('password-input');
-    const loginSubmitBtn = document.getElementById('login-submit-btn');
-    const loginError = document.getElementById('login-error');
-    const loginFormGroup = document.querySelector('.login-form-group');
-    let selectedUser = null;
-
-    // User Selection
-    userBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Deselect all
-            userBtns.forEach(b => b.classList.remove('selected'));
-            // Select clicked
-            btn.classList.add('selected');
-            selectedUser = btn.dataset.user;
-
-            // Enable password field
-            loginFormGroup.classList.add('active');
-            passwordInput.disabled = false;
-            loginSubmitBtn.disabled = false;
-            passwordInput.focus();
-            loginError.textContent = '';
-        });
-    });
-
-    // Login Submission
-    const handleLogin = () => {
-        const password = passwordInput.value;
-        let isValid = false;
-
-        if (selectedUser === 'Dimone de Patrone') {
-            isValid = (password === '0952012070');
-        } else if (selectedUser === 'Don Falcone') {
-            isValid = (password === '0634935384');
-        } else if (selectedUser === 'Maxone Povarone') {
-            isValid = (password === '26121968M@x');
-        } else if (selectedUser === 'Antone Snusone') {
-            isValid = (password === '2KC2wjud_');
-        } else {
-            isValid = (password === '12345678');
-        }
-
-        if (isValid) {
-            // Success
-            localStorage.setItem('domFalconeUser', selectedUser);
-            window.location.href = 'index.html';
-        } else {
-            // Error
-            loginError.textContent = 'Неверный пароль. Доступ запрещен.';
-            passwordInput.value = '';
-            passwordInput.focus();
-        }
-    };
-
-    loginSubmitBtn.addEventListener('click', handleLogin);
-
-    passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleLogin();
-        }
-    });
-}
+// Legacy Login System removed - now handled by inline scripts in login/index.html
 
 // Check Login State & Update Header
 const checkLoginState = () => {
@@ -542,12 +478,22 @@ document.addEventListener('DOMContentLoaded', updateStrangerTimer);
 
 // Add Site Version Label
 document.addEventListener('DOMContentLoaded', () => {
-    const footerContainer = document.querySelector('.site-footer .container');
-    if (footerContainer) {
+    const versionText = 'Версия сайта: 1.4.3. Идет разработка.';
+
+    // Try to find existing version div first
+    const existingVersion = document.querySelector('.site-footer .site-version');
+    if (existingVersion) {
+        existingVersion.textContent = versionText;
+        return;
+    }
+
+    // Fallback: create and insert if not found
+    const footerSmall = document.querySelector('.site-footer .container small');
+    if (footerSmall) {
         const versionDiv = document.createElement('div');
         versionDiv.className = 'site-version';
-        versionDiv.textContent = 'Версия сайта: 1.4.2. Идет разработка.';
-        footerContainer.appendChild(versionDiv);
+        versionDiv.textContent = versionText;
+        footerSmall.insertAdjacentElement('afterend', versionDiv);
     }
 });
 // --- Page Loader Logic ---
@@ -608,177 +554,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- Auth System Integration ---
-document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-    const loginContainer = document.querySelector('.login-container');
-    const guestBtn = document.querySelector('.user-btn[data-user="Gast"]');
-    const guestAuthContainer = document.getElementById('guest-auth-container');
-    const legacyLoginGroup = document.getElementById('legacy-login-group');
-    const backBtn = document.getElementById('back-to-selection');
+// Auth System Integration removed - now handled by inline scripts in login/index.html
 
-    // Check if we are on the login page
-    if (!loginContainer || !guestBtn) return;
-
-    // Check for existing token
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-        // Optional: Verify token or redirect
-        // checkToken(token); 
-    }
-
-    // Guest Button Click - Trigger Animation & Mode
-    guestBtn.addEventListener('click', () => {
-        loginContainer.classList.add('guest-mode');
-        if (legacyLoginGroup) legacyLoginGroup.style.display = 'none';
-
-        setTimeout(() => {
-            if (guestAuthContainer) {
-                guestAuthContainer.classList.add('active');
-            }
-        }, 500); // Wait for transition
-    });
-
-    // Back Button
-    if (backBtn) {
-        backBtn.addEventListener('click', () => {
-            if (guestAuthContainer) {
-                guestAuthContainer.classList.remove('active');
-            }
-
-            setTimeout(() => {
-                loginContainer.classList.remove('guest-mode');
-                if (legacyLoginGroup) legacyLoginGroup.style.display = 'flex';
-            }, 300);
-        });
-    }
-
-    // Tab Switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const tab = e.target.dataset.tab;
-
-            // Update buttons
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-
-            // Update forms
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            document.getElementById(`${tab}-form`).classList.add('active');
-
-            // Clear messages
-            clearMessages();
-        });
-    });
-
-    function clearMessages() {
-        const msgs = document.querySelectorAll('.error-message, .success-message');
-        msgs.forEach(m => m.textContent = '');
-    }
-
-    function setLoading(btnId, isLoading) {
-        const btn = document.getElementById(btnId);
-        if (!btn) return;
-
-        if (isLoading) {
-            btn.dataset.originalText = btn.textContent;
-            btn.textContent = 'Загрузка...';
-            btn.disabled = true;
-        } else {
-            btn.textContent = btn.dataset.originalText || 'Отправить';
-            btn.disabled = false;
-        }
-    }
-
-    // Login Logic
-    const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            const errorDiv = document.getElementById('login-error');
-
-            if (!email || !password) {
-                errorDiv.textContent = 'Заполните все поля';
-                return;
-            }
-
-            setLoading('login-btn', true);
-            errorDiv.textContent = '';
-
-            try {
-                const res = await fetch(`${API_BASE}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await res.json();
-
-                if (res.ok && data.token) {
-                    localStorage.setItem('auth_token', data.token);
-                    window.location.href = '../homepage'; // Redirect to homepage
-                } else {
-                    errorDiv.textContent = data.error || 'Ошибка входа';
-                }
-            } catch (err) {
-                errorDiv.textContent = 'Ошибка сервера';
-                console.error(err);
-            } finally {
-                setLoading('login-btn', false);
-            }
-        });
-    }
-
-    // Register Logic
-    const registerBtn = document.getElementById('register-btn');
-    if (registerBtn) {
-        registerBtn.addEventListener('click', async () => {
-            const displayName = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const confirmPass = document.getElementById('reg-password-confirm').value;
-            const errorDiv = document.getElementById('register-error');
-            const successDiv = document.getElementById('register-success');
-
-            if (!email || !password) {
-                errorDiv.textContent = 'Заполните все поля';
-                return;
-            }
-            if (password !== confirmPass) {
-                errorDiv.textContent = 'Пароли не совпадают';
-                return;
-            }
-
-            setLoading('register-btn', true);
-            errorDiv.textContent = '';
-            successDiv.textContent = '';
-
-            try {
-                const res = await fetch(`${API_BASE}/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, displayName })
-                });
-
-                const data = await res.json();
-
-                if (res.ok && data.success) {
-                    successDiv.textContent = 'Регистрация успешна! Теперь войдите.';
-                    // Optional: Switch to login tab automatically
-                    setTimeout(() => {
-                        document.querySelector('[data-tab="login"]').click();
-                        document.getElementById('login-email').value = email;
-                    }, 1500);
-                } else {
-                    errorDiv.textContent = data.error || 'Ошибка регистрации';
-                }
-            } catch (err) {
-                errorDiv.textContent = 'Ошибка сервера';
-                console.error(err);
-            } finally {
-                setLoading('register-btn', false);
-            }
-        });
-    }
-});
