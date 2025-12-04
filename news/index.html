@@ -753,7 +753,7 @@
             const card = document.createElement('div');
             card.className = 'news-item';
             const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
-            const canDelete = currentUser && (currentUser.role === 'admin' || currentUser.id === news.author_id);
+            const canDelete = currentUser && currentUser.role === 'admin';
 
             card.innerHTML = `
                 <div class="news-header">
