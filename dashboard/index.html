@@ -1273,11 +1273,17 @@ if (userData.avatar_url) {
 
     // Прогресс
     if (data.progress) {
-        document.getElementById('progress-bar').style.width = data.progress.progress + '%';
-        document.getElementById('progress-current').textContent = data.progress.current;
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = data.progress.progress || 0;
+        
+        console.log('Setting progress:', progressPercent + '%'); // для отладки
+        
+        progressBar.style.width = progressPercent + '%';
+        document.getElementById('progress-current').textContent = data.progress.current || 0;
         document.getElementById('progress-next').textContent = 
-            data.progress.next === Infinity ? '∞' : data.progress.next;
+            data.progress.next === Infinity ? '∞' : (data.progress.next || 100);
     }
+}
 
     // Биография
     document.getElementById('bio').textContent = data.bio || 'Биография не указана';
