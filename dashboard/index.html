@@ -1230,33 +1230,33 @@
         }
 
         function createUserCard(user, type) {
-            const avatarSrc = user.avatar_url || `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect fill="%23ff1744" width="50" height="50" rx="25"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="24" font-family="Arial"%3E${user.display_name ? user.display_name[0].toUpperCase() : 'U'}%3C/text%3E%3C/svg%3E`;
+    const avatarSrc = user.avatar_url || `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect fill="%23ff1744" width="50" height="50" rx="25"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="24" font-family="Arial"%3E${user.display_name ? user.display_name[0].toUpperCase() : 'U'}%3C/text%3E%3C/svg%3E`;
 
-            let actions = '';
-            if (type === 'search') {
-                actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Добавить</button>`;
-            } else if (type === 'request') {
-                actions = `
-                    <button class="btn btn-primary btn-small" onclick="acceptFriendRequest(${user.id})">Принять</button>
-                    <button class="btn btn-danger btn-small" onclick="rejectFriendRequest(${user.id})">Отклонить</button>
-                `;
-            } else if (type === 'friend') {
-                actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Удалить</button>`;
-            }
+    let actions = '';
+    if (type === 'search') {
+        actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Добавить</button>`;
+    } else if (type === 'request') {
+        actions = `
+            <button class="btn btn-primary btn-small" onclick="acceptFriendRequest(${user.id})">Принять</button>
+            <button class="btn btn-danger btn-small" onclick="rejectFriendRequest(${user.id})">Отклонить</button>
+        `;
+    } else if (type === 'friend') {
+        actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Удалить</button>`;
+    }
 
-            return `
-                <div class="user-card">
-                    <img src="${avatarSrc}" alt="${user.display_name}" class="user-avatar">
-                    <div class="user-info">
-                        <div class="user-name">${user.display_name || 'Аноним'}</div>
-                        <div class="user-rank">${user.rank} • ${user.points} очков</div>
-                    </div>
-                    <div class="user-actions">
-                        ${actions}
-                    </div>
-                </div>
-            `;
-        }
+    return `
+        <div class="user-card">
+            <img src="${avatarSrc}" alt="${user.display_name}" class="user-avatar" style="cursor: pointer;" onclick="viewProfile(${user.id})">
+            <div class="user-info" style="cursor: pointer;" onclick="viewProfile(${user.id})">
+                <div class="user-name">${user.display_name || 'Аноним'}</div>
+                <div class="user-rank">${user.rank} • ${user.points} очков</div>
+            </div>
+            <div class="user-actions">
+                ${actions}
+            </div>
+        </div>
+    `;
+}
 
         async function sendFriendRequest(friendId) {
             showLoading(true);
@@ -1560,6 +1560,12 @@
             localStorage.removeItem('auth_token');
             window.location.href = '../login';
         }
+
+        // Добавьте эту функцию для перехода к профилю
+function viewProfile(userId) {
+    window.location.href = `../profile?id=${userId}`;
+}
+        
     </script>
 </body>
 </html>
