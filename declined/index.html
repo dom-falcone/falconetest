@@ -239,8 +239,8 @@ async function loadUserHeader() {
             } else {
                 // SVG placeholder с первой буквой имени
                 const initial = userData.display_name ? userData.display_name[0].toUpperCase() : 'U';
-                avatar.src = data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E;
-            }
+                avatar.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E" + initial + "%3C/text%3E%3C/svg%3E";
+            } // ← ВОТ ЭТА СКОБКА БЫЛА ПРОПУЩЕНА!
         } else {
             // Если токен невалиден - удаляем его и показываем кнопку "Войти"
             localStorage.removeItem('auth_token');
