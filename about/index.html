@@ -134,7 +134,13 @@
                 <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
             </nav>
-            <div class="user-menu" id="user-menu" style="display: none;">
+            <!-- Показываем кнопку по умолчанию -->
+<div class="auth-action" id="auth-action">
+    <a href="../login" class="btn-login">Войти</a>
+</div>
+
+<!-- Скрываем user menu по умолчанию -->
+<div class="user-menu" id="user-menu" style="display: none;">
     <a href="../dashboard" class="user-profile-info">
         <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
         <div class="user-details">
@@ -252,7 +258,12 @@ const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api"
 const token = localStorage.getItem('auth_token');
 
 async function loadUserHeader() {
-    if (!token) return;
+    if (!token) {
+        // Если токена нет - показываем кнопку "Войти"
+        document.getElementById('auth-action').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
+        return;
+    }
     
     try {
         const res = await fetch(API_BASE + "/me", {
@@ -262,7 +273,8 @@ async function loadUserHeader() {
         if (res.ok) {
             const userData = await res.json();
             
-            // Показываем user menu
+            // Скрываем кнопку "Войти" и показываем user menu
+            document.getElementById('auth-action').style.display = 'none';
             document.getElementById('user-menu').style.display = 'flex';
             
             // Заполняем данные
@@ -279,9 +291,17 @@ async function loadUserHeader() {
                 const initial = userData.display_name ? userData.display_name[0].toUpperCase() : 'U';
                 avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
             }
+        } else {
+            // Если токен невалиден - удаляем его и показываем кнопку "Войти"
+            localStorage.removeItem('auth_token');
+            document.getElementById('auth-action').style.display = 'block';
+            document.getElementById('user-menu').style.display = 'none';
         }
     } catch (err) {
         console.error('Error loading user header:', err);
+        // При ошибке показываем кнопку "Войти"
+        document.getElementById('auth-action').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
     }
 }
 
