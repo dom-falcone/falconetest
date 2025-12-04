@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (footerContainer) {
         const versionDiv = document.createElement('div');
         versionDiv.className = 'site-version';
-        versionDiv.textContent = 'Версия сайта: 1.4.1. Идет разработка.';
+        versionDiv.textContent = 'Версия сайта: 1.4.2. Идет разработка.';
         footerContainer.appendChild(versionDiv);
     }
 });
