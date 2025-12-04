@@ -11,112 +11,583 @@
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
     <style>
+        :root {
+            --color-primary: #ff1744;
+            --color-bg: #0a0a0a;
+            --color-surface: #1a1a1a;
+            --transition: all 0.3s ease;
+        }
 
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
-.user-profile-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.3rem 1rem 0.3rem 0.3rem;
-    background: rgba(255, 23, 68, 0.1);
-    border: 1px solid rgba(255, 23, 68, 0.3);
-    border-radius: 30px;
-    position: relative;
-    text-decoration: none;
-    transition: var(--transition);
-    cursor: pointer;
-}
+        .user-profile-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.3rem 1rem 0.3rem 0.3rem;
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 30px;
+            position: relative;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
 
-.user-profile-info:hover {
-    background: rgba(255, 23, 68, 0.2);
-    border-color: rgba(255, 23, 68, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-}
+        .user-profile-info:hover {
+            background: rgba(255, 23, 68, 0.2);
+            border-color: rgba(255, 23, 68, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+        }
 
-.user-profile-info::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    bottom: 8px;
-    width: 10px;
-    height: 10px;
-    background-color: #00e676;
-    border-radius: 50%;
-    border: 2px solid var(--color-bg);
-    box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-    animation: pulse-online 2s infinite;
-    z-index: 10;
-}
+        .user-profile-info::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            width: 10px;
+            height: 10px;
+            background-color: #00e676;
+            border-radius: 50%;
+            border: 2px solid var(--color-bg);
+            box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
+            animation: pulse-online 2s infinite;
+            z-index: 10;
+        }
 
-@keyframes pulse-online {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.7;
-        transform: scale(1.1);
-    }
-}
+        @keyframes pulse-online {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
 
-.header-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--color-primary);
-    position: relative;
-}
+        .header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+            position: relative;
+        }
 
-.user-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
 
-.user-display-name {
-    color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
-    line-height: 1;
-}
+        .user-display-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1;
+        }
 
-.user-points-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--color-primary);
-}
+        .user-points-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--color-primary);
+        }
 
-</style>
+        .admin-create-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-primary), #ff4569);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 23, 68, 0.4);
+            transition: var(--transition);
+            z-index: 100;
+            border: none;
+        }
+
+        .admin-create-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 30px rgba(255, 23, 68, 0.6);
+        }
+
+        .admin-create-btn::before,
+        .admin-create-btn::after {
+            content: '';
+            position: absolute;
+            background: white;
+        }
+
+        .admin-create-btn::before {
+            width: 24px;
+            height: 3px;
+        }
+
+        .admin-create-btn::after {
+            width: 3px;
+            height: 24px;
+        }
+
+        .create-news-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .create-news-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .create-news-content {
+            background: var(--color-surface);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 23, 68, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .create-news-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 10px;
+            padding: 0.8rem;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .image-upload-area {
+            border: 2px dashed rgba(255, 23, 68, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--color-primary);
+            background: rgba(255, 23, 68, 0.05);
+        }
+
+        .image-upload-area input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 23, 68, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--color-primary), #ff4569);
+            border: none;
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .news-item {
+            background: var(--color-surface);
+            border: 1px solid rgba(255, 23, 68, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .news-item:hover {
+            border-color: rgba(255, 23, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .news-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .news-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .news-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+        }
+
+        .news-author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-author-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .news-date {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        .news-tag {
+            background: linear-gradient(135deg, var(--color-primary), #ff4569);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .news-title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .news-content {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .news-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .news-image {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .news-image:hover {
+            transform: scale(1.05);
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 23, 68, 0.2);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--color-primary);
+        }
+
+        .action-btn.liked {
+            color: var(--color-primary);
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .comments-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 23, 68, 0.2);
+        }
+
+        .comment-input-area {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comment-input-area textarea {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 10px;
+            padding: 0.8rem;
+            color: white;
+            font-family: inherit;
+            resize: none;
+            height: 60px;
+        }
+
+        .comment-input-area textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .comment-submit-btn {
+            background: linear-gradient(135deg, var(--color-primary), #ff4569);
+            border: none;
+            border-radius: 10px;
+            padding: 0 1.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .comment-text .mention {
+            color: var(--color-primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .comment-text .mention:hover {
+            text-decoration: underline;
+        }
+
+        .comment-date {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+        }
+
+        .delete-news-btn {
+            background: rgba(255, 23, 68, 0.2);
+            border: 1px solid var(--color-primary);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .delete-news-btn:hover {
+            background: var(--color-primary);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-primary);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 23, 68, 0.3);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Page Loader -->
     <div id="page-loader">
         <div class="loader-content">
             <div class="loader-text">Ждать. Идет загрузка.</div>
-            <div class="loader-hymn-section">
-                <div class="loader-hymn-label">Гимн Дома Фальконе</div>
-                <div class="loader-player-container">
-                    <div class="loader-play-btn" id="loader-play-btn">
-                        <div class="loader-play-icon"></div>
-                    </div>
-                    <div class="loader-progress-container">
-                        <div class="loader-progress-bar" id="loader-progress"></div>
-                    </div>
-                </div>
-                <audio id="loader-audio" src="../assets/audio/hymn.mp3"></audio>
-            </div>
         </div>
     </div>
+
     <header class="topbar">
         <div class="container topbar-inner">
             <div class="brand">
@@ -133,24 +604,21 @@
                 <a href="../enemies">Противники</a>
                 <a href="../news" class="active">Новости</a>
             </nav>
-            <!-- Показываем кнопку по умолчанию -->
-<div class="auth-action" id="auth-action">
-    <a href="../login" class="btn-login">Войти</a>
-</div>
-
-<!-- Скрываем user menu по умолчанию -->
-<div class="user-menu" id="user-menu" style="display: none;">
-    <a href="../dashboard" class="user-profile-info">
-        <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-        <div class="user-details">
-            <span class="user-display-name" id="header-display-name">User</span>
-            <div class="user-points-badge">
-                <span>⭐</span>
-                <span id="header-points">0</span>
+            <div class="auth-action" id="auth-action">
+                <a href="../login" class="btn-login">Войти</a>
             </div>
-        </div>
-    </a>
-</div>
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <a href="../dashboard" class="user-profile-info">
+                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                    <div class="user-details">
+                        <span class="user-display-name" id="header-display-name">User</span>
+                        <div class="user-points-badge">
+                            <span>⭐</span>
+                            <span id="header-points">0</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -164,232 +632,333 @@
 
     <main class="content-section">
         <div class="container">
-
-            <!-- Featured News -->
-            <div class="featured-news animate-fade-up">
-                <div class="featured-news-content">
-                    <div class="news-tag">Важное</div>
-                    <div class="news-date">21 Ноября 2025</div>
-                    <h2>Расширение влияния: Рейд на Эдеку</h2>
-                    <p>В прошлую пятницу состоялся стратегически важный визит в местную Эдеку. Представители Дома
-                        Фальконе провели инспекцию пивного отдела и оценили запасы противника. Были выявлены новые
-                        потенциальные угрозы в виде скидок на крепкий алкоголь.</p>
-                    <p>Кандидаты на вступление проявили себя достойно, удерживая позиции в очереди на кассу. Операция
-                        прошла успешно, ресурсы были захвачены без потерь.</p>
-                    <a href="#" class="btn-text read-more-btn">Читать полностью &rarr;</a>
-
-                    <!-- Full Content (Hidden) -->
-                    <div class="news-full-content">
-                        <p>В прошлую пятницу состоялся стратегически важный визит в местную Эдеку. Представители Дома
-                            Фальконе провели инспекцию пивного отдела и оценили запасы противника. Были выявлены новые
-                            потенциальные угрозы в виде скидок на крепкий алкоголь.</p>
-                        <p>Кандидаты на вступление проявили себя достойно, удерживая позиции в очереди на кассу.
-                            Операция прошла успешно, ресурсы были захвачены без потерь. Мы продолжаем расширять наше
-                            влияние и укреплять позиции в регионе.</p>
-                        <p>Особая благодарность выражается всем участникам рейда за проявленную дисциплину и выдержку.
-                            Впереди нас ждут новые свершения и победы!</p>
-
-                        <div class="news-modal-gallery">
-                            <div class="gallery-item">
-                                <img src="../assets/images/history12.jpg" alt="Собрание">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="../assets/images/history8.jpg" alt="Кальян">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="../assets/images/history7.jpg" alt="Победа">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="../assets/images/history1.jpg" alt="Архив">
-                            </div>
-                        </div>
-                    </div>
+            <div id="news-container">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
                 </div>
             </div>
-
-            <!-- News Grid -->
-            <div class="news-grid">
-                <!-- News Item 1 -->
-                <div class="news-card animate-fade-up">
-                    <div class="news-card-content">
-                        <div class="news-date">14 Ноября 2025</div>
-                        <h3>Традиционный сбор: Дым и Пламя</h3>
-                        <p>Очередное заседание прошло под эгидой густого дыма. Новый табак "Ледяной Арбуз" был успешно
-                            протестирован и одобрен Доном. Атмосфера способствовала глубоким философским беседам о
-                            будущем Семьи.</p>
-                        <a href="#" class="btn-text read-more-btn">Подробнее</a>
-
-                        <!-- Full Content (Hidden) -->
-                        <div class="news-full-content">
-                            <p>Очередное заседание прошло под эгидой густого дыма. Новый табак "Ледяной Арбуз" был
-                                успешно протестирован и одобрен Доном. Атмосфера способствовала глубоким философским
-                                беседам о будущем Семьи.</p>
-                            <p>Обсуждались планы на ближайший месяц, а также стратегии по укреплению братства. Каждый
-                                член Дома высказал свое мнение, и были приняты важные решения.</p>
-
-                            <div class="news-modal-gallery">
-                                <div class="gallery-item">
-                                    <img src="../assets/images/history5.jpg" alt="Фото 5">
-                                </div>
-                                <div class="gallery-item">
-                                    <img src="../assets/images/history4.jpg" alt="Фото 4">
-                                </div>
-                                <div class="gallery-item">
-                                    <img src="../assets/images/history3.jpg" alt="Фото 3">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- News Item 2 -->
-                <div class="news-card animate-fade-up">
-                    <div class="news-card-content">
-                        <div class="news-date">07 Ноября 2025</div>
-                        <h3>Отчет о боевых действиях</h3>
-                        <p>Битва с "ThreeSixty" завершилась безоговорочной победой Дома. Потери минимальны, моральный
-                            дух на высоте. Противник был уничтожен полностью, трофеи (пустые бутылки) утилизированы
-                            согласно протоколу.</p>
-                        <a href="#" class="btn-text read-more-btn">Подробнее</a>
-
-                        <!-- Full Content (Hidden) -->
-                        <div class="news-full-content">
-                            <p>Битва с "ThreeSixty" завершилась безоговорочной победой Дома. Потери минимальны,
-                                моральный дух на высоте. Противник был уничтожен полностью, трофеи (пустые бутылки)
-                                утилизированы согласно протоколу.</p>
-                            <p>Это была славная битва, которая войдет в историю Дома Фальконе как пример мужества и
-                                стойкости наших бойцов.</p>
-
-                            <div class="news-modal-gallery">
-                                <div class="gallery-item">
-                                    <img src="../assets/images/history7.jpg" alt="Победа">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- News Item 3 -->
-                <div class="news-card animate-fade-up">
-                    <div class="news-card-content">
-                        <div class="news-date">31 Октября 2025</div>
-                        <h3>Вспоминая истоки</h3>
-                        <p>В преддверии месяца основания, мы публикуем архивные записи первых дней формирования нашего
-                            братства. Это напоминание о том, с чего все начиналось и какой путь мы прошли.</p>
-                        <a href="#" class="btn-text read-more-btn">Подробнее</a>
-
-                        <!-- Full Content (Hidden) -->
-                        <div class="news-full-content">
-                            <p>В преддверии месяца основания, мы публикуем архивные записи первых дней формирования
-                                нашего братства. Это напоминание о том, с чего все начиналось и какой путь мы прошли.
-                            </p>
-                            <p>Мы помним каждого, кто стоял у истоков, и чтим традиции, заложенные в те дни. Una Fides,
-                                Unus Dominus!</p>
-
-                            <div class="news-modal-gallery">
-                                <div class="gallery-item">
-                                    <img src="../assets/images/history1.jpg" alt="Архив">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <!-- News Modal -->
-    <div id="news-modal">
-        <div class="news-modal-content">
-            <button class="news-modal-close">&times;</button>
-            <div class="news-modal-scroll-container">
-                <div class="news-modal-body">
-                    <div class="news-modal-header">
-                        <div class="news-modal-date"></div>
-                        <h2 class="news-modal-title"></h2>
-                    </div>
-                    <div class="news-modal-text"></div>
+    <button class="admin-create-btn" id="admin-create-btn" style="display: none;"></button>
+
+    <div class="create-news-modal" id="create-news-modal">
+        <div class="create-news-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <h2 style="color: white; margin-bottom: 1.5rem;">Создать новость</h2>
+            <form class="create-news-form" id="create-news-form">
+                <div class="form-group">
+                    <label>Тег</label>
+                    <select id="news-tag" required>
+                        <option value="Важное">Важное</option>
+                        <option value="Новости">Новости</option>
+                        <option value="Объявление">Объявление</option>
+                        <option value="События">События</option>
+                    </select>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label>Заголовок</label>
+                    <input type="text" id="news-title" placeholder="Введите заголовок новости" required>
+                </div>
+                <div class="form-group">
+                    <label>Содержание</label>
+                    <textarea id="news-content" placeholder="Напишите текст новости..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Изображения</label>
+                    <div class="image-upload-area" id="image-upload-area">
+                        <input type="file" id="image-input" accept="image/*" multiple>
+                        <div class="upload-icon">📸</div>
+                        <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить изображения</p>
+                    </div>
+                    <div class="image-preview-grid" id="image-preview-grid"></div>
+                </div>
+                <button type="submit" class="submit-btn">Опубликовать новость</button>
+            </form>
         </div>
     </div>
 
     <footer class="site-footer">
         <div class="container">
-            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
-            <div class="site-version"></div>
-            <div class="footer-links">
-                <a href="../privacy">Политика конфиденциальности</a>
-                <a href="../agreement">Пользовательское соглашение</a>
-                <a href="../imprint">Сведения о владельце сайта</a>
-                <a href="../hymn">Герб и Гимн</a>
-            </div>
+            <small>© Дом Фальконе — 2025. Все права защищены.</small>
         </div>
     </footer>
 
-    <a href="../contact" class="floating-contact-btn">
-        <img src="../assets/images/phone-icon.png" alt="Contact">
-        <span class="btn-text">Связаться с Домом</span>
-    </a>
+    <script>
+        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+        const token = localStorage.getItem('auth_token');
+        let currentUser = null;
+        let uploadedImages = [];
 
-    <script src="../assets/js/main.js?v=3"></script>
+        async function loadUserHeader() {
+            if (!token) {
+                document.getElementById('auth-action').style.display = 'block';
+                document.getElementById('user-menu').style.display = 'none';
+                return;
+            }
 
-<script>
-const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-const token = localStorage.getItem('auth_token');
+            try {
+                const res = await fetch(API_BASE + "/me", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
 
-async function loadUserHeader() {
-    if (!token) {
-        // Если токена нет - показываем кнопку "Войти"
-        document.getElementById('auth-action').style.display = 'block';
-        document.getElementById('user-menu').style.display = 'none';
-        return;
-    }
-    
-    try {
-        const res = await fetch(API_BASE + "/me", {
-            headers: { "Authorization": "Bearer " + token }
+                if (res.ok) {
+                    currentUser = await res.json();
+                    document.getElementById('auth-action').style.display = 'none';
+                    document.getElementById('user-menu').style.display = 'flex';
+                    document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+                    document.getElementById('header-points').textContent = currentUser.points || 0;
+
+                    const avatar = document.getElementById('header-avatar');
+                    if (currentUser.avatar_url) {
+                        avatar.src = currentUser.avatar_url;
+                    } else {
+                        const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                        avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                    }
+
+                    if (currentUser.role === 'admin') {
+                        document.getElementById('admin-create-btn').style.display = 'flex';
+                    }
+                } else {
+                    localStorage.removeItem('auth_token');
+                    document.getElementById('auth-action').style.display = 'block';
+                    document.getElementById('user-menu').style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        async function loadNews() {
+            try {
+                const res = await fetch(API_BASE + "/news");
+                const data = await res.json();
+                const container = document.getElementById('news-container');
+                container.innerHTML = '';
+
+                if (data.news && data.news.length > 0) {
+                    data.news.forEach(news => {
+                        container.appendChild(createNewsCard(news));
+                    });
+                } else {
+                    container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Новостей пока нет</p>';
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        function createNewsCard(news) {
+            const card = document.createElement('div');
+            card.className = 'news-item';
+            const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+            const canDelete = currentUser && (currentUser.role === 'admin' || currentUser.id === news.author_id);
+
+            card.innerHTML = `
+                <div class="news-header">
+                    <div class="news-author">
+                        <img src="${news.author_avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect fill=\'%23ff1744\' width=\'40\' height=\'40\'/%3E%3C/svg%3E'}" class="news-author-avatar">
+                        <div class="news-author-info">
+                            <div class="news-author-name">${news.author_name}</div>
+                            <div class="news-date">${date}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div class="news-tag">${news.tag}</div>
+                        ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
+                    </div>
+                </div>
+                <h2 class="news-title">${news.title}</h2>
+                <div class="news-content">${news.content.replace(/\n/g, '<br>')}</div>
+                ${news.images.length > 0 ? `<div class="news-images">${news.images.map(img => `<div class="news-image"><img src="${img}"></div>`).join('')}</div>` : ''}
+                <div class="news-actions">
+                    <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
+                        <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
+                        <span>${news.likes_count}</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments(${news.id})">
+                        <svg viewBox="0 0 24 24"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9Z"/></svg>
+                        <span>${news.comments_count}</span>
+                    </button>
+                </div>
+                <div class="comments-section" id="comments-${news.id}" style="display: none;"></div>
+            `;
+            return card;
+        }
+
+        async function toggleLike(newsId, button) {
+            if (!token) {
+                alert('Войдите, чтобы ставить лайки');
+                return;
+            }
+            try {
+                const res = await fetch(API_BASE + "/news/like", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ newsId })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    button.classList.toggle('liked', data.liked);
+                    const countSpan = button.querySelector('span');
+                    countSpan.textContent = data.liked ? parseInt(countSpan.textContent) + 1 : parseInt(countSpan.textContent) - 1;
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        async function toggleComments(newsId) {
+            const section = document.getElementById(`comments-${newsId}`);
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                await loadComments(newsId);
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        async function loadComments(newsId) {
+            try {
+                const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                const res = await fetch(API_BASE + `/news/${newsId}`, { headers });
+                const data = await res.json();
+                const section = document.getElementById(`comments-${newsId}`);
+                
+                let html = token ? `<div class="comment-input-area"><textarea placeholder="Написать комментарий..." id="comment-input-${newsId}"></textarea><button class="comment-submit-btn" onclick="postComment(${newsId})">Отправить</button></div>` : '';
+
+                if (data.comments && data.comments.length > 0) {
+                    data.comments.forEach(comment => {
+                        const commentDate = new Date(comment.created_at).toLocaleString('ru-RU');
+                        const processedContent = comment.content.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+                        html += `<div class="comment-item"><img src="${comment.avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'36\' height=\'36\'%3E%3Crect fill=\'%23ff1744\' width=\'36\' height=\'36\'/%3E%3C/svg%3E'}" class="comment-avatar"><div class="comment-content"><div class="comment-author">${comment.display_name}</div><div class="comment-text">${processedContent}</div><div class="comment-date">${commentDate}</div></div></div>`;
+                    });
+                }
+                section.innerHTML = html;
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        async function postComment(newsId) {
+            const textarea = document.getElementById(`comment-input-${newsId}`);
+            const content = textarea.value.trim();
+            if (!content) return;
+            try {
+                const res = await fetch(API_BASE + "/news/comment", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ newsId, content })
+                });
+                if (res.ok) {
+                    textarea.value = '';
+                    await loadComments(newsId);
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        async function deleteNews(newsId) {
+            if (!confirm('Удалить новость?')) return;
+            try {
+                const res = await fetch(API_BASE + `/news/${newsId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (res.ok) {
+                    alert('Новость удалена');
+                    await loadNews();
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        document.getElementById('admin-create-btn')?.addEventListener('click', () => {
+            document.getElementById('create-news-modal').classList.add('active');
         });
 
-        if (res.ok) {
-            const userData = await res.json();
-            
-            // Скрываем кнопку "Войти" и показываем user menu
-            document.getElementById('auth-action').style.display = 'none';
-            document.getElementById('user-menu').style.display = 'flex';
-            
-            // Заполняем данные
-            document.getElementById('header-display-name').textContent = 
-                userData.display_name || userData.email.split('@')[0];
-            document.getElementById('header-points').textContent = userData.points || 0;
-            
-            // Аватарка
-            const avatar = document.getElementById('header-avatar');
-            if (userData.avatar_url) {
-                avatar.src = userData.avatar_url;
-            } else {
-                // SVG placeholder с первой буквой имени
-                const initial = userData.display_name ? userData.display_name[0].toUpperCase() : 'U';
-                avatar.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E" + initial + "%3C/text%3E%3C/svg%3E";
-            } // ← ВОТ ЭТА СКОБКА БЫЛА ПРОПУЩЕНА!
-        } else {
-            // Если токен невалиден - удаляем его и показываем кнопку "Войти"
-            localStorage.removeItem('auth_token');
-            document.getElementById('auth-action').style.display = 'block';
-            document.getElementById('user-menu').style.display = 'none';
-        }
-    } catch (err) {
-        console.error('Error loading user header:', err);
-        // При ошибке показываем кнопку "Войти"
-        document.getElementById('auth-action').style.display = 'block';
-        document.getElementById('user-menu').style.display = 'none';
-    }
-}
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('create-news-modal').classList.remove('active');
+        });
 
-// Запускаем при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadUserHeader);
-</script>
+        document.getElementById('image-upload-area').addEventListener('click', () => {
+            document.getElementById('image-input').click();
+        });
+
+        document.getElementById('image-input').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            const previewGrid = document.getElementById('image-preview-grid');
+            for (const file of files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`Файл слишком большой`);
+                    continue;
+                }
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const dataUrl = event.target.result;
+                    uploadedImages.push(dataUrl);
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'image-preview-item';
+                    previewItem.innerHTML = `<img src="${dataUrl}"><button type="button" class="remove-image" onclick="removeImage(${uploadedImages.length - 1})">×</button>`;
+                    previewGrid.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            const previewGrid = document.getElementById('image-preview-grid');
+            previewGrid.innerHTML = '';
+            uploadedImages.forEach((img, idx) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'image-preview-item';
+                previewItem.innerHTML = `<img src="${img}"><button type="button" class="remove-image" onclick="removeImage(${idx})">×</button>`;
+                previewGrid.appendChild(previewItem);
+            });
+        }
+
+        document.getElementById('create-news-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const content = document.getElementById('news-content').value;
+            const tag = document.getElementById('news-tag').value;
+            const submitBtn = e.target.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Публикация...';
+            try {
+                const res = await fetch(API_BASE + "/news", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ title, content, tag, images: uploadedImages })
+                });
+                if (res.ok) {
+                    alert('Новость опубликована!');
+                    document.getElementById('create-news-modal').classList.remove('active');
+                    document.getElementById('create-news-form').reset();
+                    uploadedImages = [];
+                    document.getElementById('image-preview-grid').innerHTML = '';
+                    await loadNews();
+                } else {
+                    alert('Ошибка публикации');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Ошибка публикации');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Опубликовать новость';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadUserHeader();
+            await loadNews();
+        });
+    </script>
 </body>
 
 </html>
