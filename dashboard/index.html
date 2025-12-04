@@ -901,6 +901,7 @@
     </a>
 
     <!-- Замените весь <script> блок перед </body> на этот код -->
+<!-- Замените функцию displayProfile в вашем dashboard.html -->
 <script>
     const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
     let token = localStorage.getItem('auth_token') || "";
@@ -1197,9 +1198,10 @@ ${err.message}
     }
 
     function displayProfile(data) {
-        console.log('Displaying profile for:', data.email);
-        console.log('Avatar URL:', data.avatar_url);
-        console.log('Progress data:', data.progress);
+        console.log('=== DISPLAYING PROFILE ===');
+        console.log('Full data object:', data);
+        console.log('Points:', data.points);
+        console.log('Progress object:', data.progress);
         
         // Аватарка
         const avatarImg = document.getElementById('avatar-img');
@@ -1226,28 +1228,55 @@ ${err.message}
         document.getElementById('email').textContent = data.email;
         document.getElementById('rank-name').textContent = data.rank || 'Новичок';
         document.getElementById('points').textContent = `${data.points || 0} очков`;
-        document.getElementById('header-points').textContent = data.points || 0;
-        document.getElementById('header-display-name').textContent = data.display_name || 'User';
 
-        // Аватарка в хедере
-        const avatar = document.getElementById('header-avatar');
+        // Хедер
+        document.getElementById('header-display-name').textContent = data.display_name || 'User';
+        document.getElementById('header-points').textContent = data.points || 0;
+        
+        const headerAvatar = document.getElementById('header-avatar');
         if (data.avatar_url) {
-            avatar.src = data.avatar_url;
+            headerAvatar.src = data.avatar_url;
         } else {
-            avatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40"%3E%3Crect fill="%23ff1744" width="40" height="40"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="20" font-family="Arial"%3E' + (data.display_name ? data.display_name[0].toUpperCase() : 'U') + '%3C/text%3E%3C/svg%3E';
+            headerAvatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40"%3E%3Crect fill="%23ff1744" width="40" height="40"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="20" font-family="Arial"%3E' + (data.display_name ? data.display_name[0].toUpperCase() : 'U') + '%3C/text%3E%3C/svg%3E';
         }
 
-        // ПРОГРЕСС - ИСПРАВЛЕННАЯ ВЕРСИЯ
+        // ПРОГРЕСС БАР - КРИТИЧЕСКАЯ СЕКЦИЯ
+        console.log('=== SETTING PROGRESS BAR ===');
+        
+        const progressBar = document.getElementById('progress-bar');
+        console.log('Progress bar element found:', !!progressBar);
+        
+        if (!progressBar) {
+            console.error('ERROR: progress-bar element not found!');
+            return;
+        }
+
         if (data.progress) {
-            const progressBar = document.getElementById('progress-bar');
-            const progressPercent = data.progress.progress || 0;
+            const progressValue = data.progress.progress || 0;
+            const currentPoints = data.progress.current || 0;
+            const nextThreshold = data.progress.next || 100;
             
-            console.log('Setting progress:', progressPercent + '%');
+            console.log('Progress value:', progressValue);
+            console.log('Current points:', currentPoints);
+            console.log('Next threshold:', nextThreshold);
             
-            progressBar.style.width = progressPercent + '%';
-            document.getElementById('progress-current').textContent = data.progress.current || 0;
+            // Устанавливаем ширину С ЗАДЕРЖКОЙ для анимации
+            setTimeout(() => {
+                progressBar.style.width = progressValue + '%';
+                console.log('Progress bar width set to:', progressBar.style.width);
+            }, 100);
+            
+            document.getElementById('progress-current').textContent = currentPoints;
             document.getElementById('progress-next').textContent = 
-                data.progress.next === Infinity ? '∞' : (data.progress.next || 100);
+                nextThreshold === Infinity ? '∞' : nextThreshold;
+                
+            console.log('Progress labels updated');
+        } else {
+            console.error('ERROR: data.progress is missing!', data);
+            // Устанавливаем дефолтные значения
+            progressBar.style.width = '0%';
+            document.getElementById('progress-current').textContent = data.points || 0;
+            document.getElementById('progress-next').textContent = '100';
         }
 
         // Биография
@@ -1255,6 +1284,8 @@ ${err.message}
 
         // Активность
         displayActivity(data.recent_activity || []);
+        
+        console.log('=== PROFILE DISPLAY COMPLETE ===');
     }
 
     function displayActivity(activities) {
@@ -1270,7 +1301,8 @@ ${err.message}
             'daily_visit': 'Ежедневное посещение',
             'post': 'Создание поста',
             'comment': 'Комментарий',
-            'like': 'Лайк'
+            'like': 'Лайк',
+            'avatar_upload': 'Загрузка аватарки'
         };
 
         list.innerHTML = activities.map(activity => {
