@@ -900,509 +900,473 @@
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
-    <script>
-        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-        let token = localStorage.getItem('auth_token') || "";
-        let userData = null;
-        let isLoading = false; // Флаг для предотвращения множественных запросов
+    <!-- Замените весь <script> блок перед </body> на этот код -->
+<script>
+    const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+    let token = localStorage.getItem('auth_token') || "";
+    let userData = null;
+    let isLoading = false;
 
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('Dashboard loaded, token exists:', !!token);
-            
-            if (!token) {
-                console.log('No token found, redirecting to login');
-                window.location.href = '../login';
-                return;
-            }
-
-            setupEventListeners();
-            
-            // Загружаем данные с обработкой ошибок
-            try {
-                await loadProfile();
-                await loadStats();
-            } catch (err) {
-                console.error('Failed to load dashboard data:', err);
-            }
-        });
-
-        function setupEventListeners() {
-    document.getElementById('edit-btn').addEventListener('click', showEditForm);
-    document.getElementById('cancel-btn').addEventListener('click', hideEditForm);
-    document.getElementById('save-btn').addEventListener('click', saveProfile);
-    document.getElementById('logout-btn').addEventListener('click', logout);
-    
-    // Эти две строки ОБЯЗАТЕЛЬНЫ:
-    document.getElementById('avatar-input').addEventListener('change', uploadAvatar);
-    document.getElementById('remove-avatar-btn').addEventListener('click', deleteAvatar);
-}
-
-        function showLoading(show) {
-            document.getElementById('loading').classList.toggle('active', show);
+    document.addEventListener('DOMContentLoaded', async () => {
+        console.log('Dashboard loaded, token exists:', !!token);
+        
+        if (!token) {
+            console.log('No token found, redirecting to login');
+            window.location.href = '../login';
+            return;
         }
 
-        async function loadProfile() {
-            if (isLoading) {
-                console.log('Already loading, skipping duplicate request');
-                return;
+        setupEventListeners();
+        
+        try {
+            await loadProfile();
+            await loadStats();
+            await loadUserHeader();
+        } catch (err) {
+            console.error('Failed to load dashboard data:', err);
+        }
+    });
+
+    function setupEventListeners() {
+        document.getElementById('edit-btn').addEventListener('click', showEditForm);
+        document.getElementById('cancel-btn').addEventListener('click', hideEditForm);
+        document.getElementById('save-btn').addEventListener('click', saveProfile);
+        document.getElementById('logout-btn').addEventListener('click', logout);
+        document.getElementById('avatar-input').addEventListener('change', uploadAvatar);
+        document.getElementById('remove-avatar-btn').addEventListener('click', deleteAvatar);
+    }
+
+    function showLoading(show) {
+        document.getElementById('loading').classList.toggle('active', show);
+    }
+
+    async function loadProfile() {
+        if (isLoading) {
+            console.log('Already loading, skipping duplicate request');
+            return;
+        }
+
+        isLoading = true;
+        showLoading(true);
+        
+        try {
+            console.log('=== LOADING PROFILE ===');
+            console.log('Token:', token.substring(0, 20) + '...');
+            console.log('API URL:', API_BASE + "/me");
+            
+            const res = await fetch(API_BASE + "/me", {
+                headers: { 
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            console.log('Response status:', res.status);
+
+            const responseText = await res.text();
+            console.log('Response body (raw):', responseText);
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+                console.log('Response body (parsed):', data);
+            } catch (parseErr) {
+                console.error('JSON parse error:', parseErr);
+                throw new Error('Сервер вернул некорректный JSON: ' + responseText.substring(0, 100));
             }
 
-            isLoading = true;
-            showLoading(true);
+            if (!res.ok) {
+                const errorMsg = data.error || data.message || res.statusText;
+                console.error('Request failed:', errorMsg);
+                throw new Error(`Ошибка ${res.status}: ${errorMsg}`);
+            }
             
-            try {
-                console.log('=== LOADING PROFILE ===');
-                console.log('Token:', token.substring(0, 20) + '...');
-                console.log('API URL:', API_BASE + "/me");
-                
-                const res = await fetch(API_BASE + "/me", {
-                    headers: { 
-                        "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json"
-                    }
-                });
+            if (!data || !data.email) {
+                console.error('Invalid data structure:', data);
+                throw new Error('Сервер вернул неполные данные профиля');
+            }
 
-                console.log('Response status:', res.status);
-                console.log('Response headers:', Object.fromEntries(res.headers.entries()));
-
-                // Читаем ответ как текст сначала для диагностики
-                const responseText = await res.text();
-                console.log('Response body (raw):', responseText);
-
-                let data;
-                try {
-                    data = JSON.parse(responseText);
-                    console.log('Response body (parsed):', data);
-                } catch (parseErr) {
-                    console.error('JSON parse error:', parseErr);
-                    throw new Error('Сервер вернул некорректный JSON: ' + responseText.substring(0, 100));
-                }
-
-                if (!res.ok) {
-                    const errorMsg = data.error || data.message || res.statusText;
-                    console.error('Request failed:', errorMsg);
-                    throw new Error(`Ошибка ${res.status}: ${errorMsg}`);
-                }
-                
-                if (!data || !data.email) {
-                    console.error('Invalid data structure:', data);
-                    throw new Error('Сервер вернул неполные данные профиля');
-                }
-
-                console.log('=== PROFILE LOADED SUCCESSFULLY ===');
-                userData = data;
-                console.log('=== PROFILE LOADED SUCCESSFULLY ===');
-    console.log('Avatar URL from API:', data.avatar_url); // ДОБАВЬ ЭТО
-    userData = data;
-                displayProfile(data);
-            } catch (err) {
-                console.error('=== PROFILE LOAD ERROR ===');
-                console.error('Error type:', err.name);
-                console.error('Error message:', err.message);
-                console.error('Error stack:', err.stack);
-                
-                // Показываем подробное сообщение
-                const errorDetails = `
+            console.log('=== PROFILE LOADED SUCCESSFULLY ===');
+            console.log('Avatar URL from API:', data.avatar_url);
+            userData = data;
+            displayProfile(data);
+        } catch (err) {
+            console.error('=== PROFILE LOAD ERROR ===');
+            console.error('Error type:', err.name);
+            console.error('Error message:', err.message);
+            console.error('Error stack:', err.stack);
+            
+            const errorDetails = `
 Ошибка загрузки профиля:
 ${err.message}
 
 Проверьте консоль браузера (F12) для подробностей.
 Вы будете перенаправлены на страницу входа.
-                `;
-                alert(errorDetails.trim());
-                
-                // Удаляем невалидный токен
-                localStorage.removeItem('auth_token');
-                
-                // Даём время прочитать ошибку
-                setTimeout(() => {
-                    window.location.href = '../login';
-                }, 2000);
-            } finally {
-                showLoading(false);
-                isLoading = false;
-            }
+            `;
+            alert(errorDetails.trim());
+            
+            localStorage.removeItem('auth_token');
+            
+            setTimeout(() => {
+                window.location.href = '../login';
+            }, 2000);
+        } finally {
+            showLoading(false);
+            isLoading = false;
         }
-
-// Добавь эту функцию
-async function loadUserHeader() {
-    try {
-        const res = await fetch(API_BASE + "/me", {
-            headers: { "Authorization": "Bearer " + token }
-        });
-
-        if (res.ok) {
-            const userData = await res.json();
-            
-            // Показываем user menu
-            document.getElementById('user-menu').style.display = 'flex';
-            
-            // Заполняем данные
-            document.getElementById('header-display-name').textContent = userData.display_name || userData.email.split('@')[0];
-            document.getElementById('header-points').textContent = userData.points || 0;
-            
-            // Аватарка
-            const avatar = document.getElementById('header-avatar');
-            if (userData.avatar_url) {
-                avatar.src = userData.avatar_url;
-            } else {
-                // Placeholder аватарка
-                avatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40"%3E%3Crect fill="%23ff1744" width="40" height="40"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="20" font-family="Arial"%3E' + (userData.display_name ? userData.display_name[0].toUpperCase() : 'U') + '%3C/text%3E%3C/svg%3E';
-            }
-        }
-    } catch (err) {
-        console.error('Error loading user header:', err);
-    }
-}
-
-// И вызови её в DOMContentLoaded:
-document.addEventListener('DOMContentLoaded', () => {
-    if (token) {
-        loadUserHeader(); // ДОБАВЬ ЭТУ СТРОКУ
-        checkTokenAndRedirect();
-    }
-    setupEventListeners();
-});
-        
-        async function uploadAvatar(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    // Проверка типа
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-        showMessage('Неподдерживаемый формат. Используйте JPEG, PNG, GIF или WebP', 'error');
-        return;
     }
 
-    showLoading(true);
-    try {
-        // Сжимаем изображение до 500KB
-        const compressedBlob = await compressImage(file, 500 * 1024);
-        
-        const arrayBuffer = await compressedBlob.arrayBuffer();
-        
-        const res = await fetch(API_BASE + "/avatar", {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer " + token,
-                "Content-Type": compressedBlob.type
-            },
-            body: arrayBuffer
-        });
+    async function loadUserHeader() {
+        try {
+            const res = await fetch(API_BASE + "/me", {
+                headers: { "Authorization": "Bearer " + token }
+            });
 
-        console.log('Upload response status:', res.status);
-        const data = await res.json();
-        console.log('Upload response data:', data);
-
-        if (res.ok) {
-            showMessage(data.message, 'success');
-            await loadProfile();
-            hideEditForm();
-        } else {
-            showMessage(data.error || 'Ошибка загрузки', 'error');
-        }
-    } catch (err) {
-        showMessage('Ошибка подключения к серверу', 'error');
-        console.error('Upload error:', err);
-    } finally {
-        showLoading(false);
-        event.target.value = '';
-    }
-}
-
-// НОВАЯ функция для сжатия изображения
-async function compressImage(file, maxSizeBytes) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-            const img = new Image();
-            
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
+            if (res.ok) {
+                const userData = await res.json();
                 
-                // Уменьшаем размеры если слишком большие
-                const MAX_WIDTH = 400;
-                const MAX_HEIGHT = 400;
+                document.getElementById('user-menu').style.display = 'flex';
                 
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
+                document.getElementById('header-display-name').textContent = userData.display_name || userData.email.split('@')[0];
+                document.getElementById('header-points').textContent = userData.points || 0;
+                
+                const avatar = document.getElementById('header-avatar');
+                if (userData.avatar_url) {
+                    avatar.src = userData.avatar_url;
                 } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
+                    avatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40"%3E%3Crect fill="%23ff1744" width="40" height="40"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="20" font-family="Arial"%3E' + (userData.display_name ? userData.display_name[0].toUpperCase() : 'U') + '%3C/text%3E%3C/svg%3E';
                 }
+            }
+        } catch (err) {
+            console.error('Error loading user header:', err);
+        }
+    }
+        
+    async function uploadAvatar(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showMessage('Неподдерживаемый формат. Используйте JPEG, PNG, GIF или WebP', 'error');
+            return;
+        }
+
+        showLoading(true);
+        try {
+            const compressedBlob = await compressImage(file, 500 * 1024);
+            
+            const arrayBuffer = await compressedBlob.arrayBuffer();
+            
+            const res = await fetch(API_BASE + "/avatar", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": compressedBlob.type
+                },
+                body: arrayBuffer
+            });
+
+            console.log('Upload response status:', res.status);
+            const data = await res.json();
+            console.log('Upload response data:', data);
+
+            if (res.ok) {
+                showMessage(data.message, 'success');
+                await loadProfile();
+                hideEditForm();
+            } else {
+                showMessage(data.error || 'Ошибка загрузки', 'error');
+            }
+        } catch (err) {
+            showMessage('Ошибка подключения к серверу', 'error');
+            console.error('Upload error:', err);
+        } finally {
+            showLoading(false);
+            event.target.value = '';
+        }
+    }
+
+    async function compressImage(file, maxSizeBytes) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const img = new Image();
                 
-                canvas.width = width;
-                canvas.height = height;
-                
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                
-                // Начинаем с качества 0.9 и уменьшаем пока не влезет
-                let quality = 0.9;
-                
-                const tryCompress = () => {
-                    canvas.toBlob((blob) => {
-                        if (blob.size <= maxSizeBytes || quality <= 0.1) {
-                            resolve(blob);
-                        } else {
-                            quality -= 0.1;
-                            tryCompress();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    const MAX_WIDTH = 400;
+                    const MAX_HEIGHT = 400;
+                    
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
                         }
-                    }, 'image/jpeg', quality);
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    let quality = 0.9;
+                    
+                    const tryCompress = () => {
+                        canvas.toBlob((blob) => {
+                            if (blob.size <= maxSizeBytes || quality <= 0.1) {
+                                resolve(blob);
+                            } else {
+                                quality -= 0.1;
+                                tryCompress();
+                            }
+                        }, 'image/jpeg', quality);
+                    };
+                    
+                    tryCompress();
                 };
                 
-                tryCompress();
+                img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+                img.src = e.target.result;
             };
             
-            img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
-            img.src = e.target.result;
-        };
-        
-        reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
-        reader.readAsDataURL(file);
-    });
-}
-
-
-async function deleteAvatar() {
-    if (!confirm('Удалить аватарку?')) return;
-
-    showLoading(true);
-    try {
-        const res = await fetch(API_BASE + "/avatar", {
-            method: "DELETE",
-            headers: {
-                "Authorization": "Bearer " + token
-            }
+            reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+            reader.readAsDataURL(file);
         });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            showMessage(data.message, 'success');
-            await loadProfile();
-        } else {
-            showMessage(data.error || 'Ошибка удаления', 'error');
-        }
-    } catch (err) {
-        showMessage('Ошибка подключения к серверу', 'error');
-        console.error(err);
-    } finally {
-        showLoading(false);
     }
-}
 
-        async function loadStats() {
-            try {
-                console.log('Loading stats...');
-                const res = await fetch(API_BASE + "/stats", {
-                    headers: { 
-                        "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json"
-                    }
-                });
+    async function deleteAvatar() {
+        if (!confirm('Удалить аватарку?')) return;
 
-                if (res.ok) {
-                    const data = await res.json();
-                    console.log('Stats data received:', data);
-                    document.getElementById('user-rank').textContent = data.user_rank || '-';
-                    document.getElementById('total-users').textContent = data.total_users || '-';
-                } else {
-                    console.warn('Stats request failed:', res.status);
+        showLoading(true);
+        try {
+            const res = await fetch(API_BASE + "/avatar", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + token
                 }
-            } catch (err) {
-                console.error('Stats load error:', err);
-                // Не критичная ошибка, продолжаем работу
-            }
-        }
+            });
 
-        function displayProfile(data) {
-    console.log('Displaying profile for:', data.email);
-    console.log('Avatar URL:', data.avatar_url); // Для отладки
-    
-    // Аватарка с изображением или инициалами
-    const avatarImg = document.getElementById('avatar-img');
-    const avatarInitials = document.getElementById('avatar-initials');
-    
-    // Проверяем наличие аватарки (может быть URL или Base64)
-    if (data.avatar_url && data.avatar_url.trim()) {
-        avatarImg.src = data.avatar_url;
-        avatarImg.style.display = 'block';
-        avatarInitials.style.display = 'none';
-        avatarImg.onerror = function() {
-            // Если изображение не загрузилось, показываем инициалы
-            console.error('Failed to load avatar image');
+            const data = await res.json();
+
+            if (res.ok) {
+                showMessage(data.message, 'success');
+                await loadProfile();
+            } else {
+                showMessage(data.error || 'Ошибка удаления', 'error');
+            }
+        } catch (err) {
+            showMessage('Ошибка подключения к серверу', 'error');
+            console.error(err);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    async function loadStats() {
+        try {
+            console.log('Loading stats...');
+            const res = await fetch(API_BASE + "/stats", {
+                headers: { 
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                console.log('Stats data received:', data);
+                document.getElementById('user-rank').textContent = data.user_rank || '-';
+                document.getElementById('total-users').textContent = data.total_users || '-';
+            } else {
+                console.warn('Stats request failed:', res.status);
+            }
+        } catch (err) {
+            console.error('Stats load error:', err);
+        }
+    }
+
+    function displayProfile(data) {
+        console.log('Displaying profile for:', data.email);
+        console.log('Avatar URL:', data.avatar_url);
+        console.log('Progress data:', data.progress);
+        
+        // Аватарка
+        const avatarImg = document.getElementById('avatar-img');
+        const avatarInitials = document.getElementById('avatar-initials');
+        
+        if (data.avatar_url && data.avatar_url.trim()) {
+            avatarImg.src = data.avatar_url;
+            avatarImg.style.display = 'block';
+            avatarInitials.style.display = 'none';
+            avatarImg.onerror = function() {
+                console.error('Failed to load avatar image');
+                avatarImg.style.display = 'none';
+                avatarInitials.style.display = 'block';
+            };
+        } else {
+            const initials = data.display_name ? data.display_name[0].toUpperCase() : '?';
+            avatarInitials.textContent = initials;
             avatarImg.style.display = 'none';
             avatarInitials.style.display = 'block';
-        };
-    } else {
-        const initials = data.display_name ? data.display_name[0].toUpperCase() : '?';
-        avatarInitials.textContent = initials;
-        avatarImg.style.display = 'none';
-        avatarInitials.style.display = 'block';
-    }
+        }
 
-    // Основная информация
-    document.getElementById('display-name').textContent = data.display_name || 'Аноним';
-    document.getElementById('email').textContent = data.email;
-    document.getElementById('rank-name').textContent = data.rank || 'Новичок';
-    document.getElementById('points').textContent = `${data.points || 0} очков`;
-    document.getElementById('header-points').textContent = data.points || 0;
+        // Основная информация
+        document.getElementById('display-name').textContent = data.display_name || 'Аноним';
+        document.getElementById('email').textContent = data.email;
+        document.getElementById('rank-name').textContent = data.rank || 'Новичок';
+        document.getElementById('points').textContent = `${data.points || 0} очков`;
+        document.getElementById('header-points').textContent = data.points || 0;
+        document.getElementById('header-display-name').textContent = data.display_name || 'User';
 
-            // Когда загружаешь профиль пользователя
-document.getElementById('header-display-name').textContent = userData.display_name || 'User';
-document.getElementById('header-points').textContent = userData.points || 0;
+        // Аватарка в хедере
+        const avatar = document.getElementById('header-avatar');
+        if (data.avatar_url) {
+            avatar.src = data.avatar_url;
+        } else {
+            avatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40"%3E%3Crect fill="%23ff1744" width="40" height="40"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="20" font-family="Arial"%3E' + (data.display_name ? data.display_name[0].toUpperCase() : 'U') + '%3C/text%3E%3C/svg%3E';
+        }
 
-// Для аватарки
-const avatar = document.getElementById('header-avatar');
-if (userData.avatar_url) {
-    avatar.src = userData.avatar_url;
-} else {
-    avatar.src = 'default-avatar.png'; // или используй placeholder
-}
-
-    // Прогресс
-    if (data.progress) {
-        const progressBar = document.getElementById('progress-bar');
-        const progressPercent = data.progress.progress || 0;
-        
-        console.log('Setting progress:', progressPercent + '%'); // для отладки
-        
-        progressBar.style.width = progressPercent + '%';
-        document.getElementById('progress-current').textContent = data.progress.current || 0;
-        document.getElementById('progress-next').textContent = 
-            data.progress.next === Infinity ? '∞' : (data.progress.next || 100);
-    }
-}
-
-    // Биография
-    document.getElementById('bio').textContent = data.bio || 'Биография не указана';
-
-    // Активность
-    displayActivity(data.recent_activity || []);
-}
-
-        function displayActivity(activities) {
-            const list = document.getElementById('activity-list');
+        // ПРОГРЕСС - ИСПРАВЛЕННАЯ ВЕРСИЯ
+        if (data.progress) {
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = data.progress.progress || 0;
             
-            if (activities.length === 0) {
-                list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Активность не найдена</div></div></li>';
+            console.log('Setting progress:', progressPercent + '%');
+            
+            progressBar.style.width = progressPercent + '%';
+            document.getElementById('progress-current').textContent = data.progress.current || 0;
+            document.getElementById('progress-next').textContent = 
+                data.progress.next === Infinity ? '∞' : (data.progress.next || 100);
+        }
+
+        // Биография
+        document.getElementById('bio').textContent = data.bio || 'Биография не указана';
+
+        // Активность
+        displayActivity(data.recent_activity || []);
+    }
+
+    function displayActivity(activities) {
+        const list = document.getElementById('activity-list');
+        
+        if (activities.length === 0) {
+            list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Активность не найдена</div></div></li>';
+            return;
+        }
+
+        const activityNames = {
+            'registration': 'Регистрация',
+            'daily_visit': 'Ежедневное посещение',
+            'post': 'Создание поста',
+            'comment': 'Комментарий',
+            'like': 'Лайк'
+        };
+
+        list.innerHTML = activities.map(activity => {
+            const date = new Date(activity.created_at).toLocaleString('ru-RU');
+            const name = activityNames[activity.activity_type] || activity.activity_type;
+            
+            return `
+                <li class="activity-item">
+                    <div class="activity-info">
+                        <div class="activity-type">${name}</div>
+                        <div class="activity-time">${date}</div>
+                    </div>
+                    <div class="activity-points">+${activity.points_earned}</div>
+                </li>
+            `;
+        }).join('');
+    }
+
+    function showEditForm() {
+        document.getElementById('profile-view').style.display = 'none';
+        document.getElementById('edit-form').classList.add('active');
+
+        document.getElementById('edit-name').value = userData.display_name || '';
+        document.getElementById('edit-bio').value = userData.bio || '';
+        document.getElementById('edit-password').value = '';
+        document.getElementById('edit-message').innerHTML = '';
+    }
+
+    function hideEditForm() {
+        document.getElementById('profile-view').style.display = 'block';
+        document.getElementById('edit-form').classList.remove('active');
+    }
+
+    async function saveProfile() {
+        const displayName = document.getElementById('edit-name').value.trim();
+        const bio = document.getElementById('edit-bio').value.trim();
+        const newPassword = document.getElementById('edit-password').value;
+
+        const updates = {};
+        if (displayName) updates.displayName = displayName;
+        if (bio) updates.bio = bio;
+        if (newPassword) {
+            if (newPassword.length < 8) {
+                showMessage('Пароль должен содержать минимум 8 символов', 'error');
                 return;
             }
-
-            const activityNames = {
-                'registration': 'Регистрация',
-                'daily_visit': 'Ежедневное посещение',
-                'post': 'Создание поста',
-                'comment': 'Комментарий',
-                'like': 'Лайк'
-            };
-
-            list.innerHTML = activities.map(activity => {
-                const date = new Date(activity.created_at).toLocaleString('ru-RU');
-                const name = activityNames[activity.activity_type] || activity.activity_type;
-                
-                return `
-                    <li class="activity-item">
-                        <div class="activity-info">
-                            <div class="activity-type">${name}</div>
-                            <div class="activity-time">${date}</div>
-                        </div>
-                        <div class="activity-points">+${activity.points_earned}</div>
-                    </li>
-                `;
-            }).join('');
+            updates.newPassword = newPassword;
         }
 
-        function showEditForm() {
-            document.getElementById('profile-view').style.display = 'none';
-            document.getElementById('edit-form').classList.add('active');
-
-            // Заполняем форму текущими данными
-            document.getElementById('edit-name').value = userData.display_name || '';
-            document.getElementById('edit-bio').value = userData.bio || '';
-            document.getElementById('edit-password').value = '';
-            document.getElementById('edit-message').innerHTML = '';
+        if (Object.keys(updates).length === 0) {
+            showMessage('Нечего сохранять', 'error');
+            return;
         }
 
-        function hideEditForm() {
-            document.getElementById('profile-view').style.display = 'block';
-            document.getElementById('edit-form').classList.remove('active');
-        }
+        showLoading(true);
+        try {
+            const res = await fetch(API_BASE + "/me", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify(updates)
+            });
 
-        async function saveProfile() {
-            const displayName = document.getElementById('edit-name').value.trim();
-            const bio = document.getElementById('edit-bio').value.trim();
-            const newPassword = document.getElementById('edit-password').value;
+            const data = await res.json();
 
-            const updates = {};
-            if (displayName) updates.displayName = displayName;
-            if (bio) updates.bio = bio;
-            if (newPassword) {
-                if (newPassword.length < 8) {
-                    showMessage('Пароль должен содержать минимум 8 символов', 'error');
-                    return;
-                }
-                updates.newPassword = newPassword;
+            if (res.ok) {
+                showMessage('Профиль успешно обновлен!', 'success');
+                setTimeout(async () => {
+                    await loadProfile();
+                    hideEditForm();
+                }, 1500);
+            } else {
+                showMessage(data.error || 'Ошибка обновления', 'error');
             }
-
-            if (Object.keys(updates).length === 0) {
-                showMessage('Нечего сохранять', 'error');
-                return;
-            }
-
-            showLoading(true);
-            try {
-                const res = await fetch(API_BASE + "/me", {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    },
-                    body: JSON.stringify(updates)
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    showMessage('Профиль успешно обновлен!', 'success');
-                    setTimeout(async () => {
-                        await loadProfile();
-                        hideEditForm();
-                    }, 1500);
-                } else {
-                    showMessage(data.error || 'Ошибка обновления', 'error');
-                }
-            } catch (err) {
-                showMessage('Ошибка подключения к серверу', 'error');
-                console.error(err);
-            } finally {
-                showLoading(false);
-            }
+        } catch (err) {
+            showMessage('Ошибка подключения к серверу', 'error');
+            console.error(err);
+        } finally {
+            showLoading(false);
         }
+    }
 
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('edit-message');
-            messageDiv.className = 'message ' + type;
-            messageDiv.textContent = text;
-        }
+    function showMessage(text, type) {
+        const messageDiv = document.getElementById('edit-message');
+        messageDiv.className = 'message ' + type;
+        messageDiv.textContent = text;
+    }
 
-        function logout() {
-            console.log('Logging out...');
-            localStorage.removeItem('auth_token');
-            window.location.href = '../login';
-        }
-    </script>
+    function logout() {
+        console.log('Logging out...');
+        localStorage.removeItem('auth_token');
+        window.location.href = '../login';
+    }
+</script>
     <script src="../assets/js/main.js?v=3"></script>
 </body>
 </html>
