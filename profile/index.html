@@ -387,7 +387,7 @@
                         <button class="add-friend-btn" id="add-friend-btn" style="display: none;">
                             Добавить в друзья
                         </button>
-                        <a href="../messages?chatWith=USER_ID" class="btn-primary">
+                        <a href="../messages" id="message-btn" class="btn-primary" style="display: none;">
     💬 Написать сообщение
 </a>
                     </div>
@@ -536,6 +536,13 @@
                 }
             }
         }
+
+        // Show message button for other users
+if (token && data.id != getCurrentUserId()) {
+    const messageBtn = document.getElementById('message-btn');
+    messageBtn.style.display = 'inline-flex';
+    messageBtn.href = `../messages?chatWith=${data.id}`;
+}
 
         function getCurrentUserId() {
             // Try to get current user ID from localStorage or token
