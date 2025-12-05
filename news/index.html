@@ -886,44 +886,50 @@
         let uploadedImages = [];
 
         async function loadUserHeader() {
-            if (!token) {
-                document.getElementById('auth-action').style.display = 'block';
-                document.getElementById('user-menu').style.display = 'none';
-                return;
+    if (!token) {
+        document.getElementById('auth-action').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
+        return;
+    }
+
+    try {
+        const res = await fetch(API_BASE + "/me", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            currentUser = await res.json();
+            document.getElementById('auth-action').style.display = 'none';
+            document.getElementById('user-menu').style.display = 'flex';
+            document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+            document.getElementById('header-points').textContent = currentUser.points || 0;
+
+            const avatar = document.getElementById('header-avatar');
+            if (currentUser.avatar_url) {
+                avatar.src = currentUser.avatar_url;
+            } else {
+                const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
             }
 
-            try {
-                const res = await fetch(API_BASE + "/me", {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                if (res.ok) {
-                    currentUser = await res.json();
-                    document.getElementById('auth-action').style.display = 'none';
-                    document.getElementById('user-menu').style.display = 'flex';
-                    document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
-                    document.getElementById('header-points').textContent = currentUser.points || 0;
-
-                    const avatar = document.getElementById('header-avatar');
-                    if (currentUser.avatar_url) {
-                        avatar.src = currentUser.avatar_url;
-                    } else {
-                        const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
-                        avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
-                    }
-
-                    if (currentUser.role === 'admin') {
-                        document.getElementById('admin-create-btn').style.display = 'flex';
-                    }
-                } else {
-                    localStorage.removeItem('auth_token');
-                    document.getElementById('auth-action').style.display = 'block';
-                    document.getElementById('user-menu').style.display = 'none';
-                }
-            } catch (err) {
-                console.error('Error:', err);
+            if (currentUser.role === 'admin') {
+                document.getElementById('admin-create-btn').style.display = 'flex';
             }
+
+            // ДОБАВЬТЕ ЭТИ 4 СТРОКИ СЮДА:
+            loadNotifications();
+            if (notificationsInterval) clearInterval(notificationsInterval);
+            notificationsInterval = setInterval(loadNotifications, 30000);
+            
+        } else {
+            localStorage.removeItem('auth_token');
+            document.getElementById('auth-action').style.display = 'block';
+            document.getElementById('user-menu').style.display = 'none';
         }
+    } catch (err) {
+        console.error('Error:', err);
+    }
+}
 
         async function loadNews() {
             try {
@@ -1240,6 +1246,135 @@ function closeImageFullscreen() {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeImageFullscreen();
+    }
+});
+
+        let notificationsInterval;
+
+// Загрузка уведомлений
+async function loadNotifications() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/notifications", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            updateNotificationBadge(data.unread_count);
+            renderNotifications(data.notifications);
+        }
+    } catch (err) {
+        console.error('Load notifications error:', err);
+    }
+}
+
+// Обновить значок уведомлений
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notification-badge');
+    if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// Отрисовать список уведомлений
+function renderNotifications(notifications) {
+    const list = document.getElementById('notifications-list');
+    
+    if (!notifications || notifications.length === 0) {
+        list.innerHTML = '<div class="no-notifications">Нет уведомлений</div>';
+        return;
+    }
+    
+    list.innerHTML = notifications.map(notif => {
+        const time = formatNotificationTime(notif.created_at);
+        const unreadClass = notif.is_read === 0 ? 'unread' : '';
+        
+        return `
+            <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
+                <div class="notification-title">${notif.title}</div>
+                <div class="notification-message">${notif.message}</div>
+                <div class="notification-time">${time}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Форматировать время уведомления
+function formatNotificationTime(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'Только что';
+    if (minutes < 60) return `${minutes} мин назад`;
+    if (hours < 24) return `${hours} ч назад`;
+    if (days < 7) return `${days} д назад`;
+    
+    return new Date(timestamp).toLocaleDateString('ru-RU');
+}
+
+// Обработка клика по уведомлению
+async function handleNotificationClick(notificationId, relatedId, type) {
+    try {
+        // Отмечаем как прочитанное
+        await fetch(API_BASE + "/notifications/read", {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token 
+            },
+            body: JSON.stringify({ notificationId })
+        });
+        
+        // Перезагружаем уведомления
+        await loadNotifications();
+        
+        // Переходим к связанному контенту
+        if (relatedId && type.includes('news')) {
+            // Прокручиваем к новости (если мы на странице новостей)
+            document.getElementById('notifications-dropdown').classList.remove('active');
+        }
+    } catch (err) {
+        console.error('Handle notification click error:', err);
+    }
+}
+
+// Переключение выпадающего списка уведомлений
+document.getElementById('notification-bell')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dropdown = document.getElementById('notifications-dropdown');
+    dropdown.classList.toggle('active');
+    if (dropdown.classList.contains('active')) {
+        loadNotifications();
+    }
+});
+
+// Закрытие выпадающего списка при клике вне его
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('notifications-dropdown');
+    const bell = document.getElementById('notification-bell');
+    if (dropdown && !dropdown.contains(e.target) && !bell.contains(e.target)) {
+        dropdown.classList.remove('active');
+    }
+});
+
+// Отметить все как прочитанные
+document.getElementById('mark-all-read')?.addEventListener('click', async () => {
+    try {
+        await fetch(API_BASE + "/notifications/read-all", {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        await loadNotifications();
+    } catch (err) {
+        console.error('Mark all read error:', err);
     }
 });
         
