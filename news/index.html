@@ -579,6 +579,36 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
+
+        .image-fullscreen-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+}
+
+.image-fullscreen-overlay.active {
+    display: flex;
+}
+
+.image-fullscreen-overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.news-image {
+    cursor: zoom-in;
+}
+        
     </style>
 </head>
 
@@ -790,7 +820,7 @@
                 </div>
                 <h2 class="news-title">${news.title}</h2>
                 <div class="news-content">${news.content.replace(/\n/g, '<br>')}</div>
-                ${news.images.length > 0 ? `<div class="news-images">${news.images.map(img => `<div class="news-image"><img src="${img}"></div>`).join('')}</div>` : ''}
+                ${news.images.length > 0 ? `<div class="news-images">${news.images.map((img, idx) => `<div class="news-image" onclick="openImageFullscreen('${img}')"><img src="${img}"></div>`).join('')}</div>` : ''}
                 <div class="news-actions">
                     <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
                         <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
@@ -1028,6 +1058,40 @@ window.addEventListener('load', () => {
     document.getElementById('page-loader').style.display = 'none';
     
 });
+
+// Открыть изображение в полном размере
+function openImageFullscreen(imageSrc) {
+    let overlay = document.getElementById('image-fullscreen-overlay');
+    
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'image-fullscreen-overlay';
+        overlay.className = 'image-fullscreen-overlay';
+        overlay.onclick = closeImageFullscreen;
+        document.body.appendChild(overlay);
+    }
+    
+    overlay.innerHTML = `<img src="${imageSrc}" onclick="event.stopPropagation()">`;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Закрыть полноэкранное изображение
+function closeImageFullscreen() {
+    const overlay = document.getElementById('image-fullscreen-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Закрытие по клавише Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageFullscreen();
+    }
+});
+        
     </script>
 </body>
 
