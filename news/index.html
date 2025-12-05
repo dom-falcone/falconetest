@@ -10,6 +10,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
+    
     <style>
         :root {
             --color-primary: #ff1744;
@@ -608,6 +609,143 @@
 .news-image {
     cursor: zoom-in;
 }
+
+        .notification-bell {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 23, 68, 0.1);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.notification-bell:hover {
+    background: rgba(255, 23, 68, 0.2);
+    transform: translateY(-2px);
+}
+
+.notification-bell svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 2px solid var(--color-bg);
+}
+
+.notifications-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 350px;
+    max-height: 500px;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 15px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.notifications-dropdown.active {
+    display: block;
+}
+
+.notifications-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 23, 68, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-header h3 {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.mark-all-read {
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: var(--transition);
+}
+
+.mark-all-read:hover {
+    text-decoration: underline;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 23, 68, 0.1);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.notification-item:hover {
+    background: rgba(255, 23, 68, 0.05);
+}
+
+.notification-item.unread {
+    background: rgba(255, 23, 68, 0.1);
+}
+
+.notification-item.unread::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.notification-title {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.notification-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.notification-time {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+}
+
+.no-notifications {
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+}
         
     </style>
 </head>
@@ -639,17 +777,30 @@
                 <a href="../login" class="btn-login">Войти</a>
             </div>
             <div class="user-menu" id="user-menu" style="display: none;">
-                <a href="../dashboard" class="user-profile-info">
-                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-                    <div class="user-details">
-                        <span class="user-display-name" id="header-display-name">User</span>
-                        <div class="user-points-badge">
-                            <span>⭐</span>
-                            <span id="header-points">0</span>
-                        </div>
-                    </div>
-                </a>
+    <div style="position: relative;">
+        <div class="notification-bell" id="notification-bell">
+            <svg viewBox="0 0 24 24"><path d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z"/></svg>
+            <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+        </div>
+        <div class="notifications-dropdown" id="notifications-dropdown">
+            <div class="notifications-header">
+                <h3>Уведомления</h3>
+                <button class="mark-all-read" id="mark-all-read">Прочитать все</button>
             </div>
+            <div id="notifications-list"></div>
+        </div>
+    </div>
+    <a href="../dashboard" class="user-profile-info">
+        <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+        <div class="user-details">
+            <span class="user-display-name" id="header-display-name">User</span>
+            <div class="user-points-badge">
+                <span>⭐</span>
+                <span id="header-points">0</span>
+            </div>
+        </div>
+    </a>
+</div>
         </div>
     </header>
 
