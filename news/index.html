@@ -908,25 +908,34 @@
         });
 
         document.getElementById('image-input').addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            const previewGrid = document.getElementById('image-preview-grid');
-            for (const file of files) {
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`Файл слишком большой`);
-                    continue;
-                }
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const dataUrl = event.target.result;
-                    uploadedImages.push(dataUrl);
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'image-preview-item';
-                    previewItem.innerHTML = `<img src="${dataUrl}"><button type="button" class="remove-image" onclick="removeImage(${uploadedImages.length - 1})">×</button>`;
-                    previewGrid.appendChild(previewItem);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+    const files = Array.from(e.target.files);
+    const previewGrid = document.getElementById('image-preview-grid');
+    
+    for (const file of files) {
+        if (file.size > 2 * 1024 * 1024) {
+            alert(`Файл "${file.name}" слишком большой. Максимум 2MB`);
+            continue;
+        }
+        
+        if (uploadedImages.length >= 5) {
+            alert('Максимум 5 изображений');
+            break;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            uploadedImages.push(dataUrl);
+            const previewItem = document.createElement('div');
+            previewItem.className = 'image-preview-item';
+            previewItem.innerHTML = `<img src="${dataUrl}"><button type="button" class="remove-image" onclick="removeImage(${uploadedImages.length - 1})">×</button>`;
+            previewGrid.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    e.target.value = '';
+});
 
         function removeImage(index) {
             uploadedImages.splice(index, 1);
@@ -941,37 +950,67 @@
         }
 
         document.getElementById('create-news-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const content = document.getElementById('news-content').value;
-            const tag = document.getElementById('news-tag').value;
-            const submitBtn = e.target.querySelector('.submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Публикация...';
-            try {
-                const res = await fetch(API_BASE + "/news", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ title, content, tag, images: uploadedImages })
-                });
-                if (res.ok) {
-                    alert('Новость опубликована!');
-                    document.getElementById('create-news-modal').classList.remove('active');
-                    document.getElementById('create-news-form').reset();
-                    uploadedImages = [];
-                    document.getElementById('image-preview-grid').innerHTML = '';
-                    await loadNews();
-                } else {
-                    alert('Ошибка публикации');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                alert('Ошибка публикации');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Опубликовать новость';
-            }
+    e.preventDefault();
+    
+    const title = document.getElementById('news-title').value.trim();
+    const content = document.getElementById('news-content').value.trim();
+    const tag = document.getElementById('news-tag').value;
+    
+    if (!title || !content) {
+        alert('Заполните все поля');
+        return;
+    }
+    
+    const submitBtn = e.target.querySelector('.submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Публикация...';
+    
+    try {
+        const payload = {
+            title: title,
+            content: content,
+            tag: tag,
+            images: uploadedImages
+        };
+        
+        console.log('Отправка данных:', {
+            title,
+            content: content.substring(0, 50) + '...',
+            tag,
+            imagesCount: uploadedImages.length
         });
+        
+        const res = await fetch(API_BASE + "/news", {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + token 
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const responseData = await res.json();
+        console.log('Ответ сервера:', responseData);
+        
+        if (res.ok) {
+            alert('Новость опубликована!');
+            document.getElementById('create-news-modal').classList.remove('active');
+            document.getElementById('create-news-form').reset();
+            uploadedImages = [];
+            document.getElementById('image-preview-grid').innerHTML = '';
+            await loadNews();
+        } else {
+            alert('Ошибка: ' + (responseData.error || 'Неизвестная ошибка'));
+            console.error('Ошибка публикации:', responseData);
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        alert('Ошибка публикации: ' + err.message);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Опубликовать новость';
+    }
+});
 
         document.addEventListener('DOMContentLoaded', async () => {
     try {
