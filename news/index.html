@@ -746,6 +746,71 @@
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
 }
+
+        .toast-notification {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease;
+    z-index: 10000;
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-notification.hide {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.toast-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-name {
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.toast-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
         
     </style>
 </head>
@@ -778,16 +843,18 @@
             </div>
             <div class="user-menu" id="user-menu" style="display: none;">
     <div style="position: relative;">
+        <a href="../messages" class="notification-bell" style="text-decoration: none;">
+            <svg viewBox="0 0 24 24"><path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18"/></svg>
+            <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+        </a>
+    </div>
+    <div style="position: relative;">
         <div class="notification-bell" id="notification-bell">
             <svg viewBox="0 0 24 24"><path d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z"/></svg>
             <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
         </div>
         <div class="notifications-dropdown" id="notifications-dropdown">
-            <div class="notifications-header">
-                <h3>Уведомления</h3>
-                <button class="mark-all-read" id="mark-all-read">Прочитать все</button>
-            </div>
-            <div id="notifications-list"></div>
+            <!-- ... -->
         </div>
     </div>
     <a href="../dashboard" class="user-profile-info">
@@ -920,6 +987,12 @@
             loadNotifications();
             if (notificationsInterval) clearInterval(notificationsInterval);
             notificationsInterval = setInterval(loadNotifications, 30000);
+
+             // ========== ДОБАВЬТЕ ЭТИ СТРОКИ ==========
+    loadUnreadMessagesCount();
+    if (messagesCheckInterval) clearInterval(messagesCheckInterval);
+    messagesCheckInterval = setInterval(checkNewMessages, 5000);
+    // =========================================
             
         } else {
             localStorage.removeItem('auth_token');
@@ -1484,6 +1557,114 @@ document.addEventListener('keydown', (e) => {
 
         let notificationsInterval;
 
+let messagesCheckInterval;
+
+// Загрузка количества непрочитанных сообщений
+async function loadUnreadMessagesCount() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/messages/unread-count", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            updateMessagesBadge(data.unread_count);
+        }
+    } catch (err) {
+        console.error('Load unread messages error:', err);
+    }
+}
+
+// Обновить значок сообщений
+function updateMessagesBadge(count) {
+    const badge = document.getElementById('messages-badge');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+// Показать тост-уведомление о новом сообщении
+function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
+        <div class="toast-content">
+            <div class="toast-name">${senderName}</div>
+            <div class="toast-message">${messagePreview}</div>
+        </div>
+    `;
+    
+    toast.addEventListener('click', () => {
+        window.location.href = `../messages?chatWith=${senderId}`;
+    });
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// Проверка новых сообщений (для тост-уведомлений)
+let lastMessageCount = 0;
+async function checkNewMessages() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/messages/unread-count", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            
+            if (data.unread_count > lastMessageCount && lastMessageCount > 0) {
+                // Получаем последние чаты для определения отправителя
+                const chatsRes = await fetch(API_BASE + "/chats", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                
+                if (chatsRes.ok) {
+                    const chatsData = await chatsRes.json();
+                    const latestChat = chatsData.chats.find(c => c.unread_count > 0);
+                    
+                    if (latestChat && latestChat.last_message) {
+                        showMessageToast(
+                            latestChat.other_user.name,
+                            latestChat.other_user.avatar,
+                            latestChat.last_message.content,
+                            latestChat.chat_id,
+                            latestChat.other_user.id
+                        );
+                    }
+                }
+            }
+            
+            lastMessageCount = data.unread_count;
+            updateMessagesBadge(data.unread_count);
+        }
+    } catch (err) {
+        console.error('Check new messages error:', err);
+    }
+}
+
+function getDefaultAvatar(name) {
+    const initial = name ? name[0].toUpperCase() : '?';
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45'%3E%3Crect fill='%23ff1744' width='45' height='45'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+}
+        
 // Загрузка уведомлений
 async function loadNotifications() {
     if (!token) return;
