@@ -1136,12 +1136,22 @@
             });
         }
 
-        document.getElementById('create-news-form').addEventListener('submit', async (e) => {
+        // Замените обработчик отправки формы в вашем HTML на этот код
+
+document.getElementById('create-news-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const title = document.getElementById('news-title').value.trim();
     const content = document.getElementById('news-content').value.trim();
     const tag = document.getElementById('news-tag').value;
+    
+    console.log('=== SUBMIT FORM START ===');
+    console.log('Form data:', {
+        title: title.substring(0, 50) + '...',
+        contentLength: content.length,
+        tag: tag,
+        imagesCount: uploadedImages.length
+    });
     
     if (!title || !content) {
         alert('Заполните все поля');
@@ -1160,13 +1170,15 @@
             images: uploadedImages
         };
         
-        console.log('Отправка данных:', {
-            title,
-            content: content.substring(0, 50) + '...',
-            tag,
-            imagesCount: uploadedImages.length
+        console.log('Preparing request:', {
+            url: API_BASE + "/news",
+            method: 'POST',
+            hasToken: !!token,
+            tokenPreview: token ? token.substring(0, 20) + '...' : 'none',
+            payloadSize: JSON.stringify(payload).length
         });
         
+        console.log('Sending request...');
         const res = await fetch(API_BASE + "/news", {
             method: 'POST',
             headers: { 
@@ -1176,10 +1188,27 @@
             body: JSON.stringify(payload)
         });
         
-        const responseData = await res.json();
-        console.log('Ответ сервера:', responseData);
+        console.log('Response received:', {
+            status: res.status,
+            statusText: res.statusText,
+            ok: res.ok,
+            headers: Object.fromEntries(res.headers.entries())
+        });
+        
+        const responseText = await res.text();
+        console.log('Response text:', responseText);
+        
+        let responseData;
+        try {
+            responseData = JSON.parse(responseText);
+            console.log('Response data parsed:', responseData);
+        } catch (parseErr) {
+            console.error('Failed to parse response as JSON:', parseErr);
+            throw new Error('Сервер вернул некорректный ответ: ' + responseText.substring(0, 100));
+        }
         
         if (res.ok) {
+            console.log('=== SUBMIT SUCCESS ===');
             alert('Новость опубликована!');
             document.getElementById('create-news-modal').classList.remove('active');
             document.getElementById('create-news-form').reset();
@@ -1187,15 +1216,31 @@
             document.getElementById('image-preview-grid').innerHTML = '';
             await loadNews();
         } else {
-            alert('Ошибка: ' + (responseData.error || 'Неизвестная ошибка'));
-            console.error('Ошибка публикации:', responseData);
+            console.error('=== SUBMIT FAILED ===');
+            console.error('Error response:', responseData);
+            
+            let errorMsg = 'Ошибка: ' + (responseData.error || 'Неизвестная ошибка');
+            if (responseData.details) {
+                errorMsg += '\nДетали: ' + responseData.details;
+            }
+            if (responseData.type) {
+                errorMsg += '\nТип: ' + responseData.type;
+            }
+            
+            alert(errorMsg);
         }
     } catch (err) {
+        console.error('=== SUBMIT EXCEPTION ===');
         console.error('Error:', err);
+        console.error('Error type:', err.constructor.name);
+        console.error('Error message:', err.message);
+        console.error('Error stack:', err.stack);
+        
         alert('Ошибка публикации: ' + err.message);
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Опубликовать новость';
+        console.log('=== SUBMIT FORM END ===');
     }
 });
 
