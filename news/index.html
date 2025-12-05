@@ -1099,42 +1099,121 @@
     const previewGrid = document.getElementById('image-preview-grid');
     
     for (const file of files) {
-        if (file.size > 2 * 1024 * 1024) {
-            alert(`Файл "${file.name}" слишком большой. Максимум 2MB`);
+        // Увеличенная проверка размера - максимум 500KB на изображение
+        const maxSize = 500 * 1024; // 500KB
+        if (file.size > maxSize) {
+            alert(`Файл "${file.name}" слишком большой (${(file.size / 1024).toFixed(0)}KB). Максимум ${maxSize / 1024}KB`);
             continue;
         }
         
-        if (uploadedImages.length >= 5) {
-            alert('Максимум 5 изображений');
+        // Максимум 3 изображения (вместо 5)
+        if (uploadedImages.length >= 3) {
+            alert('Максимум 3 изображения');
             break;
         }
         
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const dataUrl = event.target.result;
-            uploadedImages.push(dataUrl);
-            const previewItem = document.createElement('div');
-            previewItem.className = 'image-preview-item';
-            previewItem.innerHTML = `<img src="${dataUrl}"><button type="button" class="remove-image" onclick="removeImage(${uploadedImages.length - 1})">×</button>`;
-            previewGrid.appendChild(previewItem);
-        };
-        reader.readAsDataURL(file);
+        // Проверка типа файла
+        if (!file.type.startsWith('image/')) {
+            alert(`Файл "${file.name}" не является изображением`);
+            continue;
+        }
+        
+        console.log('Processing image:', {
+            name: file.name,
+            size: file.size,
+            type: file.type
+        });
+        
+        // Сжатие изображения
+        const compressedDataUrl = await compressImage(file, 800, 0.7); // max 800px, качество 70%
+        
+        const sizeInKB = (compressedDataUrl.length * 3 / 4 / 1024).toFixed(0);
+        console.log('Compressed image size:', sizeInKB + 'KB');
+        
+        // Проверка размера после сжатия
+        if (compressedDataUrl.length > 700 * 1024) { // ~700KB после base64
+            alert(`Даже после сжатия изображение "${file.name}" слишком большое. Попробуйте изображение меньшего размера.`);
+            continue;
+        }
+        
+        uploadedImages.push(compressedDataUrl);
+        
+        const previewItem = document.createElement('div');
+        previewItem.className = 'image-preview-item';
+        previewItem.innerHTML = `
+            <img src="${compressedDataUrl}">
+            <button type="button" class="remove-image" onclick="removeImage(${uploadedImages.length - 1})">×</button>
+        `;
+        previewGrid.appendChild(previewItem);
     }
     
     e.target.value = '';
 });
 
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            const previewGrid = document.getElementById('image-preview-grid');
-            previewGrid.innerHTML = '';
-            uploadedImages.forEach((img, idx) => {
-                const previewItem = document.createElement('div');
-                previewItem.className = 'image-preview-item';
-                previewItem.innerHTML = `<img src="${img}"><button type="button" class="remove-image" onclick="removeImage(${idx})">×</button>`;
-                previewGrid.appendChild(previewItem);
-            });
-        }
+        // Функция сжатия изображения
+async function compressImage(file, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            const img = new Image();
+            
+            img.onload = () => {
+                // Создаем canvas
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Масштабируем если больше maxWidth
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Рисуем изображение
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Конвертируем в base64 с заданным качеством
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                
+                console.log('Image compressed:', {
+                    originalSize: file.size,
+                    compressedSize: (compressedDataUrl.length * 3 / 4).toFixed(0) + ' bytes',
+                    originalDimensions: `${img.width}x${img.height}`,
+                    newDimensions: `${width}x${height}`
+                });
+                
+                resolve(compressedDataUrl);
+            };
+            
+            img.onerror = () => reject(new Error('Ошибка загрузки изображения'));
+            img.src = e.target.result;
+        };
+        
+        reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+        reader.readAsDataURL(file);
+    });
+}
+
+// Обновленная функция removeImage
+function removeImage(index) {
+    uploadedImages.splice(index, 1);
+    const previewGrid = document.getElementById('image-preview-grid');
+    previewGrid.innerHTML = '';
+    uploadedImages.forEach((img, idx) => {
+        const previewItem = document.createElement('div');
+        previewItem.className = 'image-preview-item';
+        previewItem.innerHTML = `
+            <img src="${img}">
+            <button type="button" class="remove-image" onclick="removeImage(${idx})">×</button>
+        `;
+        previewGrid.appendChild(previewItem);
+    });
+}
 
         // Замените обработчик отправки формы в вашем HTML на этот код
 
