@@ -745,9 +745,14 @@
                     container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Новостей пока нет</p>';
                 }
             } catch (err) {
-                console.error('Error:', err);
-            }
-        }
+        console.error('Error:', err);
+        const container = document.getElementById('news-container');
+        container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Ошибка загрузки новостей</p>';
+    } finally {
+        // Скрыть загрузчик
+        document.getElementById('page-loader').style.display = 'none';
+    }
+}
 
         function createNewsCard(news) {
             const card = document.createElement('div');
@@ -955,9 +960,21 @@
         });
 
         document.addEventListener('DOMContentLoaded', async () => {
-            await loadUserHeader();
-            await loadNews();
-        });
+    try {
+        await loadUserHeader();
+        await loadNews();
+    } catch (err) {
+        console.error('Init error:', err);
+    } finally {
+        document.getElementById('page-loader').style.display = 'none';
+    }
+});
+
+        // Скрыть загрузчик после загрузки
+window.addEventListener('load', () => {
+    document.getElementById('page-loader').style.display = 'none';
+    
+});
     </script>
 </body>
 
