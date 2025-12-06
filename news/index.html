@@ -654,16 +654,16 @@
 
 .notifications-dropdown {
     display: none;
-    position: absolute;
-    top: 60px;
-    right: 0;
+    position: fixed; /* Изменили с absolute на fixed */
+    top: 80px; /* Увеличили с 60px */
+    right: 20px; /* Добавили отступ справа */
     width: 350px;
-    max-height: 500px;
+    max-height: calc(100vh - 120px); /* Адаптивная высота */
     background: var(--color-surface);
     border: 1px solid rgba(255, 23, 68, 0.3);
     border-radius: 15px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 10000; /* Увеличили с 1000 */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
@@ -810,6 +810,24 @@
 .toast-message {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.85rem;
+}
+
+        @media (max-width: 768px) {
+    .notifications-dropdown {
+        position: fixed;
+        top: 70px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-height: calc(100vh - 100px);
+    }
+    
+    .toast-notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
 }
         
     </style>
@@ -1697,6 +1715,32 @@ function updateNotificationBadge(count) {
 
 // Отрисовать список уведомлений
 function renderNotifications(notifications) {
+    const dropdown = document.getElementById('notifications-dropdown');
+    
+    // Создаём полную структуру если её нет
+    if (!dropdown.querySelector('.notifications-header')) {
+        dropdown.innerHTML = `
+            <div class="notifications-header">
+                <h3>Уведомления</h3>
+                <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+            </div>
+            <div id="notifications-list"></div>
+        `;
+        
+        // Добавляем обработчик для кнопки "Прочитать все"
+        document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
+            try {
+                await fetch(API_BASE + "/notifications/read-all", {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                await loadNotifications();
+            } catch (err) {
+                console.error('Mark all read error:', err);
+            }
+        });
+    }
+    
     const list = document.getElementById('notifications-list');
     
     if (!notifications || notifications.length === 0) {
@@ -1776,19 +1820,6 @@ document.addEventListener('click', (e) => {
     const bell = document.getElementById('notification-bell');
     if (dropdown && !dropdown.contains(e.target) && !bell.contains(e.target)) {
         dropdown.classList.remove('active');
-    }
-});
-
-// Отметить все как прочитанные
-document.getElementById('mark-all-read')?.addEventListener('click', async () => {
-    try {
-        await fetch(API_BASE + "/notifications/read-all", {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + token }
-        });
-        await loadNotifications();
-    } catch (err) {
-        console.error('Mark all read error:', err);
     }
 });
         
