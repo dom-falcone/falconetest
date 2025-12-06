@@ -697,206 +697,39 @@
             </div>
         </div>
     </footer>
+<script>
+   // ============================================
+// ОБЪЕДИНЁННЫЙ СКРИПТ ПРОФИЛЯ
+// ============================================
 
-    <script>
-        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-        const token = localStorage.getItem('auth_token') || "";
-        let profileUserId = null;
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            profileUserId = urlParams.get('id');
-
-            if (!profileUserId) {
-                showError();
-                return;
-            }
-
-            await loadProfile();
-        });
-
-        function showLoading(show) {
-            const loader = document.getElementById('page-loader');
-            if (loader) {
-                if (show) {
-                    loader.classList.remove('loaded');
-                } else {
-                    loader.classList.add('loaded');
-                }
-            }
-        }
-
-        function showError() {
-            document.getElementById('profile-content').style.display = 'none';
-            document.getElementById('error-content').style.display = 'block';
-        }
-
-        async function loadProfile() {
-            showLoading(true);
-            try {
-                const headers = token ? { "Authorization": "Bearer " + token } : {};
-                const res = await fetch(API_BASE + "/user/" + profileUserId, { headers });
-
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        showError();
-                    } else {
-                        console.error('Profile load failed:', res.status);
-                        showError();
-                    }
-                    return;
-                }
-
-                const userData = await res.json();
-                displayProfile(userData);
-
-            } catch (err) {
-                console.error('Profile load error:', err);
-                showError();
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        function displayProfile(data) {
-            const avatarContainer = document.getElementById('avatar-container');
-            const avatarInitials = document.getElementById('avatar-initials');
-
-            if (data.avatar_url && data.avatar_url.trim()) {
-                const img = document.createElement('img');
-                img.src = data.avatar_url;
-                img.alt = data.display_name || 'Avatar';
-                img.onerror = function () {
-                    this.remove();
-                    avatarInitials.style.display = 'block';
-                };
-                avatarInitials.style.display = 'none';
-                avatarContainer.appendChild(img);
-            } else {
-                avatarInitials.textContent = data.display_name ? data.display_name[0].toUpperCase() : '?';
-            }
-
-            document.getElementById('display-name').textContent = data.display_name || 'Аноним';
-            document.getElementById('rank-badge').textContent = data.rank || 'Новичок';
-            document.getElementById('points').textContent = data.points || 0;
-            document.getElementById('friends-count').textContent = data.friends_count || 0;
-            document.getElementById('user-rank').textContent = data.user_rank || '-';
-            document.getElementById('bio').textContent = data.bio || 'Биография не указана';
-            document.title = `${data.display_name || 'Профиль'} - Dom Falcone`;
-
-            // Показываем кнопки только если это не свой профиль
-            const currentUserId = getCurrentUserId();
-            if (token && currentUserId && data.id != currentUserId) {
-                // Кнопка добавления в друзья
-                const addBtn = document.getElementById('add-friend-btn');
-                addBtn.style.display = 'inline-flex';
-
-                if (data.friendship_status === 'accepted') {
-                    addBtn.textContent = '✓ Уже в друзьях';
-                    addBtn.disabled = true;
-                } else if (data.friendship_status === 'pending_sent') {
-                    addBtn.textContent = 'Запрос отправлен';
-                    addBtn.disabled = true;
-                } else if (data.friendship_status === 'pending_received') {
-                    addBtn.textContent = 'Принять запрос';
-                    addBtn.onclick = () => acceptFriendRequest(data.id);
-                } else {
-                    addBtn.textContent = 'Добавить в друзья';
-                    addBtn.onclick = () => sendFriendRequest(data.id);
-                }
-
-                // Кнопка написать сообщение
-                const messageBtn = document.getElementById('message-btn');
-                messageBtn.style.display = 'inline-flex';
-                messageBtn.href = `../messages?chatWith=${data.id}`;
-            }
-        }
-
-        function getCurrentUserId() {
-            if (!token) return null;
-            try {
-                const parts = token.split('.');
-                if (parts.length !== 3) return null;
-                const payload = JSON.parse(atob(parts[1]));
-                return payload.id;
-            } catch {
-                return null;
-            }
-        }
-
-        async function sendFriendRequest(friendId) {
-            const btn = document.getElementById('add-friend-btn');
-            btn.disabled = true;
-            btn.textContent = 'Отправка...';
-
-            try {
-                const res = await fetch(API_BASE + "/friends/request", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    },
-                    body: JSON.stringify({ friendId })
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    btn.textContent = '✓ Запрос отправлен';
-                    alert(data.message || 'Запрос отправлен!');
-                } else {
-                    btn.textContent = 'Добавить в друзья';
-                    btn.disabled = false;
-                    alert(data.error || 'Ошибка отправки запроса');
-                }
-            } catch (err) {
-                console.error('Send request error:', err);
-                btn.textContent = 'Добавить в друзья';
-                btn.disabled = false;
-                alert('Ошибка подключения');
-            }
-        }
-
-        async function acceptFriendRequest(friendId) {
-            const btn = document.getElementById('add-friend-btn');
-            btn.disabled = true;
-            btn.textContent = 'Принимаем...';
-
-            try {
-                const res = await fetch(API_BASE + "/friends/accept", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    },
-                    body: JSON.stringify({ friendId })
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    btn.textContent = '✓ Уже в друзьях';
-                    alert(data.message || 'Запрос принят!');
-                    await loadProfile();
-                } else {
-                    btn.textContent = 'Принять запрос';
-                    btn.disabled = false;
-                    alert(data.error || 'Ошибка принятия запроса');
-                }
-            } catch (err) {
-                console.error('Accept request error:', err);
-                btn.textContent = 'Принять запрос';
-                btn.disabled = false;
-                alert('Ошибка подключения');
-            }
-        }
-    </script>
-    <script>
 const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-const token = localStorage.getItem('auth_token');
+const token = localStorage.getItem('auth_token') || "";
+let profileUserId = null;
+let currentUser = null;
+
+// Для уведомлений
 let notificationsInterval;
 let messagesCheckInterval;
 let lastMessageCount = 0;
+
+// ============ ИНИЦИАЛИЗАЦИЯ ============
+document.addEventListener('DOMContentLoaded', async () => {
+    // Загружаем header (если авторизован)
+    if (token) {
+        await loadUserHeader();
+    }
+
+    // Загружаем профиль пользователя
+    const urlParams = new URLSearchParams(window.location.search);
+    profileUserId = urlParams.get('id');
+
+    if (!profileUserId) {
+        showError();
+        return;
+    }
+
+    await loadProfile();
+});
 
 // ============ ЗАГРУЗКА HEADER ============
 async function loadUserHeader() {
@@ -912,21 +745,26 @@ async function loadUserHeader() {
         });
 
         if (res.ok) {
-            const currentUser = await res.json();
+            currentUser = await res.json();
+            
+            // Обновляем UI header
             document.getElementById('auth-action').style.display = 'none';
             document.getElementById('user-menu').style.display = 'flex';
-            document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+            
+            document.getElementById('header-display-name').textContent = 
+                currentUser.display_name || currentUser.email.split('@')[0];
             document.getElementById('header-points').textContent = currentUser.points || 0;
 
             const avatar = document.getElementById('header-avatar');
             if (currentUser.avatar_url) {
                 avatar.src = currentUser.avatar_url;
             } else {
-                const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                const initial = currentUser.display_name ? 
+                    currentUser.display_name[0].toUpperCase() : 'U';
                 avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
             }
 
-            // Запускаем загрузку уведомлений и сообщений
+            // Запускаем уведомления
             loadNotifications();
             loadUnreadMessagesCount();
             
@@ -941,9 +779,176 @@ async function loadUserHeader() {
             document.getElementById('user-menu').style.display = 'none';
         }
     } catch (err) {
-        console.error('Error:', err);
+        console.error('Load header error:', err);
         document.getElementById('auth-action').style.display = 'block';
         document.getElementById('user-menu').style.display = 'none';
+    }
+}
+
+// ============ ЗАГРУЗКА ПРОФИЛЯ ============
+function showLoading(show) {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        if (show) {
+            loader.classList.remove('loaded');
+        } else {
+            loader.classList.add('loaded');
+        }
+    }
+}
+
+function showError() {
+    document.getElementById('profile-content').style.display = 'none';
+    document.getElementById('error-content').style.display = 'block';
+}
+
+async function loadProfile() {
+    showLoading(true);
+    try {
+        const headers = token ? { "Authorization": "Bearer " + token } : {};
+        const res = await fetch(API_BASE + "/user/" + profileUserId, { headers });
+
+        if (!res.ok) {
+            if (res.status === 404) {
+                showError();
+            } else {
+                console.error('Profile load failed:', res.status);
+                showError();
+            }
+            return;
+        }
+
+        const userData = await res.json();
+        displayProfile(userData);
+
+    } catch (err) {
+        console.error('Profile load error:', err);
+        showError();
+    } finally {
+        showLoading(false);
+    }
+}
+
+function displayProfile(data) {
+    const avatarContainer = document.getElementById('avatar-container');
+    const avatarInitials = document.getElementById('avatar-initials');
+
+    if (data.avatar_url && data.avatar_url.trim()) {
+        const img = document.createElement('img');
+        img.src = data.avatar_url;
+        img.alt = data.display_name || 'Avatar';
+        img.onerror = function () {
+            this.remove();
+            avatarInitials.style.display = 'block';
+        };
+        avatarInitials.style.display = 'none';
+        avatarContainer.appendChild(img);
+    } else {
+        avatarInitials.textContent = data.display_name ? 
+            data.display_name[0].toUpperCase() : '?';
+    }
+
+    document.getElementById('display-name').textContent = data.display_name || 'Аноним';
+    document.getElementById('rank-badge').textContent = data.rank || 'Новичок';
+    document.getElementById('points').textContent = data.points || 0;
+    document.getElementById('friends-count').textContent = data.friends_count || 0;
+    document.getElementById('user-rank').textContent = data.user_rank || '-';
+    document.getElementById('bio').textContent = data.bio || 'Биография не указана';
+    document.title = `${data.display_name || 'Профиль'} - Dom Falcone`;
+
+    // Показываем кнопки только если это не свой профиль
+    const isOwnProfile = currentUser && data.id == currentUser.id;
+    
+    if (token && !isOwnProfile) {
+        // Кнопка добавления в друзья
+        const addBtn = document.getElementById('add-friend-btn');
+        addBtn.style.display = 'inline-flex';
+
+        if (data.friendship_status === 'accepted') {
+            addBtn.textContent = '✓ Уже в друзьях';
+            addBtn.disabled = true;
+        } else if (data.friendship_status === 'pending_sent') {
+            addBtn.textContent = 'Запрос отправлен';
+            addBtn.disabled = true;
+        } else if (data.friendship_status === 'pending_received') {
+            addBtn.textContent = 'Принять запрос';
+            addBtn.onclick = () => acceptFriendRequest(data.id);
+        } else {
+            addBtn.textContent = 'Добавить в друзья';
+            addBtn.onclick = () => sendFriendRequest(data.id);
+        }
+
+        // Кнопка написать сообщение
+        const messageBtn = document.getElementById('message-btn');
+        messageBtn.style.display = 'inline-flex';
+        messageBtn.href = `../messages?chatWith=${data.id}`;
+    }
+}
+
+async function sendFriendRequest(friendId) {
+    const btn = document.getElementById('add-friend-btn');
+    btn.disabled = true;
+    btn.textContent = 'Отправка...';
+
+    try {
+        const res = await fetch(API_BASE + "/friends/request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ friendId })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            btn.textContent = '✓ Запрос отправлен';
+            alert(data.message || 'Запрос отправлен!');
+        } else {
+            btn.textContent = 'Добавить в друзья';
+            btn.disabled = false;
+            alert(data.error || 'Ошибка отправки запроса');
+        }
+    } catch (err) {
+        console.error('Send request error:', err);
+        btn.textContent = 'Добавить в друзья';
+        btn.disabled = false;
+        alert('Ошибка подключения');
+    }
+}
+
+async function acceptFriendRequest(friendId) {
+    const btn = document.getElementById('add-friend-btn');
+    btn.disabled = true;
+    btn.textContent = 'Принимаем...';
+
+    try {
+        const res = await fetch(API_BASE + "/friends/accept", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ friendId })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            btn.textContent = '✓ Уже в друзьях';
+            alert(data.message || 'Запрос принят!');
+            await loadProfile();
+        } else {
+            btn.textContent = 'Принять запрос';
+            btn.disabled = false;
+            alert(data.error || 'Ошибка принятия запроса');
+        }
+    } catch (err) {
+        console.error('Accept request error:', err);
+        btn.textContent = 'Принять запрос';
+        btn.disabled = false;
+        alert('Ошибка подключения');
     }
 }
 
@@ -989,9 +994,10 @@ function renderNotifications(notifications) {
         const unreadClass = notif.is_read === 0 ? 'unread' : '';
         
         return `
-            <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
-                <div class="notification-title">${notif.title}</div>
-                <div class="notification-message">${notif.message}</div>
+            <div class="notification-item ${unreadClass}" 
+                 onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
+                <div class="notification-title">${escapeHtml(notif.title)}</div>
+                <div class="notification-message">${escapeHtml(notif.message)}</div>
                 <div class="notification-time">${time}</div>
             </div>
         `;
@@ -1027,7 +1033,6 @@ async function handleNotificationClick(notificationId, relatedId, type) {
         await loadNotifications();
         document.getElementById('notifications-dropdown').classList.remove('active');
         
-        // Переход к связанному контенту
         if (type === 'new_message' && relatedId) {
             window.location.href = `../messages`;
         } else if (type.includes('news') && relatedId) {
@@ -1117,8 +1122,8 @@ function showMessageToast(senderName, senderAvatar, messagePreview, chatId, send
     toast.innerHTML = `
         <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
         <div class="toast-content">
-            <div class="toast-name">${senderName}</div>
-            <div class="toast-message">${messagePreview}</div>
+            <div class="toast-name">${escapeHtml(senderName)}</div>
+            <div class="toast-message">${escapeHtml(messagePreview)}</div>
         </div>
     `;
     
@@ -1134,9 +1139,17 @@ function showMessageToast(senderName, senderAvatar, messagePreview, chatId, send
     }, 5000);
 }
 
+// ============ УТИЛИТЫ ============
 function getDefaultAvatar(name) {
     const initial = name ? name[0].toUpperCase() : '?';
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45'%3E%3Crect fill='%23ff1744' width='45' height='45'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
@@ -1168,10 +1181,7 @@ document.addEventListener('click', (e) => {
         dropdown.classList.remove('active');
     }
 });
-
-// ============ ИНИЦИАЛИЗАЦИЯ ============
-document.addEventListener('DOMContentLoaded', loadUserHeader);
-</script>
+        </script>
 
     <script src="../assets/js/main.js?v=3"></script>
 </body>
