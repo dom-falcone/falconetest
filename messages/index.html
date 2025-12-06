@@ -19,23 +19,24 @@
         }
 
         .messages-container {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 0;
-            height: calc(100vh - 80px);
-            background: var(--color-surface);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 23, 68, 0.2);
-        }
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 0;
+    height: calc(100vh - 80px); /* Уже правильно */
+    background: var(--color-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 23, 68, 0.2);
+}
 
-        /* СПИСОК ЧАТОВ */
-        .chats-sidebar {
-            background: var(--color-surface);
-            border-right: 1px solid rgba(255, 23, 68, 0.2);
-            display: flex;
-            flex-direction: column;
-        }
+        /* СПИСОК ЧАТОВ - добавьте overflow */
+.chats-sidebar {
+    background: var(--color-surface);
+    border-right: 1px solid rgba(255, 23, 68, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* ДОБАВЬТЕ ЭТУ СТРОКУ */
+}
 
         .chats-header {
             padding: 1.5rem;
@@ -68,9 +69,9 @@
         }
 
         .chats-list {
-            flex: 1;
-            overflow-y: auto;
-        }
+    flex: 1;
+    overflow-y: auto; /* Уже есть, проверьте что осталось */
+}
 
         .chat-item {
             padding: 1rem 1.5rem;
@@ -146,12 +147,14 @@
             font-weight: 600;
         }
 
-        /* ОБЛАСТЬ СООБЩЕНИЙ */
-        .chat-area {
-            display: flex;
-            flex-direction: column;
-            background: var(--color-bg);
-        }
+        /* ОБЛАСТЬ СООБЩЕНИЙ - главное исправление */
+.chat-area {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    height: 100%; /* ДОБАВЬТЕ */
+    overflow: hidden; /* ДОБАВЬТЕ */
+}
 
         .chat-area-empty {
             display: flex;
@@ -169,13 +172,14 @@
         }
 
         .chat-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 23, 68, 0.2);
-            background: var(--color-surface);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 23, 68, 0.2);
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0; /* ДОБАВЬТЕ - не позволяет сжиматься */
+}
 
         .chat-header-avatar {
             width: 45px;
@@ -192,13 +196,15 @@
         }
 
         .messages-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+    flex: 1;
+    overflow-y: auto; /* Уже есть */
+    overflow-x: hidden; /* ДОБАВЬТЕ */
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 0; /* ВАЖНО - позволяет flex-item сжиматься */
+}
 
         .message {
             display: flex;
@@ -262,13 +268,14 @@
 
         /* ФОРМА ОТПРАВКИ */
         .message-input-area {
-            padding: 1.5rem;
-            background: var(--color-surface);
-            border-top: 1px solid rgba(255, 23, 68, 0.2);
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-        }
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border-top: 1px solid rgba(255, 23, 68, 0.2);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-shrink: 0; /* ДОБАВЬТЕ - не позволяет сжиматься */
+}
 
         .message-input-area textarea {
             flex: 1;
@@ -410,6 +417,33 @@
                 display: flex;
             }
         }
+
+        /* Кастомные скроллбары */
+.chats-list::-webkit-scrollbar,
+.messages-area::-webkit-scrollbar,
+.notifications-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chats-list::-webkit-scrollbar-track,
+.messages-area::-webkit-scrollbar-track,
+.notifications-dropdown::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.chats-list::-webkit-scrollbar-thumb,
+.messages-area::-webkit-scrollbar-thumb,
+.notifications-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 23, 68, 0.5);
+    border-radius: 10px;
+}
+
+.chats-list::-webkit-scrollbar-thumb:hover,
+.messages-area::-webkit-scrollbar-thumb:hover,
+.notifications-dropdown::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 23, 68, 0.7);
+}
     </style>
 </head>
 
