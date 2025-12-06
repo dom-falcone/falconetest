@@ -208,90 +208,336 @@
                 flex-direction: column;
             }
         }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .user-profile-info {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.3rem 1rem 0.3rem 0.3rem;
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 30px;
-            position: relative;
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .user-profile-info:hover {
-            background: rgba(255, 23, 68, 0.2);
-            border-color: rgba(255, 23, 68, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-        }
-
-        .user-profile-info::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            bottom: 8px;
-            width: 10px;
-            height: 10px;
-            background-color: #00e676;
-            border-radius: 50%;
-            border: 2px solid var(--color-bg);
-            box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-            animation: pulse-online 2s infinite;
-            z-index: 10;
-        }
-
-        @keyframes pulse-online {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-            }
-        }
-
-        .header-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--color-primary);
-            position: relative;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .user-display-name {
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            line-height: 1;
-        }
-
-        .user-points-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.75rem;
-            color: var(--color-primary);
-        }
     </style>
+    <style>
+/* Базовые стили для user menu */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.3rem 1rem 0.3rem 0.3rem;
+    background: rgba(255, 23, 68, 0.1);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 30px;
+    position: relative;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.user-profile-info:hover {
+    background: rgba(255, 23, 68, 0.2);
+    border-color: rgba(255, 23, 68, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+}
+
+/* Индикатор "онлайн" */
+.user-profile-info::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: #00e676;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg);
+    box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
+    animation: pulse-online 2s infinite;
+    z-index: 10;
+}
+
+@keyframes pulse-online {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+.header-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+    position: relative;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.user-display-name {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.user-points-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--color-primary);
+}
+
+/* Кнопки уведомлений и сообщений */
+.notification-bell {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 23, 68, 0.1);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.notification-bell:hover {
+    background: rgba(255, 23, 68, 0.2);
+    transform: translateY(-2px);
+}
+
+.notification-bell svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 2px solid var(--color-bg);
+}
+
+/* Выпадающий список уведомлений */
+.notifications-dropdown {
+    display: none;
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 350px;
+    max-height: calc(100vh - 120px);
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 15px;
+    overflow-y: auto;
+    z-index: 10000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.notifications-dropdown.active {
+    display: block;
+}
+
+.notifications-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 23, 68, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-header h3 {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.mark-all-read {
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: var(--transition);
+}
+
+.mark-all-read:hover {
+    text-decoration: underline;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 23, 68, 0.1);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.notification-item:hover {
+    background: rgba(255, 23, 68, 0.05);
+}
+
+.notification-item.unread {
+    background: rgba(255, 23, 68, 0.1);
+}
+
+.notification-item.unread::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.notification-title {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.notification-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.notification-time {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+}
+
+.no-notifications {
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Тост-уведомления */
+.toast-notification {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease;
+    z-index: 10000;
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-notification.hide {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.toast-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-name {
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.toast-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+/* Скроллбары */
+.notifications-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 23, 68, 0.5);
+    border-radius: 10px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 23, 68, 0.7);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .notifications-dropdown {
+        position: fixed;
+        top: 70px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-height: calc(100vh - 100px);
+    }
+    
+    .toast-notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+}
+</style>
 </head>
 
 <body>
@@ -315,37 +561,72 @@
     </div>
 
     <header class="topbar">
-        <div class="container topbar-inner">
-            <div class="brand">
-                <a href="../homepage">
-                    <div class="logo-mark"
-                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
-                    <span class="brand-title">Dom Falcone</span>
-                </a>
-            </div>
-            <nav class="nav">
-                <a href="../about">О доме</a>
-                <a href="../history">История</a>
-                <a href="../enemies">Противники</a>
-                <a href="../news">Новости</a>
-            </nav>
-            <div class="auth-action" id="auth-action">
-                <a href="../login" class="btn-login">Войти</a>
-            </div>
-            <div class="user-menu" id="user-menu" style="display: none;">
-                <a href="../dashboard" class="user-profile-info">
-                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-                    <div class="user-details">
-                        <span class="user-display-name" id="header-display-name">User</span>
-                        <div class="user-points-badge">
-                            <span>⭐</span>
-                            <span id="header-points">0</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
+    <div class="container topbar-inner">
+        <div class="brand">
+            <a href="../homepage">
+                <div class="logo-mark" style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                <span class="brand-title">Dom Falcone</span>
+            </a>
         </div>
-    </header>
+        <nav class="nav">
+            <a href="../about">О доме</a>
+            <a href="../history">История</a>
+            <a href="../enemies">Противники</a>
+            <a href="../news">Новости</a>
+        </nav>
+        
+        <!-- Кнопка "Войти" (показывается когда не авторизован) -->
+        <div class="auth-action" id="auth-action">
+            <a href="../login" class="btn-login">Войти</a>
+        </div>
+
+        <!-- User Menu (показывается когда авторизован) -->
+        <div class="user-menu" id="user-menu" style="display: none;">
+            <!-- Кнопка сообщений -->
+            <div style="position: relative;">
+                <a href="../messages" class="notification-bell" style="text-decoration: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18"/>
+                    </svg>
+                    <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+                </a>
+            </div>
+            
+            <!-- Кнопка уведомлений -->
+            <div style="position: relative;">
+                <div class="notification-bell" id="notification-bell">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z"/>
+                    </svg>
+                    <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                </div>
+                
+                <!-- Выпадающий список уведомлений -->
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notifications-header">
+                        <h3>Уведомления</h3>
+                        <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+                    </div>
+                    <div id="notifications-list">
+                        <div class="no-notifications">Нет уведомлений</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Профиль пользователя -->
+            <a href="../dashboard" class="user-profile-info">
+                <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                <div class="user-details">
+                    <span class="user-display-name" id="header-display-name">User</span>
+                    <div class="user-points-badge">
+                        <span>⭐</span>
+                        <span id="header-points">0</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
 
     <main>
         <div class="profile-page-header">
@@ -610,6 +891,288 @@
             }
         }
     </script>
+    <script>
+const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+const token = localStorage.getItem('auth_token');
+let notificationsInterval;
+let messagesCheckInterval;
+let lastMessageCount = 0;
+
+// ============ ЗАГРУЗКА HEADER ============
+async function loadUserHeader() {
+    if (!token) {
+        document.getElementById('auth-action').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
+        return;
+    }
+
+    try {
+        const res = await fetch(API_BASE + "/me", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const currentUser = await res.json();
+            document.getElementById('auth-action').style.display = 'none';
+            document.getElementById('user-menu').style.display = 'flex';
+            document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+            document.getElementById('header-points').textContent = currentUser.points || 0;
+
+            const avatar = document.getElementById('header-avatar');
+            if (currentUser.avatar_url) {
+                avatar.src = currentUser.avatar_url;
+            } else {
+                const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+            }
+
+            // Запускаем загрузку уведомлений и сообщений
+            loadNotifications();
+            loadUnreadMessagesCount();
+            
+            if (notificationsInterval) clearInterval(notificationsInterval);
+            notificationsInterval = setInterval(loadNotifications, 30000);
+            
+            if (messagesCheckInterval) clearInterval(messagesCheckInterval);
+            messagesCheckInterval = setInterval(checkNewMessages, 5000);
+        } else {
+            localStorage.removeItem('auth_token');
+            document.getElementById('auth-action').style.display = 'block';
+            document.getElementById('user-menu').style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('auth-action').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
+    }
+}
+
+// ============ УВЕДОМЛЕНИЯ ============
+async function loadNotifications() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/notifications", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            updateNotificationBadge(data.unread_count);
+            renderNotifications(data.notifications);
+        }
+    } catch (err) {
+        console.error('Load notifications error:', err);
+    }
+}
+
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notification-badge');
+    if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function renderNotifications(notifications) {
+    const list = document.getElementById('notifications-list');
+    
+    if (!notifications || notifications.length === 0) {
+        list.innerHTML = '<div class="no-notifications">Нет уведомлений</div>';
+        return;
+    }
+    
+    list.innerHTML = notifications.map(notif => {
+        const time = formatNotificationTime(notif.created_at);
+        const unreadClass = notif.is_read === 0 ? 'unread' : '';
+        
+        return `
+            <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
+                <div class="notification-title">${notif.title}</div>
+                <div class="notification-message">${notif.message}</div>
+                <div class="notification-time">${time}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function formatNotificationTime(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'Только что';
+    if (minutes < 60) return `${minutes} мин назад`;
+    if (hours < 24) return `${hours} ч назад`;
+    if (days < 7) return `${days} д назад`;
+    
+    return new Date(timestamp).toLocaleDateString('ru-RU');
+}
+
+async function handleNotificationClick(notificationId, relatedId, type) {
+    try {
+        await fetch(API_BASE + "/notifications/read", {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token 
+            },
+            body: JSON.stringify({ notificationId })
+        });
+        
+        await loadNotifications();
+        document.getElementById('notifications-dropdown').classList.remove('active');
+        
+        // Переход к связанному контенту
+        if (type === 'new_message' && relatedId) {
+            window.location.href = `../messages`;
+        } else if (type.includes('news') && relatedId) {
+            window.location.href = `../news`;
+        }
+    } catch (err) {
+        console.error('Handle notification click error:', err);
+    }
+}
+
+// ============ СООБЩЕНИЯ ============
+async function loadUnreadMessagesCount() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/messages/unread-count", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            updateMessagesBadge(data.unread_count);
+        }
+    } catch (err) {
+        console.error('Load unread messages error:', err);
+    }
+}
+
+function updateMessagesBadge(count) {
+    const badge = document.getElementById('messages-badge');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+async function checkNewMessages() {
+    if (!token) return;
+    
+    try {
+        const res = await fetch(API_BASE + "/messages/unread-count", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            
+            if (data.unread_count > lastMessageCount && lastMessageCount > 0) {
+                const chatsRes = await fetch(API_BASE + "/chats", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                
+                if (chatsRes.ok) {
+                    const chatsData = await chatsRes.json();
+                    const latestChat = chatsData.chats.find(c => c.unread_count > 0);
+                    
+                    if (latestChat && latestChat.last_message) {
+                        showMessageToast(
+                            latestChat.other_user.name,
+                            latestChat.other_user.avatar,
+                            latestChat.last_message.content,
+                            latestChat.chat_id,
+                            latestChat.other_user.id
+                        );
+                    }
+                }
+            }
+            
+            lastMessageCount = data.unread_count;
+            updateMessagesBadge(data.unread_count);
+        }
+    } catch (err) {
+        console.error('Check new messages error:', err);
+    }
+}
+
+function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
+        <div class="toast-content">
+            <div class="toast-name">${senderName}</div>
+            <div class="toast-message">${messagePreview}</div>
+        </div>
+    `;
+    
+    toast.addEventListener('click', () => {
+        window.location.href = `../messages?chatWith=${senderId}`;
+    });
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function getDefaultAvatar(name) {
+    const initial = name ? name[0].toUpperCase() : '?';
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45'%3E%3Crect fill='%23ff1744' width='45' height='45'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+}
+
+// ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
+document.getElementById('notification-bell')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dropdown = document.getElementById('notifications-dropdown');
+    dropdown.classList.toggle('active');
+    if (dropdown.classList.contains('active')) {
+        loadNotifications();
+    }
+});
+
+document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
+    try {
+        await fetch(API_BASE + "/notifications/read-all", {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        await loadNotifications();
+    } catch (err) {
+        console.error('Mark all read error:', err);
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('notifications-dropdown');
+    const bell = document.getElementById('notification-bell');
+    if (dropdown && !dropdown.contains(e.target) && !bell.contains(e.target)) {
+        dropdown.classList.remove('active');
+    }
+});
+
+// ============ ИНИЦИАЛИЗАЦИЯ ============
+document.addEventListener('DOMContentLoaded', loadUserHeader);
+</script>
+
     <script src="../assets/js/main.js?v=3"></script>
 </body>
 
