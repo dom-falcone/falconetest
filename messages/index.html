@@ -571,8 +571,9 @@
         }
 
         // Открытие чата
-        async function openChat(chatId, userId, userName, userAvatar) {
-            currentChatId = chatId;
+async function openChat(chatId, userId, userName, userAvatar) {
+    currentChatId = chatId;
+    lastMessagesData = []; // ДОБАВЬТЕ ЭТУ СТРОКУ - сброс при открытии нового чата
             
             // Обновляем активный чат в списке
             document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
@@ -644,34 +645,73 @@
             }
         }
 
-        // Отрисовка сообщений
-        function renderMessages(messages) {
-            const area = document.getElementById('messages-area');
-            if (!area) return;
+       // Отрисовка сообщений (умное обновление без лишних анимаций)
+let lastMessagesData = [];
 
-            const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
+function renderMessages(messages) {
+    const area = document.getElementById('messages-area');
+    if (!area) return;
 
-            area.innerHTML = messages.map(msg => {
-                const isOwn = msg.sender_id === currentUser.id;
-                const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                
-                return `
-                    <div class="message ${isOwn ? 'own' : ''}">
-                        <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" class="message-avatar">
-                        <div class="message-content">
-                            <div class="message-text">${escapeHtml(msg.content)}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
+    const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
+
+    // Проверяем, изменились ли сообщения
+    const messagesChanged = JSON.stringify(messages) !== JSON.stringify(lastMessagesData);
+    
+    if (!messagesChanged) {
+        // Если сообщения не изменились, не перерисовываем
+        return;
+    }
+
+    // Проверяем, добавились ли только новые сообщения в конец
+    const onlyNewMessages = lastMessagesData.length > 0 && 
+                           messages.length > lastMessagesData.length &&
+                           JSON.stringify(messages.slice(0, lastMessagesData.length)) === 
+                           JSON.stringify(lastMessagesData);
+
+    if (onlyNewMessages) {
+        // Добавляем только новые сообщения без перерисовки всех
+        const newMessages = messages.slice(lastMessagesData.length);
+        newMessages.forEach(msg => {
+            const isOwn = msg.sender_id === currentUser.id;
+            const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            messageDiv.innerHTML = `
+                <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" class="message-avatar">
+                <div class="message-content">
+                    <div class="message-text">${escapeHtml(msg.content)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            area.appendChild(messageDiv);
+        });
+    } else {
+        // Полная перерисовка (при первой загрузке или изменении существующих сообщений)
+        area.innerHTML = messages.map(msg => {
+            const isOwn = msg.sender_id === currentUser.id;
+            const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            
+            return `
+                <div class="message ${isOwn ? 'own' : ''}">
+                    <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(msg.content)}</div>
+                        <div class="message-time">${time}</div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `;
+        }).join('');
+    }
 
-            // Прокручиваем вниз если были внизу или это первая загрузка
-            if (scrolledToBottom || messages.length <= 10) {
-                area.scrollTop = area.scrollHeight;
-            }
-        }
+    // Сохраняем текущее состояние
+    lastMessagesData = JSON.parse(JSON.stringify(messages));
 
+    // Прокручиваем вниз если были внизу или это новые сообщения
+    if (scrolledToBottom || onlyNewMessages) {
+        area.scrollTop = area.scrollHeight;
+    }
+}
         // Отправка сообщения
         async function sendMessage() {
             const textarea = document.getElementById('message-input');
