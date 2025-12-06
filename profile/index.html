@@ -130,6 +130,7 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .back-btn {
@@ -151,7 +152,7 @@
             color: white;
         }
 
-        .add-friend-btn {
+        .add-friend-btn, .message-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -165,9 +166,10 @@
             transition: var(--transition);
             font-family: var(--font-main);
             font-size: 1rem;
+            text-decoration: none;
         }
 
-        .add-friend-btn:hover {
+        .add-friend-btn:hover, .message-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(255, 23, 68, 0.4);
         }
@@ -178,7 +180,13 @@
             transform: none;
         }
 
-        /* Loading styles are in style.css for #page-loader */
+        .message-btn {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+        }
+
+        .message-btn:hover {
+            box-shadow: 0 10px 20px rgba(33, 150, 243, 0.4);
+        }
 
         .error-state {
             text-align: center;
@@ -200,93 +208,90 @@
                 flex-direction: column;
             }
         }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-profile-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.3rem 1rem 0.3rem 0.3rem;
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 30px;
+            position: relative;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .user-profile-info:hover {
+            background: rgba(255, 23, 68, 0.2);
+            border-color: rgba(255, 23, 68, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+        }
+
+        .user-profile-info::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            width: 10px;
+            height: 10px;
+            background-color: #00e676;
+            border-radius: 50%;
+            border: 2px solid var(--color-bg);
+            box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
+            animation: pulse-online 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse-online {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        .header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+            position: relative;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .user-display-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+
+        .user-points-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--color-primary);
+        }
     </style>
-    <style>
-
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.user-profile-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.3rem 1rem 0.3rem 0.3rem;
-    background: rgba(255, 23, 68, 0.1);
-    border: 1px solid rgba(255, 23, 68, 0.3);
-    border-radius: 30px;
-    position: relative;
-    text-decoration: none;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.user-profile-info:hover {
-    background: rgba(255, 23, 68, 0.2);
-    border-color: rgba(255, 23, 68, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-}
-
-.user-profile-info::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    bottom: 8px;
-    width: 10px;
-    height: 10px;
-    background-color: #00e676;
-    border-radius: 50%;
-    border: 2px solid var(--color-bg);
-    box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-    animation: pulse-online 2s infinite;
-    z-index: 10;
-}
-
-@keyframes pulse-online {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.7;
-        transform: scale(1.1);
-    }
-}
-
-.header-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--color-primary);
-    position: relative;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.user-display-name {
-    color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
-    line-height: 1;
-}
-
-.user-points-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--color-primary);
-}
-
-</style>
 </head>
 
 <body>
@@ -324,28 +329,23 @@
                 <a href="../enemies">Противники</a>
                 <a href="../news">Новости</a>
             </nav>
-            <!-- Показываем кнопку по умолчанию -->
-<div class="auth-action" id="auth-action">
-    <a href="../login" class="btn-login">Войти</a>
-</div>
-
-<!-- Скрываем user menu по умолчанию -->
-<div class="user-menu" id="user-menu" style="display: none;">
-    <a href="../dashboard" class="user-profile-info">
-        <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-        <div class="user-details">
-            <span class="user-display-name" id="header-display-name">User</span>
-            <div class="user-points-badge">
-                <span>⭐</span>
-                <span id="header-points">0</span>
+            <div class="auth-action" id="auth-action">
+                <a href="../login" class="btn-login">Войти</a>
+            </div>
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <a href="../dashboard" class="user-profile-info">
+                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                    <div class="user-details">
+                        <span class="user-display-name" id="header-display-name">User</span>
+                        <div class="user-points-badge">
+                            <span>⭐</span>
+                            <span id="header-points">0</span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-    </a>
-</div>
-        </div>
     </header>
-
-
 
     <main>
         <div class="profile-page-header">
@@ -357,7 +357,6 @@
 
         <div class="profile-container">
             <div id="profile-content">
-                <!-- Profile will be loaded here -->
                 <div class="profile-card">
                     <div class="profile-avatar-large" id="avatar-container">
                         <span id="avatar-initials">?</span>
@@ -387,9 +386,9 @@
                         <button class="add-friend-btn" id="add-friend-btn" style="display: none;">
                             Добавить в друзья
                         </button>
-                        <a href="../messages" id="message-btn" class="btn-primary" style="display: none;">
-    💬 Написать сообщение
-</a>
+                        <a href="../messages" class="message-btn" id="message-btn" style="display: none;">
+                            💬 Написать сообщение
+                        </a>
                     </div>
                 </div>
             </div>
@@ -424,7 +423,6 @@
         let profileUserId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Get user ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             profileUserId = urlParams.get('id');
 
@@ -455,7 +453,6 @@
         async function loadProfile() {
             showLoading(true);
             try {
-                // Use the correct /user/:id endpoint (singular "user", not "users")
                 const headers = token ? { "Authorization": "Bearer " + token } : {};
                 const res = await fetch(API_BASE + "/user/" + profileUserId, { headers });
 
@@ -481,7 +478,6 @@
         }
 
         function displayProfile(data) {
-            // Avatar
             const avatarContainer = document.getElementById('avatar-container');
             const avatarInitials = document.getElementById('avatar-initials');
 
@@ -499,25 +495,18 @@
                 avatarInitials.textContent = data.display_name ? data.display_name[0].toUpperCase() : '?';
             }
 
-            // Basic info
             document.getElementById('display-name').textContent = data.display_name || 'Аноним';
             document.getElementById('rank-badge').textContent = data.rank || 'Новичок';
             document.getElementById('points').textContent = data.points || 0;
-
-            // Friends count from API
             document.getElementById('friends-count').textContent = data.friends_count || 0;
-
-            // Leaderboard position - use user_rank from API
             document.getElementById('user-rank').textContent = data.user_rank || '-';
-
-            // Bio from API
             document.getElementById('bio').textContent = data.bio || 'Биография не указана';
-
-            // Update page title
             document.title = `${data.display_name || 'Профиль'} - Dom Falcone`;
 
-            // Show add friend button based on friendship_status
-            if (token && data.id != getCurrentUserId()) {
+            // Показываем кнопки только если это не свой профиль
+            const currentUserId = getCurrentUserId();
+            if (token && currentUserId && data.id != currentUserId) {
+                // Кнопка добавления в друзья
                 const addBtn = document.getElementById('add-friend-btn');
                 addBtn.style.display = 'inline-flex';
 
@@ -534,21 +523,21 @@
                     addBtn.textContent = 'Добавить в друзья';
                     addBtn.onclick = () => sendFriendRequest(data.id);
                 }
+
+                // Кнопка написать сообщение
+                const messageBtn = document.getElementById('message-btn');
+                messageBtn.style.display = 'inline-flex';
+                messageBtn.href = `../messages?chatWith=${data.id}`;
             }
         }
 
-        // Show message button for other users
-if (token && data.id != getCurrentUserId()) {
-    const messageBtn = document.getElementById('message-btn');
-    messageBtn.style.display = 'inline-flex';
-    messageBtn.href = `../messages?chatWith=${data.id}`;
-}
-
         function getCurrentUserId() {
-            // Try to get current user ID from localStorage or token
+            if (!token) return null;
             try {
-                const tokenData = JSON.parse(atob(token.split('.')[1]));
-                return tokenData.userId || tokenData.id || tokenData.sub;
+                const parts = token.split('.');
+                if (parts.length !== 3) return null;
+                const payload = JSON.parse(atob(parts[1]));
+                return payload.id;
             } catch {
                 return null;
             }
@@ -607,7 +596,6 @@ if (token && data.id != getCurrentUserId()) {
                 if (res.ok) {
                     btn.textContent = '✓ Уже в друзьях';
                     alert(data.message || 'Запрос принят!');
-                    // Reload profile to update status
                     await loadProfile();
                 } else {
                     btn.textContent = 'Принять запрос';
@@ -623,92 +611,6 @@ if (token && data.id != getCurrentUserId()) {
         }
     </script>
     <script src="../assets/js/main.js?v=3"></script>
-    <style>
-
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.user-profile-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.3rem 1rem 0.3rem 0.3rem;
-    background: rgba(255, 23, 68, 0.1);
-    border: 1px solid rgba(255, 23, 68, 0.3);
-    border-radius: 30px;
-    position: relative;
-    text-decoration: none;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.user-profile-info:hover {
-    background: rgba(255, 23, 68, 0.2);
-    border-color: rgba(255, 23, 68, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-}
-
-.user-profile-info::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    bottom: 8px;
-    width: 10px;
-    height: 10px;
-    background-color: #00e676;
-    border-radius: 50%;
-    border: 2px solid var(--color-bg);
-    box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-    animation: pulse-online 2s infinite;
-    z-index: 10;
-}
-
-@keyframes pulse-online {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.7;
-        transform: scale(1.1);
-    }
-}
-
-.header-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--color-primary);
-    position: relative;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.user-display-name {
-    color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
-    line-height: 1;
-}
-
-.user-points-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--color-primary);
-}
-
-</style>
 </body>
 
 </html>
