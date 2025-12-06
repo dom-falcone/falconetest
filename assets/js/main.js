@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', updateStrangerTimer);
 
 // Add Site Version Label
 document.addEventListener('DOMContentLoaded', () => {
-    const versionText = 'Версия сайта: 1.6.0. Идет разработка. fahjfashjkhjkafshjkasfjhkasf';
+    const versionText = 'Версия сайта: 1.6.0. Идет разработка.';
 
     // Try to find existing version div first
     const existingVersion = document.querySelector('.site-footer .site-version');
