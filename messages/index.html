@@ -1013,519 +1013,61 @@
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
-    <script>
-        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-        const token = localStorage.getItem('auth_token');
-        
-        if (!token) {
-            window.location.href = '../login';
-        }
+<script>
 
-        let currentUser = null;
-        let currentChatId = null;
-        let chats = [];
-        let messagesPollingInterval = null;
-        let chatsPollingInterval = null;
-        let lastMessagesData = [];
+// ============================================
+// ОСНОВНОЙ СКРИПТ СООБЩЕНИЙ (ОБЪЕДИНЁННЫЙ)
+// ============================================
 
-        // Загрузка профиля пользователя
-        async function loadUserProfile() {
-            try {
-                const res = await fetch(API_BASE + "/me", {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                if (res.ok) {
-                    currentUser = await res.json();
-                    document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
-                    
-                    const avatar = document.getElementById('header-avatar');
-                    if (currentUser.avatar_url) {
-                        avatar.src = currentUser.avatar_url;
-                    } else {
-                        const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
-                        avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
-                    }
-                } else {
-                    localStorage.removeItem('auth_token');
-                    window.location.href = '../login';
-                }
-            } catch (err) {
-                console.error('Load profile error:', err);
-            }
-        }
-
-        // Загрузка списка чатов
-        async function loadChats() {
-            try {
-                const res = await fetch(API_BASE + "/chats", {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    chats = data.chats;
-                    renderChatsList();
-                }
-            } catch (err) {
-                console.error('Load chats error:', err);
-            }
-        }
-
-        // Отрисовка списка чатов
-        function renderChatsList() {
-            const list = document.getElementById('chats-list');
-            
-            if (!chats || chats.length === 0) {
-                list.innerHTML = '<div class="no-chats">Нет активных чатов</div>';
-                return;
-            }
-
-            list.innerHTML = chats.map(chat => {
-                const time = formatMessageTime(chat.updated_at);
-                const unreadClass = chat.unread_count > 0 ? 'unread' : '';
-                const activeClass = chat.chat_id === currentChatId ? 'active' : '';
-                const lastMessage = chat.last_message ? chat.last_message.content : 'Нет сообщений';
-                
-                return `
-                    <div class="chat-item ${unreadClass} ${activeClass}" onclick="openChat(${chat.chat_id}, ${chat.other_user.id}, '${chat.other_user.name}', '${chat.other_user.avatar}')">
-                        <img src="${chat.other_user.avatar || getDefaultAvatar(chat.other_user.name)}" class="chat-avatar">
-                        <div class="chat-info">
-                            <div class="chat-name">
-                                <span>${chat.other_user.name}</span>
-                                ${chat.unread_count > 0 ? `<span class="unread-badge">${chat.unread_count}</span>` : `<span class="chat-time">${time}</span>`}
-                            </div>
-                            <div class="chat-last-message">${lastMessage}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Открытие чата
-        async function openChat(chatId, userId, userName, userAvatar) {
-            currentChatId = chatId;
-            lastMessagesData = [];
-            
-            // Обновляем активный чат в списке
-            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget?.classList.add('active');
-
-            // Показываем область чата
-            const chatArea = document.getElementById('chat-area');
-            chatArea.classList.remove('chat-area-empty');
-            chatArea.innerHTML = `
-                <div class="chat-header">
-                    <img src="${userAvatar || getDefaultAvatar(userName)}" class="chat-header-avatar">
-                    <div class="chat-header-info">
-                        <h3>${userName}</h3>
-                    </div>
-                </div>
-                <div class="messages-area" id="messages-area"></div>
-                <div class="message-input-area">
-                    <textarea id="message-input" placeholder="Напишите сообщение..." rows="1"></textarea>
-                    <button class="send-btn" id="send-btn">
-                        <svg viewBox="0 0 24 24"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/></svg>
-                    </button>
-                </div>
-            `;
-
-            // Автоматическое изменение размера textarea
-            const textarea = document.getElementById('message-input');
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-            });
-
-            // Отправка по Enter (Shift+Enter для новой строки)
-            textarea.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            // Обработчик кнопки отправки
-            document.getElementById('send-btn').addEventListener('click', sendMessage);
-
-            // Загружаем сообщения
-            await loadMessages();
-
-            // Отмечаем чат как прочитанный
-            await markChatAsRead(chatId);
-
-            // Запускаем автообновление сообщений
-            if (messagesPollingInterval) clearInterval(messagesPollingInterval);
-            messagesPollingInterval = setInterval(loadMessages, 3000);
-        }
-
-        // Загрузка сообщений
-        async function loadMessages() {
-            if (!currentChatId) return;
-
-            try {
-                const res = await fetch(API_BASE + `/chats/${currentChatId}/messages`, {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    renderMessages(data.messages);
-                }
-            } catch (err) {
-                console.error('Load messages error:', err);
-            }
-        }
-
-        // Отрисовка сообщений (умное обновление)
-        function renderMessages(messages) {
-            const area = document.getElementById('messages-area');
-            if (!area) return;
-
-            const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
-
-            const messagesChanged = JSON.stringify(messages) !== JSON.stringify(lastMessagesData);
-            
-            if (!messagesChanged) {
-                return;
-            }
-
-            const onlyNewMessages = lastMessagesData.length > 0 && 
-                                   messages.length > lastMessagesData.length &&
-                                   JSON.stringify(messages.slice(0, lastMessagesData.length)) === 
-                                   JSON.stringify(lastMessagesData);
-
-            if (onlyNewMessages) {
-                const newMessages = messages.slice(lastMessagesData.length);
-                newMessages.forEach(msg => {
-                    const isOwn = msg.sender_id === currentUser.id;
-                    const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message ${isOwn ? 'own' : ''}`;
-                    messageDiv.innerHTML = `
-                        <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" class="message-avatar">
-                        <div class="message-content">
-                            <div class="message-text">${escapeHtml(msg.content)}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
-                    `;
-                    area.appendChild(messageDiv);
-                });
-            } else {
-                area.innerHTML = messages.map(msg => {
-                    const isOwn = msg.sender_id === currentUser.id;
-                    const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    
-                    return `
-                        <div class="message ${isOwn ? 'own' : ''}">
-                            <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" class="message-avatar">
-                            <div class="message-content">
-                                <div class="message-text">${escapeHtml(msg.content)}</div>
-                                <div class="message-time">${time}</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            lastMessagesData = JSON.parse(JSON.stringify(messages));
-
-            if (scrolledToBottom || onlyNewMessages) {
-                area.scrollTop = area.scrollHeight;
-            }
-        }
-
-        // Отправка сообщения
-        async function sendMessage() {
-            const textarea = document.getElementById('message-input');
-            const content = textarea.value.trim();
-            
-            if (!content || !currentChatId) return;
-
-            const sendBtn = document.getElementById('send-btn');
-            sendBtn.disabled = true;
-
-            try {
-                const res = await fetch(API_BASE + "/messages/send", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({
-                        chatId: currentChatId,
-                        content: content
-                    })
-                });
-
-                if (res.ok) {
-                    textarea.value = '';
-                    textarea.style.height = 'auto';
-                    await loadMessages();
-                    await loadChats();
-                }
-            } catch (err) {
-                console.error('Send message error:', err);
-            } finally {
-                sendBtn.disabled = false;
-                textarea.focus();
-            }
-        }
-
-        // Отметить чат как прочитанный
-        async function markChatAsRead(chatId) {
-            try {
-                await fetch(API_BASE + "/messages/mark-read", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ chatId })
-                });
-                await loadChats();
-            } catch (err) {
-                console.error('Mark as read error:', err);
-            }
-        }
-
-        // Поиск по чатам
-        document.getElementById('chat-search')?.addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            const chatItems = document.querySelectorAll('.chat-item');
-            
-            chatItems.forEach(item => {
-                const name = item.querySelector('.chat-name span').textContent.toLowerCase();
-                item.style.display = name.includes(query) ? 'flex' : 'none';
-            });
-        });
-
-        // Модальное окно для выбора друзей
-        function showFriendsModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal">
-                    <div class="modal-header">
-                        <h3>Выберите друга</h3>
-                        <button class="modal-close" onclick="closeFriendsModal()">×</button>
-                    </div>
-                    <div class="modal-search">
-                        <input type="text" id="friend-search" placeholder="Поиск друга...">
-                    </div>
-                    <div class="modal-content" id="friends-list">
-                        <div class="loading-friends">Загрузка друзей...</div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-
-            // Закрытие по клику вне модального окна
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeFriendsModal();
-                }
-            });
-
-            // Загружаем список друзей
-            loadFriends();
-
-            // Поиск по друзьям
-            setTimeout(() => {
-                document.getElementById('friend-search')?.addEventListener('input', function(e) {
-                    const query = e.target.value.toLowerCase();
-                    const friendItems = document.querySelectorAll('.friend-item');
-                    
-                    friendItems.forEach(item => {
-                        const name = item.querySelector('.friend-name').textContent.toLowerCase();
-                        item.style.display = name.includes(query) ? 'flex' : 'none';
-                    });
-                });
-            }, 100);
-        }
-
-        function closeFriendsModal() {
-            const modal = document.querySelector('.modal-overlay');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        // Загрузка списка друзей
-        async function loadFriends() {
-            try {
-                const res = await fetch(API_BASE + "/friends", {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    renderFriendsList(data.friends);
-                }
-            } catch (err) {
-                console.error('Load friends error:', err);
-                document.getElementById('friends-list').innerHTML = `
-                    <div class="no-friends">Ошибка загрузки друзей</div>
-                `;
-            }
-        }
-
-        // Отрисовка списка друзей
-        function renderFriendsList(friends) {
-            const list = document.getElementById('friends-list');
-            
-            if (!friends || friends.length === 0) {
-                list.innerHTML = '<div class="no-friends">У вас пока нет друзей</div>';
-                return;
-            }
-
-            list.innerHTML = friends.map(friend => `
-                <div class="friend-item" onclick="createChatWithFriend(${friend.id}, '${friend.display_name}', '${friend.avatar_url}')">
-                    <img src="${friend.avatar_url || getDefaultAvatar(friend.display_name)}" class="friend-avatar">
-                    <div class="friend-info">
-                        <div class="friend-name">${friend.display_name}</div>
-                        <div class="friend-rank">${friend.rank}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Создать или открыть чат с другом
-        async function createChatWithFriend(friendId, friendName, friendAvatar) {
-            closeFriendsModal();
-
-            try {
-                const res = await fetch(API_BASE + "/chats/create", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ userId: friendId })
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    await loadChats();
-                    
-                    // Небольшая задержка для обновления списка чатов
-                    setTimeout(() => {
-                        openChat(data.chat_id, data.other_user.id, data.other_user.name, data.other_user.avatar);
-                    }, 300);
-                }
-            } catch (err) {
-                console.error('Create chat error:', err);
-            }
-        }
-
-        // Утилиты
-        function formatMessageTime(timestamp) {
-            const now = Date.now();
-            const diff = now - timestamp;
-            const date = new Date(timestamp);
-            
-            if (diff < 60000) return 'Только что';
-            if (diff < 3600000) return `${Math.floor(diff / 60000)} мин`;
-            if (diff < 86400000) return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            if (diff < 604800000) return date.toLocaleDateString('ru-RU', { weekday: 'short' });
-            return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-        }
-
-        function getDefaultAvatar(name) {
-            const initial = name ? name[0].toUpperCase() : '?';
-            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23ff1744' width='50' height='50'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='24' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML.replace(/\n/g, '<br>');
-        }
-
-        // Обработчик кнопки "Новый чат"
-        document.getElementById('new-chat-btn').addEventListener('click', showFriendsModal);
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadUserProfile();
-            await loadChats();
-            
-            // Автообновление списка чатов
-            chatsPollingInterval = setInterval(loadChats, 10000);
-            
-            document.getElementById('page-loader').style.display = 'none';
-
-            // Проверяем, есть ли параметр chatWith в URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const chatWith = urlParams.get('chatWith');
-            
-            if (chatWith) {
-                try {
-                    const res = await fetch(API_BASE + "/chats/create", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + token
-                        },
-                        body: JSON.stringify({ userId: parseInt(chatWith) })
-                    });
-                    
-                    if (res.ok) {
-                        const data = await res.json();
-                        await loadChats();
-                        setTimeout(() => {
-                            openChat(data.chat_id, data.other_user.id, data.other_user.name, data.other_user.avatar);
-                        }, 500);
-                    }
-                } catch (err) {
-                    console.error('Create chat error:', err);
-                }
-            }
-        });
-
-        // Очистка при уходе со страницы
-        window.addEventListener('beforeunload', () => {
-            if (messagesPollingInterval) clearInterval(messagesPollingInterval);
-            if (chatsPollingInterval) clearInterval(chatsPollingInterval);
-        });
-    </script>
-    <script>
 const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
 const token = localStorage.getItem('auth_token');
+
+if (!token) {
+    window.location.href = '../login';
+}
+
+let currentUser = null;
+let currentChatId = null;
+let currentChatUserId = null; // Добавляем для хранения ID собеседника
+let chats = [];
+let messagesPollingInterval = null;
+let chatsPollingInterval = null;
+let lastMessagesData = [];
+
+// Для уведомлений
 let notificationsInterval;
 let messagesCheckInterval;
 let lastMessageCount = 0;
 
-// ============ ЗАГРУЗКА HEADER ============
-async function loadUserHeader() {
-    if (!token) {
-        document.getElementById('auth-action').style.display = 'block';
-        document.getElementById('user-menu').style.display = 'none';
-        return;
-    }
-
+// ============ ЗАГРУЗКА ПРОФИЛЯ (ОБЪЕДИНЁННАЯ) ============
+async function loadUserProfile() {
     try {
         const res = await fetch(API_BASE + "/me", {
             headers: { "Authorization": "Bearer " + token }
         });
 
         if (res.ok) {
-            const currentUser = await res.json();
+            currentUser = await res.json();
+            
+            // Обновляем UI
             document.getElementById('auth-action').style.display = 'none';
             document.getElementById('user-menu').style.display = 'flex';
-            document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+            
+            document.getElementById('header-display-name').textContent = 
+                currentUser.display_name || currentUser.email.split('@')[0];
+            
             document.getElementById('header-points').textContent = currentUser.points || 0;
-
+            
             const avatar = document.getElementById('header-avatar');
             if (currentUser.avatar_url) {
                 avatar.src = currentUser.avatar_url;
             } else {
-                const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                const initial = currentUser.display_name ? 
+                    currentUser.display_name[0].toUpperCase() : 'U';
                 avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
             }
 
-            // Запускаем загрузку уведомлений и сообщений
+            // Запускаем уведомления
             loadNotifications();
             loadUnreadMessagesCount();
             
@@ -1536,13 +1078,363 @@ async function loadUserHeader() {
             messagesCheckInterval = setInterval(checkNewMessages, 5000);
         } else {
             localStorage.removeItem('auth_token');
-            document.getElementById('auth-action').style.display = 'block';
-            document.getElementById('user-menu').style.display = 'none';
+            window.location.href = '../login';
         }
     } catch (err) {
-        console.error('Error:', err);
-        document.getElementById('auth-action').style.display = 'block';
-        document.getElementById('user-menu').style.display = 'none';
+        console.error('Load profile error:', err);
+        localStorage.removeItem('auth_token');
+        window.location.href = '../login';
+    }
+}
+
+// ============ ЧАТЫ ============
+async function loadChats() {
+    try {
+        const res = await fetch(API_BASE + "/chats", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            chats = data.chats;
+            renderChatsList();
+        }
+    } catch (err) {
+        console.error('Load chats error:', err);
+    }
+}
+
+function renderChatsList() {
+    const list = document.getElementById('chats-list');
+    
+    if (!chats || chats.length === 0) {
+        list.innerHTML = '<div class="no-chats">Нет активных чатов</div>';
+        return;
+    }
+
+    list.innerHTML = chats.map(chat => {
+        const time = formatMessageTime(chat.updated_at);
+        const unreadClass = chat.unread_count > 0 ? 'unread' : '';
+        const activeClass = chat.chat_id === currentChatId ? 'active' : '';
+        const lastMessage = chat.last_message ? chat.last_message.content : 'Нет сообщений';
+        
+        return `
+            <div class="chat-item ${unreadClass} ${activeClass}" 
+                 onclick="openChat(${chat.chat_id}, ${chat.other_user.id}, '${escapeHtml(chat.other_user.name)}', '${chat.other_user.avatar || ''}')">
+                <img src="${chat.other_user.avatar || getDefaultAvatar(chat.other_user.name)}" class="chat-avatar">
+                <div class="chat-info">
+                    <div class="chat-name">
+                        <span>${escapeHtml(chat.other_user.name)}</span>
+                        ${chat.unread_count > 0 ? 
+                            `<span class="unread-badge">${chat.unread_count}</span>` : 
+                            `<span class="chat-time">${time}</span>`}
+                    </div>
+                    <div class="chat-last-message">${escapeHtml(lastMessage)}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ============ ОТКРЫТИЕ ЧАТА (ИСПРАВЛЕНО) ============
+async function openChat(chatId, userId, userName, userAvatar) {
+    currentChatId = chatId;
+    currentChatUserId = userId; // Сохраняем ID собеседника
+    lastMessagesData = [];
+    
+    // Обновляем активный чат в списке
+    document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+    event.currentTarget?.classList.add('active');
+
+    // Показываем область чата
+    const chatArea = document.getElementById('chat-area');
+    chatArea.classList.remove('chat-area-empty');
+    chatArea.innerHTML = `
+        <div class="chat-header">
+            <img src="${userAvatar || getDefaultAvatar(userName)}" class="chat-header-avatar">
+            <div class="chat-header-info" style="cursor: pointer;" onclick="window.location.href='../profile?id=${userId}'">
+                <h3 style="transition: color 0.3s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='white'">${escapeHtml(userName)}</h3>
+            </div>
+        </div>
+        <div class="messages-area" id="messages-area"></div>
+        <div class="message-input-area">
+            <textarea id="message-input" placeholder="Напишите сообщение..." rows="1"></textarea>
+            <button class="send-btn" id="send-btn">
+                <svg viewBox="0 0 24 24"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/></svg>
+            </button>
+        </div>
+    `;
+
+    // Автоматическое изменение размера textarea
+    const textarea = document.getElementById('message-input');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+    });
+
+    // Отправка по Enter
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+    await loadMessages();
+    await markChatAsRead(chatId);
+
+    if (messagesPollingInterval) clearInterval(messagesPollingInterval);
+    messagesPollingInterval = setInterval(loadMessages, 3000);
+}
+
+// ============ СООБЩЕНИЯ ============
+async function loadMessages() {
+    if (!currentChatId) return;
+
+    try {
+        const res = await fetch(API_BASE + `/chats/${currentChatId}/messages`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            renderMessages(data.messages);
+        }
+    } catch (err) {
+        console.error('Load messages error:', err);
+    }
+}
+
+function renderMessages(messages) {
+    const area = document.getElementById('messages-area');
+    if (!area) return;
+
+    const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
+    const messagesChanged = JSON.stringify(messages) !== JSON.stringify(lastMessagesData);
+    
+    if (!messagesChanged) return;
+
+    const onlyNewMessages = lastMessagesData.length > 0 && 
+                           messages.length > lastMessagesData.length &&
+                           JSON.stringify(messages.slice(0, lastMessagesData.length)) === 
+                           JSON.stringify(lastMessagesData);
+
+    if (onlyNewMessages) {
+        const newMessages = messages.slice(lastMessagesData.length);
+        newMessages.forEach(msg => {
+            const isOwn = msg.sender_id === currentUser.id;
+            const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', minute: '2-digit' 
+            });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            messageDiv.innerHTML = `
+                <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" 
+                     class="message-avatar">
+                <div class="message-content">
+                    <div class="message-text">${escapeHtml(msg.content)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            area.appendChild(messageDiv);
+        });
+    } else {
+        area.innerHTML = messages.map(msg => {
+            const isOwn = msg.sender_id === currentUser.id;
+            const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', minute: '2-digit' 
+            });
+            
+            return `
+                <div class="message ${isOwn ? 'own' : ''}">
+                    <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" 
+                         class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(msg.content)}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    lastMessagesData = JSON.parse(JSON.stringify(messages));
+
+    if (scrolledToBottom || onlyNewMessages) {
+        area.scrollTop = area.scrollHeight;
+    }
+}
+
+async function sendMessage() {
+    const textarea = document.getElementById('message-input');
+    const content = textarea.value.trim();
+    
+    if (!content || !currentChatId) return;
+
+    const sendBtn = document.getElementById('send-btn');
+    sendBtn.disabled = true;
+
+    try {
+        const res = await fetch(API_BASE + "/messages/send", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                chatId: currentChatId,
+                content: content
+            })
+        });
+
+        if (res.ok) {
+            textarea.value = '';
+            textarea.style.height = 'auto';
+            await loadMessages();
+            await loadChats();
+        }
+    } catch (err) {
+        console.error('Send message error:', err);
+    } finally {
+        sendBtn.disabled = false;
+        textarea.focus();
+    }
+}
+
+async function markChatAsRead(chatId) {
+    try {
+        await fetch(API_BASE + "/messages/mark-read", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ chatId })
+        });
+        await loadChats();
+    } catch (err) {
+        console.error('Mark as read error:', err);
+    }
+}
+
+// ============ ПОИСК ЧАТОВ ============
+document.getElementById('chat-search')?.addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    const chatItems = document.querySelectorAll('.chat-item');
+    
+    chatItems.forEach(item => {
+        const name = item.querySelector('.chat-name span').textContent.toLowerCase();
+        item.style.display = name.includes(query) ? 'flex' : 'none';
+    });
+});
+
+// ============ МОДАЛКА ДРУЗЕЙ ============
+function showFriendsModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Выберите друга</h3>
+                <button class="modal-close" onclick="closeFriendsModal()">×</button>
+            </div>
+            <div class="modal-search">
+                <input type="text" id="friend-search" placeholder="Поиск друга...">
+            </div>
+            <div class="modal-content" id="friends-list">
+                <div class="loading-friends">Загрузка друзей...</div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeFriendsModal();
+    });
+
+    loadFriends();
+
+    setTimeout(() => {
+        document.getElementById('friend-search')?.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const friendItems = document.querySelectorAll('.friend-item');
+            
+            friendItems.forEach(item => {
+                const name = item.querySelector('.friend-name').textContent.toLowerCase();
+                item.style.display = name.includes(query) ? 'flex' : 'none';
+            });
+        });
+    }, 100);
+}
+
+function closeFriendsModal() {
+    document.querySelector('.modal-overlay')?.remove();
+}
+
+async function loadFriends() {
+    try {
+        const res = await fetch(API_BASE + "/friends", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            renderFriendsList(data.friends);
+        }
+    } catch (err) {
+        console.error('Load friends error:', err);
+        document.getElementById('friends-list').innerHTML = 
+            '<div class="no-friends">Ошибка загрузки друзей</div>';
+    }
+}
+
+function renderFriendsList(friends) {
+    const list = document.getElementById('friends-list');
+    
+    if (!friends || friends.length === 0) {
+        list.innerHTML = '<div class="no-friends">У вас пока нет друзей</div>';
+        return;
+    }
+
+    list.innerHTML = friends.map(friend => `
+        <div class="friend-item" onclick="createChatWithFriend(${friend.id}, '${escapeHtml(friend.display_name)}', '${friend.avatar_url || ''}')">
+            <img src="${friend.avatar_url || getDefaultAvatar(friend.display_name)}" 
+                 class="friend-avatar">
+            <div class="friend-info">
+                <div class="friend-name">${escapeHtml(friend.display_name)}</div>
+                <div class="friend-rank">${friend.rank}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function createChatWithFriend(friendId, friendName, friendAvatar) {
+    closeFriendsModal();
+
+    try {
+        const res = await fetch(API_BASE + "/chats/create", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ userId: friendId })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            await loadChats();
+            
+            setTimeout(() => {
+                openChat(data.chat_id, data.other_user.id, 
+                        data.other_user.name, data.other_user.avatar);
+            }, 300);
+        }
+    } catch (err) {
+        console.error('Create chat error:', err);
     }
 }
 
@@ -1588,9 +1480,10 @@ function renderNotifications(notifications) {
         const unreadClass = notif.is_read === 0 ? 'unread' : '';
         
         return `
-            <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
-                <div class="notification-title">${notif.title}</div>
-                <div class="notification-message">${notif.message}</div>
+            <div class="notification-item ${unreadClass}" 
+                 onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
+                <div class="notification-title">${escapeHtml(notif.title)}</div>
+                <div class="notification-message">${escapeHtml(notif.message)}</div>
                 <div class="notification-time">${time}</div>
             </div>
         `;
@@ -1626,7 +1519,6 @@ async function handleNotificationClick(notificationId, relatedId, type) {
         await loadNotifications();
         document.getElementById('notifications-dropdown').classList.remove('active');
         
-        // Переход к связанному контенту
         if (type === 'new_message' && relatedId) {
             window.location.href = `../messages`;
         } else if (type.includes('news') && relatedId) {
@@ -1637,7 +1529,6 @@ async function handleNotificationClick(notificationId, relatedId, type) {
     }
 }
 
-// ============ СООБЩЕНИЯ ============
 async function loadUnreadMessagesCount() {
     if (!token) return;
     
@@ -1716,8 +1607,8 @@ function showMessageToast(senderName, senderAvatar, messagePreview, chatId, send
     toast.innerHTML = `
         <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
         <div class="toast-content">
-            <div class="toast-name">${senderName}</div>
-            <div class="toast-message">${messagePreview}</div>
+            <div class="toast-name">${escapeHtml(senderName)}</div>
+            <div class="toast-message">${escapeHtml(messagePreview)}</div>
         </div>
     `;
     
@@ -1733,12 +1624,35 @@ function showMessageToast(senderName, senderAvatar, messagePreview, chatId, send
     }, 5000);
 }
 
+// ============ УТИЛИТЫ ============
+function formatMessageTime(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const date = new Date(timestamp);
+    
+    if (diff < 60000) return 'Только что';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)} мин`;
+    if (diff < 86400000) return date.toLocaleTimeString('ru-RU', { 
+        hour: '2-digit', minute: '2-digit' 
+    });
+    if (diff < 604800000) return date.toLocaleDateString('ru-RU', { weekday: 'short' });
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+}
+
 function getDefaultAvatar(name) {
     const initial = name ? name[0].toUpperCase() : '?';
-    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45'%3E%3Crect fill='%23ff1744' width='45' height='45'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23ff1744' width='50' height='50'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='24' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML.replace(/\n/g, '<br>');
 }
 
 // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
+document.getElementById('new-chat-btn').addEventListener('click', showFriendsModal);
+
 document.getElementById('notification-bell')?.addEventListener('click', (e) => {
     e.stopPropagation();
     const dropdown = document.getElementById('notifications-dropdown');
@@ -1769,7 +1683,49 @@ document.addEventListener('click', (e) => {
 });
 
 // ============ ИНИЦИАЛИЗАЦИЯ ============
-document.addEventListener('DOMContentLoaded', loadUserHeader);
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadUserProfile();
+    await loadChats();
+    
+    chatsPollingInterval = setInterval(loadChats, 10000);
+    
+    document.getElementById('page-loader').style.display = 'none';
+
+    // Проверка параметра chatWith
+    const urlParams = new URLSearchParams(window.location.search);
+    const chatWith = urlParams.get('chatWith');
+    
+    if (chatWith) {
+        try {
+            const res = await fetch(API_BASE + "/chats/create", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ userId: parseInt(chatWith) })
+            });
+            
+            if (res.ok) {
+                const data = await res.json();
+                await loadChats();
+                setTimeout(() => {
+                    openChat(data.chat_id, data.other_user.id, 
+                            data.other_user.name, data.other_user.avatar);
+                }, 500);
+            }
+        } catch (err) {
+            console.error('Create chat error:', err);
+        }
+    }
+});
+
+window.addEventListener('beforeunload', () => {
+    if (messagesPollingInterval) clearInterval(messagesPollingInterval);
+    if (chatsPollingInterval) clearInterval(chatsPollingInterval);
+    if (notificationsInterval) clearInterval(notificationsInterval);
+    if (messagesCheckInterval) clearInterval(messagesCheckInterval);
+});
 </script>
 </body>
 </html>
