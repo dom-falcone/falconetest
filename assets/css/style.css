@@ -274,8 +274,10 @@ a {
 
 .btn-primary {
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: white;
     box-shadow: var(--shadow-glow);
+    border: 2px solid transparent;
 }
 
 .btn-primary:hover {
@@ -292,6 +294,18 @@ a {
 .btn-ghost:hover {
     border-color: white;
     background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(255, 23, 68, 0.1);
 }
 
 .card {

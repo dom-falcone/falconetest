@@ -103,7 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
         observer.observe(el);
     });
+
 });
+
 
 // Contact Form Handler
 const contactForm = document.getElementById('contactForm');
@@ -478,7 +480,7 @@ document.addEventListener('DOMContentLoaded', updateStrangerTimer);
 
 // Add Site Version Label
 document.addEventListener('DOMContentLoaded', () => {
-    const versionText = 'Версия сайта: 1.6.0. Идет разработка.';
+    const versionText = 'Версия сайта: 1.6.2. Идет разработка.';
 
     // Try to find existing version div first
     const existingVersion = document.querySelector('.site-footer .site-version');
@@ -556,3 +558,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Auth System Integration removed - now handled by inline scripts in login/index.html
 
+// ============ NAVIGATION ACTIVE STATE ============
+// This MUST be at the very end of the file to ensure the DOM is fully parsed
+// when the script runs (since script is loaded at end of body)
+(function setActiveNavLink() {
+    const navLinks = document.querySelectorAll('.nav a');
+    if (!navLinks.length) return; // No navigation found
+
+    const currentPath = window.location.pathname; // e.g., /about/, /enemies/, /
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+
+        // Extract the folder name from href (e.g., "../about" -> "about", "../homepage" -> "homepage")
+        const linkPageName = href.substring(href.lastIndexOf('/') + 1);
+
+        // Extract the current page folder from URL (e.g., "/about/" -> "about", "/" -> "")
+        const pathParts = currentPath.split('/').filter(Boolean);
+        let currentPageName = pathParts.length > 0 ? pathParts[0] : '';
+
+        // Treat root "/" as "homepage"
+        if (currentPath === '/' || currentPath === '/homepage/' || currentPath === '/homepage') {
+            currentPageName = 'homepage';
+        }
+
+        // Compare folder names (case-insensitive)
+        if (linkPageName.toLowerCase() === currentPageName.toLowerCase()) {
+            link.classList.add('active');
+        }
+    });
+})();
