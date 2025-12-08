@@ -545,21 +545,7 @@
         }
 
         /* News Images Gallery */
-        .news-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .news-image {
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
+        
 
         .news-image::after {
             content: '🔍';
@@ -815,20 +801,6 @@
         }
 
         /* Fullscreen Image Overlay */
-        .image-fullscreen-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.97);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-out;
-        }
 
         .image-fullscreen-overlay.active {
             display: flex;
@@ -1176,23 +1148,272 @@
     object-fit: contain;
 }
 
-.news-videos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.news-video {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    background: black;
-}
-
 .news-video video {
     width: 100%;
     display: block;
+}
+
+        /* ==================== КОМПАКТНОЕ ОТОБРАЖЕНИЕ МЕДИА ==================== */
+
+/* Контейнер медиа - компактная плашка */
+.news-media-container {
+    margin: 1.5rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.news-media-container:hover {
+    border-color: rgba(255, 23, 68, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Заголовок плашки с медиа */
+.media-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition);
+}
+
+.media-header:hover {
+    background: rgba(255, 23, 68, 0.05);
+}
+
+.media-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.media-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 23, 68, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.media-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.media-title {
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.media-count {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+}
+
+.media-toggle {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 23, 68, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+.media-toggle.active {
+    transform: rotate(180deg);
+    background: rgba(255, 23, 68, 0.2);
+}
+
+/* Контент медиа - скрыт по умолчанию */
+.media-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.media-content.active {
+    max-height: 5000px; /* Большое значение для плавной анимации */
+}
+
+.media-content-inner {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+/* Сетка изображений - компактная */
+.news-images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.8rem;
+}
+
+.news-image-item {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.news-image-item::after {
+    content: '🔍';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 1.8rem;
+    opacity: 0;
+    transition: var(--transition);
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+.news-image-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 23, 68, 0.15);
+}
+
+.news-image-item:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.news-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.news-image-item:hover img {
+    filter: brightness(0.7);
+    transform: scale(1.05);
+}
+
+/* Сетка видео - компактная */
+.news-videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.news-video-item {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    background: black;
+    transition: var(--transition);
+}
+
+.news-video-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 23, 68, 0.15);
+}
+
+.news-video-item video {
+    width: 100%;
+    max-height: 400px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Разделитель между типами медиа */
+.media-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 1.5rem 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .news-images-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.6rem;
+    }
+    
+    .news-videos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .media-header {
+        padding: 0.8rem 1rem;
+    }
+    
+    .media-content-inner {
+        padding: 0 1rem 1rem 1rem;
+    }
+}
+
+/* Полноэкранный просмотр изображений */
+.image-fullscreen-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.97);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+}
+
+.image-fullscreen-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.image-fullscreen-overlay img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.fullscreen-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 23, 68, 0.9);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    z-index: 10000;
+}
+
+.fullscreen-close:hover {
+    background: var(--color-primary);
+    transform: rotate(90deg) scale(1.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
     </style>
@@ -1462,46 +1683,111 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function createNewsCard(news) {
-            const card = document.createElement('div');
-            card.className = 'news-item';
-            const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
-            const canDelete = currentUser && currentUser.role === 'admin';
+    const card = document.createElement('div');
+    card.className = 'news-item';
+    const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+    const canDelete = currentUser && currentUser.role === 'admin';
 
-            card.innerHTML = `
-                <div class="news-item-inner">
-                    <div class="news-header">
-                        <div class="news-author">
-                            <img src="${news.author_avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect fill=\'%23ff1744\' width=\'50\' height=\'50\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'22\' font-family=\'Arial\'%3E?%3C/text%3E%3C/svg%3E'}" class="news-author-avatar" alt="">
-                            <div class="news-author-info">
-                                <div class="news-author-name">${escapeHtml(news.author_name)}</div>
-                                <div class="news-date">${date}</div>
+    // Подготовка медиа блоков
+    let mediaHTML = '';
+    
+    if (news.images.length > 0 || (news.videos && news.videos.length > 0)) {
+        const totalMedia = news.images.length + (news.videos?.length || 0);
+        
+        mediaHTML = `
+            <div class="news-media-container">
+                <div class="media-header" onclick="toggleMediaContent(${news.id})">
+                    <div class="media-header-left">
+                        <div class="media-icon">
+                            ${news.videos && news.videos.length > 0 ? '🎬' : '📸'}
+                        </div>
+                        <div class="media-info">
+                            <div class="media-title">Медиафайлы</div>
+                            <div class="media-count">
+                                ${news.images.length > 0 ? news.images.length + ' фото' : ''}
+                                ${news.images.length > 0 && news.videos?.length > 0 ? ' • ' : ''}
+                                ${news.videos?.length > 0 ? news.videos.length + ' видео' : ''}
                             </div>
                         </div>
-                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                            <div class="news-tag">${escapeHtml(news.tag)}</div>
-                            ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
-                        </div>
                     </div>
-                    <h2 class="news-title">${escapeHtml(news.title)}</h2>
-                    <div class="news-content">${escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
-                    ${news.images.length > 0 ? `<div class="news-images">${news.images.map((img, idx) => `<div class="news-image" onclick="openImageFullscreen('${img}')"><img src="${img}" alt="News image"></div>`).join('')}</div>` : ''}
-${news.videos && news.videos.length > 0 ? `<div class="news-videos">${news.videos.map(video => `<div class="news-video"><video controls preload="metadata"><source src="${video}"></video></div>`).join('')}</div>` : ''}
-                    <div class="news-actions">
-                        <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
-                            <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
-                            <span>${news.likes_count}</span>
-                        </button>
-                        <button class="action-btn" onclick="toggleComments(${news.id})">
-                            <svg viewBox="0 0 24 24"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9Z"/></svg>
-                            <span>${news.comments_count}</span>
-                        </button>
-                    </div>
-                    <div class="comments-section" id="comments-${news.id}" style="display: none;"></div>
+                    <div class="media-toggle" id="media-toggle-${news.id}">▼</div>
                 </div>
-            `;
-            return card;
-        }
+                <div class="media-content" id="media-content-${news.id}">
+                    <div class="media-content-inner">
+                        ${news.images.length > 0 ? `
+                            <div class="news-images-grid">
+                                ${news.images.map((img, idx) => `
+                                    <div class="news-image-item" onclick="openImageFullscreen('${img}')">
+                                        <img src="${img}" alt="Изображение ${idx + 1}" loading="lazy">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${news.images.length > 0 && news.videos?.length > 0 ? '<div class="media-separator"></div>' : ''}
+                        
+                        ${news.videos && news.videos.length > 0 ? `
+                            <div class="news-videos-grid">
+                                ${news.videos.map((video, idx) => `
+                                    <div class="news-video-item">
+                                        <video controls preload="metadata">
+                                            <source src="${video}">
+                                            Ваш браузер не поддерживает воспроизведение видео.
+                                        </video>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
+    card.innerHTML = `
+        <div class="news-item-inner">
+            <div class="news-header">
+                <div class="news-author">
+                    <img src="${news.author_avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect fill=\'%23ff1744\' width=\'50\' height=\'50\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'22\' font-family=\'Arial\'%3E?%3C/text%3E%3C/svg%3E'}" class="news-author-avatar" alt="">
+                    <div class="news-author-info">
+                        <div class="news-author-name">${escapeHtml(news.author_name)}</div>
+                        <div class="news-date">${date}</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <div class="news-tag">${escapeHtml(news.tag)}</div>
+                    ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
+                </div>
+            </div>
+            <h2 class="news-title">${escapeHtml(news.title)}</h2>
+            <div class="news-content">${escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
+            
+            ${mediaHTML}
+            
+            <div class="news-actions">
+                <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
+                    <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
+                    <span>${news.likes_count}</span>
+                </button>
+                <button class="action-btn" onclick="toggleComments(${news.id})">
+                    <svg viewBox="0 0 24 24"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9Z"/></svg>
+                    <span>${news.comments_count}</span>
+                </button>
+            </div>
+            <div class="comments-section" id="comments-${news.id}" style="display: none;"></div>
+        </div>
+    `;
+    return card;
+}
+
+function toggleMediaContent(newsId) {
+    const content = document.getElementById(`media-content-${newsId}`);
+    const toggle = document.getElementById(`media-toggle-${newsId}`);
+    
+    content.classList.toggle('active');
+    toggle.classList.toggle('active');
+}
+        
         async function toggleLike(newsId, button) {
             if (!token) {
                 alert('Войдите, чтобы ставить лайки');
@@ -2066,30 +2352,50 @@ updateCounters();
         });
 
         // Открыть изображение в полном размере
-        function openImageFullscreen(imageSrc) {
-            let overlay = document.getElementById('image-fullscreen-overlay');
+function openImageFullscreen(imageSrc) {
+    let overlay = document.getElementById('image-fullscreen-overlay');
 
-            if (!overlay) {
-                overlay = document.createElement('div');
-                overlay.id = 'image-fullscreen-overlay';
-                overlay.className = 'image-fullscreen-overlay';
-                overlay.onclick = closeImageFullscreen;
-                document.body.appendChild(overlay);
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'image-fullscreen-overlay';
+        overlay.className = 'image-fullscreen-overlay';
+        overlay.innerHTML = '<button class="fullscreen-close" onclick="closeImageFullscreen()">×</button>';
+        document.body.appendChild(overlay);
+        
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeImageFullscreen();
             }
+        });
+    }
 
-            overlay.innerHTML = `<img src="${imageSrc}" onclick="event.stopPropagation()">`;
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+    const existingImg = overlay.querySelector('img');
+    if (existingImg) existingImg.remove();
 
-        // Закрыть полноэкранное изображение
-        function closeImageFullscreen() {
-            const overlay = document.getElementById('image-fullscreen-overlay');
-            if (overlay) {
-                overlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    img.onclick = (e) => e.stopPropagation();
+    overlay.appendChild(img);
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Закрыть полноэкранное изображение
+function closeImageFullscreen() {
+    const overlay = document.getElementById('image-fullscreen-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Закрытие по клавише Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageFullscreen();
+    }
+});
 
         // Закрытие по клавише Escape
         document.addEventListener('keydown', (e) => {
