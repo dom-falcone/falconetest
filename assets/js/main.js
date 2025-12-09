@@ -137,9 +137,9 @@ if (contactForm) {
             }, function (error) {
                 console.error('EmailJS Error:', error);
                 if (error.status === 412) {
-                    alert('Ошибка конфигурации отправки (Invalid Grant). Пожалуйста, свяжитесь с администратором.');
+                    showErrorModal('Ошибка конфигурации отправки (Invalid Grant). Пожалуйста, свяжитесь с администратором.');
                 } else {
-                    alert('Произошла ошибка при отправке. Попробуйте позже.');
+                    showErrorModal('Произошла ошибка при отправке. Попробуйте позже.');
                 }
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
@@ -306,6 +306,190 @@ const hideSuccessModal = () => {
     }
 };
 
+// Create and inject Error Modal
+const createErrorModal = () => {
+    if (document.getElementById('error-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'error-modal';
+    modal.className = 'error-modal';
+    modal.innerHTML = `
+        <div class="error-modal-content">
+            <div class="error-modal-text" id="error-modal-message"></div>
+            <div class="error-modal-buttons">
+                <button class="btn-error-confirm">OK</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Event Listeners
+    const confirmBtn = modal.querySelector('.btn-error-confirm');
+
+    confirmBtn.addEventListener('click', hideErrorModal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideErrorModal();
+        }
+    });
+};
+
+const showErrorModal = (message) => {
+    createErrorModal(); // Ensure it exists
+    const modal = document.getElementById('error-modal');
+    const messageDiv = document.getElementById('error-modal-message');
+    messageDiv.textContent = message;
+    modal.classList.add('active');
+};
+
+const hideErrorModal = () => {
+    const modal = document.getElementById('error-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+};
+
+// ============ CONFIRM MODAL (with Yes/Cancel) ============
+let confirmResolve = null;
+
+const createConfirmModal = () => {
+    if (document.getElementById('confirm-modal')) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            animation: fadeIn 0.2s ease;
+        }
+        .confirm-modal.active {
+            display: flex;
+        }
+        .confirm-modal-content {
+            background: linear-gradient(165deg, #1a1a1a, #0d0d0d);
+            border: 2px solid #4CAF50;
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(76, 175, 80, 0.2);
+            animation: modalSlideIn 0.3s ease;
+            max-width: 400px;
+        }
+        @keyframes modalSlideIn {
+            from { transform: scale(0.9) translateY(-20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .confirm-modal-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .btn-confirm-yes {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .btn-confirm-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+        .btn-confirm-cancel {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .btn-confirm-cancel:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            transform: translateY(-2px);
+        }
+    `;
+    document.head.appendChild(style);
+
+    const modal = document.createElement('div');
+    modal.id = 'confirm-modal';
+    modal.className = 'confirm-modal';
+    modal.innerHTML = `
+        <div class="confirm-modal-content">
+            <div class="confirm-modal-text" id="confirm-modal-message"></div>
+            <div class="confirm-modal-buttons">
+                <button class="btn-confirm-yes">Да</button>
+                <button class="btn-confirm-cancel">Отмена</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Event Listeners
+    const yesBtn = modal.querySelector('.btn-confirm-yes');
+    const cancelBtn = modal.querySelector('.btn-confirm-cancel');
+
+    yesBtn.addEventListener('click', () => {
+        hideConfirmModal();
+        if (confirmResolve) confirmResolve(true);
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        hideConfirmModal();
+        if (confirmResolve) confirmResolve(false);
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideConfirmModal();
+            if (confirmResolve) confirmResolve(false);
+        }
+    });
+};
+
+const showConfirmModal = (message) => {
+    return new Promise((resolve) => {
+        createConfirmModal();
+        confirmResolve = resolve;
+        const modal = document.getElementById('confirm-modal');
+        const messageDiv = document.getElementById('confirm-modal-message');
+        messageDiv.textContent = message;
+        modal.classList.add('active');
+    });
+};
+
+const hideConfirmModal = () => {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+};
+
 // Run check on load
 document.addEventListener('DOMContentLoaded', checkLoginState);
 
@@ -396,7 +580,6 @@ if (newsModal) {
 function updateStrangerTimer() {
     const timerContainer = document.getElementById('stranger-timer');
     const messageElement = document.getElementById('stranger-message');
-    console.log('Stranger Timer updated');
 
     // Elements for individual units
     const daysEl = document.getElementById('timer-days');
@@ -480,7 +663,7 @@ document.addEventListener('DOMContentLoaded', updateStrangerTimer);
 
 // Add Site Version Label
 document.addEventListener('DOMContentLoaded', () => {
-    const versionText = 'Версия сайта: 1.6.2. Идет разработка.';
+    const versionText = 'Версия сайта: 1.6.5. Идет разработка.';
 
     // Try to find existing version div first
     const existingVersion = document.querySelector('.site-footer .site-version');
@@ -508,6 +691,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const startTime = Date.now();
 
         window.addEventListener('load', () => {
+            // Skip for news page - it handles its own loading after API call
+            const isNewsPage = window.location.pathname.includes('/news');
+            if (isNewsPage) return;
+
             const elapsedTime = Date.now() - startTime;
             const remainingTime = Math.max(0, minLoadTime - elapsedTime);
 

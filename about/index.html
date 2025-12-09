@@ -8,338 +8,277 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=3">
+    <link rel="stylesheet" href="../assets/css/style.css?v=6">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/user-menu.css?v=1">
     <style>
-        /* Базовые стили для user menu */
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        /* Don Falcone Bio Modal */
+        .bio-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 2rem 1rem;
         }
 
-        .user-profile-info {
+        /* Custom Scrollbar for Bio Modal */
+        .bio-modal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .bio-modal::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .bio-modal::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8b0000 0%, #5a0000 100%);
+            border-radius: 4px;
+            border: 1px solid rgba(139, 0, 0, 0.3);
+        }
+
+        .bio-modal::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #a50000 0%, #8b0000 100%);
+        }
+
+        /* Firefox scrollbar */
+        .bio-modal {
+            scrollbar-width: thin;
+            scrollbar-color: #8b0000 rgba(0, 0, 0, 0.3);
+        }
+
+        .bio-modal.active {
             display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.3rem 1rem 0.3rem 0.3rem;
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 30px;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 3rem;
+            animation: bioFadeIn 0.3s ease;
+        }
+
+        @keyframes bioFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .bio-modal-content {
+            background: linear-gradient(165deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 1px solid rgba(139, 0, 0, 0.5);
+            border-left: 5px solid #8b0000;
+            border-radius: 20px;
+            max-width: 1100px;
+            width: 95%;
             position: relative;
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8),
+                0 0 120px rgba(139, 0, 0, 0.2),
+                inset 0 0 150px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
         }
 
-        .user-profile-info:hover {
-            background: rgba(255, 23, 68, 0.2);
-            border-color: rgba(255, 23, 68, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-        }
-
-        /* Индикатор "онлайн" */
-        .user-profile-info::before {
+        .bio-modal-content::before {
             content: '';
             position: absolute;
-            left: 8px;
-            bottom: 8px;
-            width: 10px;
-            height: 10px;
-            background-color: #00e676;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8b0000 0%, #c41e3a 50%, #8b0000 100%);
+            opacity: 0.8;
+        }
+
+        .bio-modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(139, 0, 0, 0.1);
+            border: 1px solid rgba(139, 0, 0, 0.3);
             border-radius: 50%;
-            border: 2px solid var(--color-bg);
-            box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-            animation: pulse-online 2s infinite;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 10;
         }
 
-        @keyframes pulse-online {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-            }
-        }
-
-        .header-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--color-primary);
-            position: relative;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .user-display-name {
+        .bio-modal-close:hover {
+            background: #8b0000;
             color: white;
-            font-weight: 600;
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+        }
+
+        .bio-modal-header {
+            padding: 2rem 2.5rem 1rem 2.5rem;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.25);
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.08) 0%, transparent 100%);
+        }
+
+        .bio-modal-date {
+            color: #8b0000;
             font-size: 0.9rem;
-            line-height: 1;
-        }
-
-        .user-points-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.75rem;
-            color: var(--color-primary);
-        }
-
-        /* Кнопки уведомлений и сообщений */
-        .notification-bell {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .notification-bell:hover {
-            background: rgba(255, 23, 68, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .notification-bell svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--color-primary);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
             font-weight: 600;
-            border: 2px solid var(--color-bg);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.3);
         }
 
-        /* Выпадающий список уведомлений */
-        .notifications-dropdown {
-            display: none;
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            width: 350px;
-            max-height: calc(100vh - 120px);
-            background: var(--color-surface);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 15px;
-            overflow-y: auto;
-            z-index: 10000;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        .bio-modal-title {
+            color: #c41e3a;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 0 0 40px rgba(196, 30, 58, 0.4);
+            letter-spacing: 0.02em;
         }
 
-        .notifications-dropdown.active {
-            display: block;
-        }
-
-        .notifications-header {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 23, 68, 0.2);
+        .bio-modal-body {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 2.5rem;
+            padding: 2.5rem;
         }
 
-        .notifications-header h3 {
-            color: white;
+        .bio-modal-image {
+            flex-shrink: 0;
+            width: 320px;
+        }
+
+        .bio-modal-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            border: 3px solid rgba(139, 0, 0, 0.5);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(139, 0, 0, 0.25);
+            transition: all 0.4s ease;
+        }
+
+        .bio-modal-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+                0 0 50px rgba(139, 0, 0, 0.35);
+        }
+
+        .bio-modal-text {
+            flex: 1;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.1rem;
+            line-height: 1.9;
+        }
+
+        .bio-modal-text p {
+            margin-bottom: 1.4rem;
+        }
+
+        .bio-modal-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bio-modal-text strong {
+            color: #c41e3a;
+            font-weight: 700;
+        }
+
+        .bio-modal-text em {
+            color: #fff;
+            font-style: normal;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.4) 0%, rgba(196, 30, 58, 0.3) 100%);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            border-left: 3px solid #c41e3a;
+            box-shadow: 0 2px 10px rgba(139, 0, 0, 0.2), inset 0 0 20px rgba(139, 0, 0, 0.1);
+            display: inline-block;
+            margin: 0.1rem 0;
+            text-shadow: 0 0 10px rgba(196, 30, 58, 0.3);
+        }
+
+        .bio-footer {
+            padding: 2rem 2.5rem;
+            border-top: 1px solid rgba(139, 0, 0, 0.25);
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+        }
+
+        .bio-footer p {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.8;
             margin: 0;
         }
 
-        .mark-all-read {
-            color: var(--color-primary);
-            font-size: 0.85rem;
+        .bio-quote {
+            color: #c41e3a;
+            font-style: italic;
+            font-weight: 700;
+            display: block;
+            margin-top: 1.2rem;
+            font-size: 1.2rem;
+            text-shadow: 0 0 20px rgba(196, 30, 58, 0.3);
+            padding-left: 1rem;
+            border-left: 3px solid #8b0000;
+        }
+
+        /* Clickable member card for Don Falcone */
+        .member-card.clickable {
             cursor: pointer;
-            background: none;
-            border: none;
-            transition: var(--transition);
         }
 
-        .mark-all-read:hover {
-            text-decoration: underline;
-        }
-
-        .notification-item {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 23, 68, 0.1);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .notification-item:hover {
-            background: rgba(255, 23, 68, 0.05);
-        }
-
-        .notification-item.unread {
-            background: rgba(255, 23, 68, 0.1);
-        }
-
-        .notification-item.unread::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--color-primary);
-            border-radius: 50%;
-            margin-right: 0.5rem;
-        }
-
-        .notification-title {
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .notification-message {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .notification-time {
-            color: rgba(255, 255, 255, 0.4);
+        .member-card.clickable::after {
+            content: 'Нажмите для просмотра биографии';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .no-notifications {
-            padding: 2rem;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
+        .member-card.clickable:hover::after {
+            opacity: 1;
         }
 
-        /* Тост-уведомления */
-        .toast-notification {
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            background: var(--color-surface);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 15px;
-            padding: 1rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            min-width: 300px;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            animation: slideIn 0.3s ease;
-            z-index: 10000;
-            cursor: pointer;
+        .member-card {
+            position: relative;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast-notification.hide {
-            animation: slideOut 0.3s ease forwards;
-        }
-
-        @keyframes slideOut {
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-
-        .toast-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--color-primary);
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-name {
-            color: white;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .toast-message {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85rem;
-        }
-
-        /* Скроллбары */
-        .notifications-dropdown::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .notifications-dropdown::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .notifications-dropdown::-webkit-scrollbar-thumb {
-            background: rgba(255, 23, 68, 0.5);
-            border-radius: 10px;
-        }
-
-        .notifications-dropdown::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 23, 68, 0.7);
-        }
-
-        /* Адаптив */
         @media (max-width: 768px) {
-            .notifications-dropdown {
-                position: fixed;
-                top: 70px;
-                left: 10px;
-                right: 10px;
-                width: auto;
-                max-height: calc(100vh - 100px);
+            .bio-modal-body {
+                flex-direction: column;
+                padding: 1.5rem;
             }
 
-            .toast-notification {
-                right: 10px;
-                left: 10px;
-                min-width: auto;
-                max-width: none;
+            .bio-modal-image {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .bio-modal-title {
+                font-size: 1.6rem;
+            }
+
+            .bio-modal-header,
+            .bio-footer {
+                padding: 1.2rem 1.5rem;
             }
         }
     </style>
@@ -381,7 +320,8 @@
             </nav>
 
             <!-- Кнопка "Войти" (показывается когда не авторизован) -->
-            <div class="auth-action" id="auth-action">
+            <!-- Initially hidden to prevent flash - shown by sync localStorage check -->
+            <div class="auth-action" id="auth-action" style="display: none;">
                 <a href="../login" class="btn-login">Войти</a>
             </div>
 
@@ -459,7 +399,7 @@
                 <p>Члены дома Фальконе — бесстрашные воины, еженедельно сражающиеся против всего спиртосодержащего, что
                     только есть на полках немецких магазинов. От легендарного бурбона до коварной водки,
                     от хитрого ликёра до старинного пива — ни один напиток не уйдёт от справедливого возмездия
-                    бойцов Дома Фальконе. Наш девиз: <em>«Una Fides, Unus Dominus»</em> — одна вера, один Дон.</p>
+                    бойцов Дома Фальконе. Наш девиз: <em>«Una Fides, Unus Dominus»</em> — Одна вера, Один Дон.</p>
             </div>
 
             <div class="features animate-fade-up">
@@ -505,25 +445,25 @@
             <div class="content-block animate-fade-up mt-xl">
                 <h2 class="underline-container">Члены Дома</h2>
                 <div class="members-gallery">
-                    <div class="member-card">
+                    <div class="member-card clickable" id="don-falcone-card" onclick="openBioModal()">
                         <div class="member-image">
                             <img src="../assets/images/DonFalcone_new.jpg" alt="Don Falcone">
                         </div>
                         <h3>Don Falcone</h3>
                     </div>
-                    <div class="member-card">
+                    <div class="member-card clickable" id="antone-snusone-card" onclick="openAntoneBioModal()">
                         <div class="member-image">
                             <img src="../assets/images/Anton.png" alt="Antone de Snusone">
                         </div>
                         <h3>Antone Snusone</h3>
                     </div>
-                    <div class="member-card">
+                    <div class="member-card clickable" id="dimone-card" onclick="openDimoneBioModal()">
                         <div class="member-image">
                             <img src="../assets/images/Dima.png" alt="Dimone de Patrone">
                         </div>
                         <h3>Dimone de Patrone</h3>
                     </div>
-                    <div class="member-card">
+                    <div class="member-card clickable" id="maxone-card" onclick="openMaxoneBioModal()">
                         <div class="member-image">
                             <img src="../assets/images/Maksym.jpg" alt="Maxone de Povarone">
                         </div>
@@ -542,23 +482,298 @@
                 <a href="../privacy">Политика конфиденциальности</a>
                 <a href="../agreement">Пользовательское соглашение</a>
                 <a href="../imprint">Сведения о владельце сайта</a>
+                <a href="../developers">Разработчики</a>
                 <a href="../hymn">Герб и Гимн</a>
             </div>
         </div>
     </footer>
+
+    <!-- Don Falcone Bio Modal -->
+    <div class="bio-modal" id="bio-modal">
+        <div class="bio-modal-content">
+            <button class="bio-modal-close" onclick="closeBioModal()">×</button>
+
+            <div class="bio-modal-header">
+                <div class="bio-modal-date">Основатель Дома • 4 октября 2025</div>
+                <h2 class="bio-modal-title">Don Falcone</h2>
+            </div>
+
+            <div class="bio-modal-body">
+                <div class="bio-modal-image">
+                    <img src="../assets/images/DonFalcone_new.jpg" alt="Don Falcone">
+                </div>
+                <div class="bio-modal-text">
+                    <p><strong>Аркадий</strong>, известный как <strong>Don Falcone</strong> — основатель и бессменный
+                        лидер Дома Фальконе. Именно в его священном подвале в ночь с 4 на 5 октября 2025 года было
+                        провозглашено создание великого братства.</p>
+
+                    <p>В разгар первой великой битвы с Джим Бимом, когда силы воинов были на исходе, Аркадий встал и
+                        провозгласил: <em>«Я Дон Дома Фальконе!»</em> — эти слова навеки изменили судьбу всех
+                        присутствующих.</p>
+
+                    <p>Дон Фальконе — хранитель священного кальяна, владелец легендарного подвала и главный стратег в
+                        битвах против всякого рода спиртных противников. Его мудрость и стойкость служат примером для
+                        всех членов Дома.</p>
+                </div>
+            </div>
+
+            <div class="bio-footer">
+                <p>Под руководством Дона Фальконе братство прошло путь от четырёх храбрецов до растущей организации с
+                    чёткой иерархией и священными традициями. Каждую пятницу Дон возглавляет заседания, где воины
+                    сражаются, укрепляют узы братства и чтят традиции Дома.</p>
+                <span class="bio-quote">«Una Fides, Unus Dominus» — Одна вера, Один Дон.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Antone Snusone Bio Modal -->
+    <div class="bio-modal" id="antone-bio-modal">
+        <div class="bio-modal-content">
+            <button class="bio-modal-close" onclick="closeAntoneBioModal()">×</button>
+
+            <div class="bio-modal-header">
+                <div class="bio-modal-date">Соучредитель Дома • 4 октября 2025</div>
+                <h2 class="bio-modal-title">Antone Snusone</h2>
+            </div>
+
+            <div class="bio-modal-body">
+                <div class="bio-modal-image">
+                    <img src="../assets/images/Anton.png" alt="Antone Snusone">
+                </div>
+                <div class="bio-modal-text">
+                    <p><strong>Антон</strong>, известный как <strong>Antone Snusone</strong> — один из четырёх
+                        основателей Дома Фальконе и верный соратник Дона. Он был среди тех, кто стоял у истоков братства
+                        в ту судьбоносную ночь с 4 на 5 октября 2025 года.</p>
+
+                    <p>Своё прозвище <em>«Снюсоне»</em> Антон получил благодаря неизменной приверженности к снюсу —
+                        верному спутнику каждого заседания. Именно Антон стал тем, кто покраснел как помидор к концу
+                        первой великой битвы, но не сдался.</p>
+
+                    <p>Antone Snusone известен своей выдержкой и способностью противостоять самым коварным противникам.
+                        Его присутствие на каждом заседании — гарантия того, что традиции Дома будут соблюдены.</p>
+                </div>
+            </div>
+
+            <div class="bio-footer">
+                <p>Антон — неотъемлемая часть ядра Дома Фальконе. Вместе с Доном он формирует стратегию противостояния
+                    врагам и следит за тем, чтобы каждый пятничный вечер прошёл достойно. Его вклад в развитие братства
+                    неоценим.</p>
+                <span class="bio-quote">«Снюс не помеха — снюс помощник.»</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dimone de Patrone Bio Modal -->
+    <div class="bio-modal" id="dimone-bio-modal">
+        <div class="bio-modal-content">
+            <button class="bio-modal-close" onclick="closeDimoneBioModal()">×</button>
+
+            <div class="bio-modal-header">
+                <div class="bio-modal-date">Правая рука Дона Фальконе • 4 октября 2025</div>
+                <h2 class="bio-modal-title">Dimone de Patrone</h2>
+            </div>
+
+            <div class="bio-modal-body">
+                <div class="bio-modal-image">
+                    <img src="../assets/images/Dima.png" alt="Dimone de Patrone">
+                </div>
+                <div class="bio-modal-text">
+                    <p><strong>Дмитрий</strong>, известный как <strong>Dimone de Patrone</strong> — правая рука Дона
+                        Фальконе, повелитель бутылки пива залпом и один из четырёх основателей великого братства. Именно
+                        он вместе с Максоне начал историческую битву с Джим Бимом ещё утром 4 октября 2025 года.</p>
+
+                    <p>Dimone de Patrone — легенда пивного фронта. Его норма — <em>минимум 2 литра пива в день</em>, что
+                        делает его одним из самых стойких воинов Дома. Ни одно заседание не обходится без его
+                        решительного участия в уничтожении запасов противника.</p>
+
+                    <p>Помимо своих боевых подвигов, Дмитрий заслужил прозвище <em>«де Патроне»</em>, создав легендарный
+                        герб Дома Фальконе. Шесть вариантов логотипа, один победитель — ныне официальный символ
+                        братства.</p>
+                </div>
+            </div>
+
+            <div class="bio-footer">
+                <p>Дмитрий — настоящий боец, для которого пиво не напиток, а образ жизни. Каждую пятницу он доказывает
+                    свою преданность Дому, опустошая бутылки залпом и вдохновляя братьев своей несгибаемой волей.</p>
+                <span class="bio-quote">«Два литра — это не предел, это разминка.»</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maxone Povarone Bio Modal -->
+    <div class="bio-modal" id="maxone-bio-modal">
+        <div class="bio-modal-content">
+            <button class="bio-modal-close" onclick="closeMaxoneBioModal()">×</button>
+
+            <div class="bio-modal-header">
+                <div class="bio-modal-date">Повар Дома Фальконе • 4 октября 2025</div>
+                <h2 class="bio-modal-title">Maxone Povarone</h2>
+            </div>
+
+            <div class="bio-modal-body">
+                <div class="bio-modal-image">
+                    <img src="../assets/images/Maksym.jpg" alt="Maxone Povarone">
+                </div>
+                <div class="bio-modal-text">
+                    <p><strong>Максим</strong>, известный как <strong>Maxone Povarone</strong> — главный повар Дома
+                        Фальконе и один из четырёх основателей братства. Именно в его квартире началась историческая
+                        битва с Джим Бимом утром 4 октября 2025 года.</p>
+
+                    <p>Своё прозвище <em>«де Повароне»</em> Максим получил благодаря своему кулинарному мастерству. Его
+                        легендарные <em>макароны с сыром и тунцом</em> стали первым блюдом в истории Дома Фальконе и
+                        навеки вписаны в его летописи.</p>
+
+                    <p>Maxone Povarone также является хранителем традиций аэрогриля. Именно картошка из его аэрогриля
+                        стала священной закуской, которая сопровождает каждое заседание Дома.</p>
+                </div>
+            </div>
+
+            <div class="bio-footer">
+                <p>Максим — сердце гастрономических традиций Дома Фальконе. Без его кулинарных шедевров ни одна пятница
+                    не была бы такой же. Он кормит воинов перед боем и после него, даря им силы для новых побед.</p>
+                <span class="bio-quote">«Голодный воин — слабый воин. Сытый воин — непобедим.»</span>
+            </div>
+        </div>
+    </div>
 
     <a href="../contact" class="floating-contact-btn">
         <img src="../assets/images/phone-icon.png" alt="Contact">
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
-    <script src="../assets/js/main.js?v=5"></script>
+    <script src="../assets/js/main.js?v=6"></script>
     <script>
         const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
         const token = localStorage.getItem('auth_token');
         let notificationsInterval;
         let messagesCheckInterval;
         let lastMessageCount = 0;
+
+        // ============ DON FALCONE BIO MODAL ============
+        function openBioModal() {
+            // Calculate scrollbar width to prevent layout shift
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = scrollbarWidth + 'px';
+            document.documentElement.style.overflow = 'hidden';
+            document.getElementById('bio-modal').classList.add('active');
+        }
+
+        function closeBioModal() {
+            document.getElementById('bio-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
+        }
+
+        // Close modal when clicking outside content
+        document.getElementById('bio-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeBioModal();
+            }
+        });
+
+        // ============ ANTONE SNUSONE BIO MODAL ============
+        function openAntoneBioModal() {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = scrollbarWidth + 'px';
+            document.documentElement.style.overflow = 'hidden';
+            document.getElementById('antone-bio-modal').classList.add('active');
+        }
+
+        function closeAntoneBioModal() {
+            document.getElementById('antone-bio-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
+        }
+
+        // Close Antone modal when clicking outside content
+        document.getElementById('antone-bio-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeAntoneBioModal();
+            }
+        });
+
+        // ============ DIMONE DE PATRONE BIO MODAL ============
+        function openDimoneBioModal() {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = scrollbarWidth + 'px';
+            document.documentElement.style.overflow = 'hidden';
+            document.getElementById('dimone-bio-modal').classList.add('active');
+        }
+
+        function closeDimoneBioModal() {
+            document.getElementById('dimone-bio-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
+        }
+
+        // Close Dimone modal when clicking outside content
+        document.getElementById('dimone-bio-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeDimoneBioModal();
+            }
+        });
+
+        // ============ MAXONE POVARONE BIO MODAL ============
+        function openMaxoneBioModal() {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = scrollbarWidth + 'px';
+            document.documentElement.style.overflow = 'hidden';
+            document.getElementById('maxone-bio-modal').classList.add('active');
+        }
+
+        function closeMaxoneBioModal() {
+            document.getElementById('maxone-bio-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
+        }
+
+        // Close Maxone modal when clicking outside content
+        document.getElementById('maxone-bio-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeMaxoneBioModal();
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('bio-modal').classList.contains('active')) {
+                    closeBioModal();
+                }
+                if (document.getElementById('antone-bio-modal').classList.contains('active')) {
+                    closeAntoneBioModal();
+                }
+                if (document.getElementById('dimone-bio-modal').classList.contains('active')) {
+                    closeDimoneBioModal();
+                }
+                if (document.getElementById('maxone-bio-modal').classList.contains('active')) {
+                    closeMaxoneBioModal();
+                }
+            }
+        });
+
+
+        // ============ SYNCHRONOUS AUTH CHECK (prevents flash) ============
+        (function syncAuthCheck() {
+            const authAction = document.getElementById('auth-action');
+            const userMenu = document.getElementById('user-menu');
+
+            if (token) {
+                if (authAction) authAction.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'flex';
+            } else {
+                if (authAction) authAction.style.display = 'block';
+                if (userMenu) userMenu.style.display = 'none';
+            }
+        })();
 
         // ============ ЗАГРУЗКА HEADER ============
         async function loadUserHeader() {

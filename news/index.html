@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=3">
+    <link rel="stylesheet" href="../assets/css/style.css?v=6">
     <link rel="icon" href="../assets/images/Falcone-circle.png" type="image/png">
 
     <style>
@@ -32,93 +32,9 @@
             flex-direction: column;
             gap: 2.5rem;
         }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .user-profile-info {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.3rem 1rem 0.3rem 0.3rem;
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 30px;
-            position: relative;
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .user-profile-info:hover {
-            background: rgba(255, 23, 68, 0.2);
-            border-color: rgba(255, 23, 68, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
-        }
-
-        .user-profile-info::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            bottom: 8px;
-            width: 10px;
-            height: 10px;
-            background-color: #00e676;
-            border-radius: 50%;
-            border: 2px solid var(--color-bg);
-            box-shadow: 0 0 10px #00e676, 0 0 20px rgba(0, 230, 118, 0.8);
-            animation: pulse-online 2s infinite;
-            z-index: 10;
-        }
-
-        @keyframes pulse-online {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-            }
-        }
-
-        .header-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--color-primary);
-            position: relative;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .user-display-name {
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            line-height: 1;
-        }
-
-        .user-points-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.75rem;
-            color: var(--color-primary);
-        }
-
+    </style>
+    <link rel="stylesheet" href="../assets/css/user-menu.css?v=1">
+    <style>
         /* Admin Create Button - Floating */
         .admin-create-btn {
             position: fixed;
@@ -450,9 +366,16 @@
             gap: 1rem;
         }
 
+        .news-header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
         .news-author {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             flex-shrink: 0;
         }
@@ -470,6 +393,7 @@
             flex-shrink: 0;
             transition: var(--transition);
             box-shadow: 0 4px 15px rgba(255, 23, 68, 0.2);
+            margin-top: 5px;
         }
 
         .news-author-avatar:hover {
@@ -525,6 +449,25 @@
             box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
         }
 
+        .delete-news-btn {
+            background: rgba(255, 23, 68, 0.15);
+            color: #ff8a80;
+            border: 1px solid rgba(255, 23, 68, 0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .delete-news-btn:hover {
+            background: rgba(255, 23, 68, 0.3);
+            border-color: rgba(255, 23, 68, 0.6);
+            transform: translateY(-2px);
+        }
+
         .news-title {
             color: white;
             font-size: 2rem;
@@ -545,7 +488,21 @@
         }
 
         /* News Images Gallery */
-        
+        .news-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .news-image {
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
 
         .news-image::after {
             content: '🔍';
@@ -801,6 +758,20 @@
         }
 
         /* Fullscreen Image Overlay */
+        .image-fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
 
         .image-fullscreen-overlay.active {
             display: flex;
@@ -1073,349 +1044,302 @@
             }
         }
 
-        /* Вкладки медиа */
-.media-upload-tabs {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
+        /* Media Upload Tabs (Video support) */
+        .media-upload-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
 
-.media-tab {
-    flex: 1;
-    padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: var(--transition);
-    text-align: center;
-    font-weight: 600;
-}
+        .media-tab {
+            flex: 1;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 600;
+        }
 
-.media-tab.active {
-    background: rgba(255, 23, 68, 0.1);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
+        .media-tab.active {
+            background: rgba(255, 23, 68, 0.1);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
 
-.media-tab:hover {
-    border-color: var(--color-primary);
-}
+        .media-tab:hover {
+            border-color: var(--color-primary);
+        }
 
-.media-upload-content {
-    display: none;
-}
+        .media-upload-content {
+            display: none;
+        }
 
-.media-upload-content.active {
-    display: block;
-}
+        .media-upload-content.active {
+            display: block;
+        }
 
-.upload-limits {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: 0.5rem;
-    text-align: center;
-}
+        .upload-limits {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
 
-.file-counter {
-    text-align: center;
-    margin-top: 0.5rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-}
+        .file-counter {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
 
-.file-counter.warning {
-    color: #ff9800;
-}
+        .file-counter.warning {
+            color: #ff9800;
+        }
 
-.file-counter.error {
-    color: #f44336;
-}
+        .file-counter.error {
+            color: #f44336;
+        }
 
-.video-preview-item {
-    position: relative;
-    aspect-ratio: 16/9;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    background: black;
-}
+        .video-preview-item {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: black;
+        }
 
-.video-preview-item video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+        .video-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
-.news-video video {
-    width: 100%;
-    display: block;
-}
+        /* ==================== COMPACT MEDIA DISPLAY ==================== */
+        .news-media-container {
+            margin: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
 
-        /* ==================== КОМПАКТНОЕ ОТОБРАЖЕНИЕ МЕДИА ==================== */
+        .news-media-container:hover {
+            border-color: rgba(255, 23, 68, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+        }
 
-/* Контейнер медиа - компактная плашка */
-.news-media-container {
-    margin: 1.5rem 0;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: var(--transition);
-}
+        .media-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
 
-.news-media-container:hover {
-    border-color: rgba(255, 23, 68, 0.2);
-    background: rgba(255, 255, 255, 0.04);
-}
+        .media-header:hover {
+            background: rgba(255, 23, 68, 0.05);
+        }
 
-/* Заголовок плашки с медиа */
-.media-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    user-select: none;
-    transition: var(--transition);
-}
+        .media-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-.media-header:hover {
-    background: rgba(255, 23, 68, 0.05);
-}
+        .media-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 23, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
 
-.media-header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        .media-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
 
-.media-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 23, 68, 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-}
+        .media-title {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
 
-.media-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
+        .media-count {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
 
-.media-title {
-    color: white;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
+        .media-toggle {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 23, 68, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
 
-.media-count {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.8rem;
-}
+        .media-toggle.active {
+            transform: rotate(180deg);
+            background: rgba(255, 23, 68, 0.2);
+        }
 
-.media-toggle {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 23, 68, 0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-primary);
-    font-size: 1.2rem;
-    transition: var(--transition);
-}
+        .media-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.media-toggle.active {
-    transform: rotate(180deg);
-    background: rgba(255, 23, 68, 0.2);
-}
+        .media-content.active {
+            max-height: 5000px;
+        }
 
-/* Контент медиа - скрыт по умолчанию */
-.media-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+        .media-content-inner {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
 
-.media-content.active {
-    max-height: 5000px; /* Большое значение для плавной анимации */
-}
+        .news-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.8rem;
+        }
 
-.media-content-inner {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-}
+        .news-image-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
 
-/* Сетка изображений - компактная */
-.news-images-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.8rem;
-}
+        .news-image-item::after {
+            content: '🔍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 1.8rem;
+            opacity: 0;
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+        }
 
-.news-image-item {
-    position: relative;
-    aspect-ratio: 4/3;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
+        .news-image-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 23, 68, 0.15);
+        }
 
-.news-image-item::after {
-    content: '🔍';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    font-size: 1.8rem;
-    opacity: 0;
-    transition: var(--transition);
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
-}
+        .news-image-item:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
 
-.news-image-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 23, 68, 0.15);
-}
+        .news-image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
 
-.news-image-item:hover::after {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-}
+        .news-image-item:hover img {
+            filter: brightness(0.7);
+            transform: scale(1.05);
+        }
 
-.news-image-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--transition);
-}
+        .news-videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
 
-.news-image-item:hover img {
-    filter: brightness(0.7);
-    transform: scale(1.05);
-}
+        .news-video-item {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: black;
+            transition: var(--transition);
+        }
 
-/* Сетка видео - компактная */
-.news-videos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-}
+        .news-video-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 23, 68, 0.15);
+        }
 
-.news-video-item {
-    position: relative;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    background: black;
-    transition: var(--transition);
-}
+        .news-video-item video {
+            width: 100%;
+            max-height: 400px;
+            display: block;
+            object-fit: contain;
+        }
 
-.news-video-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 23, 68, 0.15);
-}
+        .media-separator {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 1.5rem 0;
+        }
 
-.news-video-item video {
-    width: 100%;
-    max-height: 400px;
-    display: block;
-    object-fit: contain;
-}
+        /* Improved Fullscreen Close Button */
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 23, 68, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10000;
+        }
 
-/* Разделитель между типами медиа */
-.media-separator {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.08);
-    margin: 1.5rem 0;
-}
+        .fullscreen-close:hover {
+            background: var(--color-primary);
+            transform: rotate(90deg) scale(1.1);
+        }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    .news-images-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 0.6rem;
-    }
-    
-    .news-videos-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .media-header {
-        padding: 0.8rem 1rem;
-    }
-    
-    .media-content-inner {
-        padding: 0 1rem 1rem 1rem;
-    }
-}
+        @media (max-width: 768px) {
+            .news-images-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 0.6rem;
+            }
 
-/* Полноэкранный просмотр изображений */
-.image-fullscreen-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.97);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    cursor: zoom-out;
-}
+            .news-videos-grid {
+                grid-template-columns: 1fr;
+            }
 
-.image-fullscreen-overlay.active {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
+            .media-header {
+                padding: 0.8rem 1rem;
+            }
 
-.image-fullscreen-overlay img {
-    max-width: 95%;
-    max-height: 95%;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-}
-
-.fullscreen-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 23, 68, 0.9);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-    z-index: 10000;
-}
-
-.fullscreen-close:hover {
-    background: var(--color-primary);
-    transform: rotate(90deg) scale(1.1);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+            .media-content-inner {
+                padding: 0 1rem 1rem 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -1423,6 +1347,18 @@
     <div id="page-loader">
         <div class="loader-content">
             <div class="loader-text">Ждать. Идет загрузка.</div>
+            <div class="loader-hymn-section">
+                <div class="loader-hymn-label">Гимн Дома Фальконе</div>
+                <div class="loader-player-container">
+                    <div class="loader-play-btn" id="loader-play-btn">
+                        <div class="loader-play-icon"></div>
+                    </div>
+                    <div class="loader-progress-container">
+                        <div class="loader-progress-bar" id="loader-progress"></div>
+                    </div>
+                </div>
+                <audio id="loader-audio" src="../assets/audio/hymn.mp3"></audio>
+            </div>
         </div>
     </div>
 
@@ -1442,7 +1378,8 @@
                 <a href="../enemies">Противники</a>
                 <a href="../news" class="active">Новости</a>
             </nav>
-            <div class="auth-action" id="auth-action">
+            <!-- Initially hidden to prevent flash - shown by sync localStorage check -->
+            <div class="auth-action" id="auth-action" style="display: none;">
                 <a href="../login" class="btn-login">Войти</a>
             </div>
             <div class="user-menu" id="user-menu" style="display: none;">
@@ -1491,11 +1428,7 @@
 
     <main class="content-section">
         <div class="container">
-            <div id="news-container">
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                </div>
-            </div>
+            <div id="news-container"></div>
         </div>
     </main>
 
@@ -1524,42 +1457,43 @@
                     <textarea id="news-content" placeholder="Напишите текст новости..." required></textarea>
                 </div>
                 <div class="form-group">
-    <label>Медиафайлы</label>
-    <div class="media-upload-tabs">
-        <div class="media-tab active" data-tab="images">📸 Изображения</div>
-        <div class="media-tab" data-tab="videos">🎬 Видео</div>
-    </div>
-    
-    <!-- Изображения -->
-    <div class="media-upload-content active" id="images-content">
-        <div class="image-upload-area" id="image-upload-area">
-            <input type="file" id="image-input" accept="image/*" multiple>
-            <div class="upload-icon">📸</div>
-            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить изображения</p>
-            <p class="upload-limits">Максимум 10 изображений по 10MB каждое</p>
-        </div>
-        <div class="file-counter" id="images-counter">0 / 10 изображений</div>
-        <div class="image-preview-grid" id="image-preview-grid"></div>
-    </div>
-    
-    <!-- Видео -->
-    <div class="media-upload-content" id="videos-content">
-        <div class="image-upload-area" id="video-upload-area">
-            <input type="file" id="video-input" accept="video/mp4,video/webm,video/ogg,video/quicktime" multiple>
-            <div class="upload-icon">🎬</div>
-            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить видео</p>
-            <p class="upload-limits">Максимум 10 видео по 100MB каждое (MP4, WebM, OGG, MOV)</p>
-        </div>
-        <div class="file-counter" id="videos-counter">0 / 10 видео</div>
-        <div class="image-preview-grid" id="video-preview-grid"></div>
-    </div>
-</div>
+                    <label>Медиафайлы</label>
+                    <div class="media-upload-tabs">
+                        <div class="media-tab active" data-tab="images">📸 Изображения</div>
+                        <div class="media-tab" data-tab="videos">🎬 Видео</div>
+                    </div>
+
+                    <!-- Изображения -->
+                    <div class="media-upload-content active" id="images-content">
+                        <div class="image-upload-area" id="image-upload-area">
+                            <input type="file" id="image-input" accept="image/*" multiple>
+                            <div class="upload-icon">📸</div>
+                            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить изображения</p>
+                            <p class="upload-limits">Максимум 10 изображений по 10MB каждое</p>
+                        </div>
+                        <div class="file-counter" id="images-counter">0 / 10 изображений</div>
+                        <div class="image-preview-grid" id="image-preview-grid"></div>
+                    </div>
+
+                    <!-- Видео -->
+                    <div class="media-upload-content" id="videos-content">
+                        <div class="image-upload-area" id="video-upload-area">
+                            <input type="file" id="video-input" accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                                multiple>
+                            <div class="upload-icon">🎬</div>
+                            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить видео</p>
+                            <p class="upload-limits">Максимум 10 видео по 100MB каждое (MP4, WebM, OGG, MOV)</p>
+                        </div>
+                        <div class="file-counter" id="videos-counter">0 / 10 видео</div>
+                        <div class="image-preview-grid" id="video-preview-grid"></div>
+                    </div>
+                </div>
                 <button type="submit" class="submit-btn">Опубликовать новость</button>
             </form>
         </div>
     </div>
 
-     <!-- Footer -->
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
             <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
@@ -1579,33 +1513,48 @@
         <span class="btn-text">Связаться с Домом</span>
     </a>
 
+    <script src="../assets/js/main.js?v=6"></script>
     <script>
         const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
-const token = localStorage.getItem('auth_token');
-let currentUser = null;
-let uploadedImages = [];
-let uploadedVideos = [];
+        const token = localStorage.getItem('auth_token');
+        let currentUser = null;
+        let uploadedImages = [];
+        let uploadedVideos = [];
 
-const MAX_IMAGES = 10;
-const MAX_VIDEOS = 10;
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
-const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB ← ИЗМЕНЕНО С 50MB
-const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
-        
-// Переключение вкладок медиа
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.media-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabName = tab.dataset.tab;
-            
-            document.querySelectorAll('.media-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.media-upload-content').forEach(c => c.classList.remove('active'));
-            
-            tab.classList.add('active');
-            document.getElementById(tabName + '-content').classList.add('active');
+        const MAX_IMAGES = 10;
+        const MAX_VIDEOS = 10;
+        const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+        const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
+        const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+
+        // Media tabs switching
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.media-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+
+                    document.querySelectorAll('.media-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.media-upload-content').forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(tabName + '-content').classList.add('active');
+                });
+            });
         });
-    });
-});
+
+        // ============ SYNCHRONOUS AUTH CHECK (prevents flash) ============
+        (function syncAuthCheck() {
+            const authAction = document.getElementById('auth-action');
+            const userMenu = document.getElementById('user-menu');
+
+            if (token) {
+                if (authAction) authAction.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'flex';
+            } else {
+                if (authAction) authAction.style.display = 'block';
+                if (userMenu) userMenu.style.display = 'none';
+            }
+        })();
 
         async function loadUserHeader() {
             if (!token) {
@@ -1661,7 +1610,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function loadNews() {
             try {
-                const res = await fetch(API_BASE + "/news");
+                const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                const res = await fetch(API_BASE + "/news", { headers });
                 const data = await res.json();
                 const container = document.getElementById('news-container');
                 container.innerHTML = '';
@@ -1678,120 +1628,117 @@ document.addEventListener('DOMContentLoaded', () => {
                 const container = document.getElementById('news-container');
                 container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Ошибка загрузки новостей</p>';
             } finally {
-                // Скрыть загрузчик
-                document.getElementById('page-loader').style.display = 'none';
+                // Loader wird in DOMContentLoaded versteckt
             }
         }
 
         function createNewsCard(news) {
-    const card = document.createElement('div');
-    card.className = 'news-item';
-    const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
-    const canDelete = currentUser && currentUser.role === 'admin';
+            const card = document.createElement('div');
+            card.className = 'news-item';
+            const date = new Date(news.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+            const canDelete = currentUser && currentUser.role === 'admin';
 
-    // Подготовка медиа блоков
-    let mediaHTML = '';
-    
-    if (news.images.length > 0 || (news.videos && news.videos.length > 0)) {
-        const totalMedia = news.images.length + (news.videos?.length || 0);
-        
-        mediaHTML = `
-            <div class="news-media-container">
-                <div class="media-header" onclick="toggleMediaContent(${news.id})">
-                    <div class="media-header-left">
-                        <div class="media-icon">
-                            ${news.videos && news.videos.length > 0 ? '🎬' : '📸'}
-                        </div>
-                        <div class="media-info">
-                            <div class="media-title">Медиафайлы</div>
-                            <div class="media-count">
-                                ${news.images.length > 0 ? news.images.length + ' фото' : ''}
-                                ${news.images.length > 0 && news.videos?.length > 0 ? ' • ' : ''}
-                                ${news.videos?.length > 0 ? news.videos.length + ' видео' : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media-toggle" id="media-toggle-${news.id}">▼</div>
-                </div>
-                <div class="media-content" id="media-content-${news.id}">
-                    <div class="media-content-inner">
-                        ${news.images.length > 0 ? `
-                            <div class="news-images-grid">
-                                ${news.images.map((img, idx) => `
-                                    <div class="news-image-item" onclick="openImageFullscreen('${img}')">
-                                        <img src="${img}" alt="Изображение ${idx + 1}" loading="lazy">
+            // Prepare compact media display
+            let mediaHTML = '';
+
+            if (news.images.length > 0 || (news.videos && news.videos.length > 0)) {
+                mediaHTML = `
+                    <div class="news-media-container">
+                        <div class="media-header" onclick="toggleMediaContent(${news.id})">
+                            <div class="media-header-left">
+                                <div class="media-icon">
+                                    ${news.videos && news.videos.length > 0 ? '🎬' : '📸'}
+                                </div>
+                                <div class="media-info">
+                                    <div class="media-title">Медиафайлы</div>
+                                    <div class="media-count">
+                                        ${news.images.length > 0 ? news.images.length + ' фото' : ''}
+                                        ${news.images.length > 0 && news.videos?.length > 0 ? ' • ' : ''}
+                                        ${news.videos?.length > 0 ? news.videos.length + ' видео' : ''}
                                     </div>
-                                `).join('')}
+                                </div>
                             </div>
-                        ` : ''}
-                        
-                        ${news.images.length > 0 && news.videos?.length > 0 ? '<div class="media-separator"></div>' : ''}
-                        
-                        ${news.videos && news.videos.length > 0 ? `
-                            <div class="news-videos-grid">
-                                ${news.videos.map((video, idx) => `
-                                    <div class="news-video-item">
-                                        <video controls preload="metadata">
-                                            <source src="${video}">
-                                            Ваш браузер не поддерживает воспроизведение видео.
-                                        </video>
+                            <div class="media-toggle" id="media-toggle-${news.id}">▼</div>
+                        </div>
+                        <div class="media-content" id="media-content-${news.id}">
+                            <div class="media-content-inner">
+                                ${news.images.length > 0 ? `
+                                    <div class="news-images-grid">
+                                        ${news.images.map((img, idx) => `
+                                            <div class="news-image-item" onclick="openImageFullscreen('${img}')">
+                                                <img src="${img}" alt="Изображение ${idx + 1}" loading="lazy">
+                                            </div>
+                                        `).join('')}
                                     </div>
-                                `).join('')}
+                                ` : ''}
+                                
+                                ${news.images.length > 0 && news.videos?.length > 0 ? '<div class="media-separator"></div>' : ''}
+                                
+                                ${news.videos && news.videos.length > 0 ? `
+                                    <div class="news-videos-grid">
+                                        ${news.videos.map((video, idx) => `
+                                            <div class="news-video-item">
+                                                <video controls preload="metadata">
+                                                    <source src="${video}">
+                                                    Ваш браузер не поддерживает воспроизведение видео.
+                                                </video>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
                             </div>
-                        ` : ''}
+                        </div>
                     </div>
-                </div>
-            </div>
-        `;
-    }
+                `;
+            }
 
-    card.innerHTML = `
-        <div class="news-item-inner">
-            <div class="news-header">
-                <div class="news-author">
-                    <img src="${news.author_avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect fill=\'%23ff1744\' width=\'50\' height=\'50\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'22\' font-family=\'Arial\'%3E?%3C/text%3E%3C/svg%3E'}" class="news-author-avatar" alt="">
-                    <div class="news-author-info">
-                        <div class="news-author-name">${escapeHtml(news.author_name)}</div>
-                        <div class="news-date">${date}</div>
+            card.innerHTML = `
+                <div class="news-item-inner">
+                    <div class="news-header">
+                        <div class="news-author">
+                            <img src="${news.author_avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect fill=\'%23ff1744\' width=\'50\' height=\'50\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'22\' font-family=\'Arial\'%3E?%3C/text%3E%3C/svg%3E'}" class="news-author-avatar" alt="">
+                            <div class="news-author-info">
+                                <div class="news-author-name">${escapeHtml(news.author_name)}</div>
+                                <div class="news-date">${date}</div>
+                            </div>
+                        </div>
+                        <div class="news-header-actions">
+                            <div class="news-tag">${escapeHtml(news.tag)}</div>
+                            ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
+                        </div>
                     </div>
+                    <h2 class="news-title">${escapeHtml(news.title)}</h2>
+                    <div class="news-content">${escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
+                    
+                    ${mediaHTML}
+                    
+                    <div class="news-actions">
+                        <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
+                            <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
+                            <span>${news.likes_count}</span>
+                        </button>
+                        <button class="action-btn" onclick="toggleComments(${news.id})">
+                            <svg viewBox="0 0 24 24"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9Z"/></svg>
+                            <span>${news.comments_count}</span>
+                        </button>
+                    </div>
+                    <div class="comments-section" id="comments-${news.id}" style="display: none;"></div>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                    <div class="news-tag">${escapeHtml(news.tag)}</div>
-                    ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
-                </div>
-            </div>
-            <h2 class="news-title">${escapeHtml(news.title)}</h2>
-            <div class="news-content">${escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
-            
-            ${mediaHTML}
-            
-            <div class="news-actions">
-                <button class="action-btn ${news.user_liked ? 'liked' : ''}" onclick="toggleLike(${news.id}, this)">
-                    <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
-                    <span>${news.likes_count}</span>
-                </button>
-                <button class="action-btn" onclick="toggleComments(${news.id})">
-                    <svg viewBox="0 0 24 24"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9Z"/></svg>
-                    <span>${news.comments_count}</span>
-                </button>
-            </div>
-            <div class="comments-section" id="comments-${news.id}" style="display: none;"></div>
-        </div>
-    `;
-    return card;
-}
+            `;
+            return card;
+        }
 
-function toggleMediaContent(newsId) {
-    const content = document.getElementById(`media-content-${newsId}`);
-    const toggle = document.getElementById(`media-toggle-${newsId}`);
-    
-    content.classList.toggle('active');
-    toggle.classList.toggle('active');
-}
-        
+        function toggleMediaContent(newsId) {
+            const content = document.getElementById(`media-content-${newsId}`);
+            const toggle = document.getElementById(`media-toggle-${newsId}`);
+
+            content.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
         async function toggleLike(newsId, button) {
             if (!token) {
-                alert('Войдите, чтобы ставить лайки');
+                showErrorModal('Войдите, чтобы ставить лайки');
                 return;
             }
             try {
@@ -1864,14 +1811,15 @@ function toggleMediaContent(newsId) {
         }
 
         async function deleteNews(newsId) {
-            if (!confirm('Удалить новость?')) return;
+            const confirmed = await showConfirmModal('Удалить новость?');
+            if (!confirmed) return;
             try {
                 const res = await fetch(API_BASE + `/news/${newsId}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
                 if (res.ok) {
-                    alert('Новость удалена');
+                    showSuccessModal('Новость удалена');
                     await loadNews();
                 }
             } catch (err) {
@@ -1891,42 +1839,32 @@ function toggleMediaContent(newsId) {
             document.getElementById('image-input').click();
         });
 
-        // Замените обработчик загрузки изображений в вашем HTML на этот код
-
+        // Image upload handler
         document.getElementById('image-input').addEventListener('change', async (e) => {
-    const files = Array.from(e.target.files);
-    const previewGrid = document.getElementById('image-preview-grid');
+            const files = Array.from(e.target.files);
+            const previewGrid = document.getElementById('image-preview-grid');
 
-    for (const file of files) {
-        if (uploadedImages.length >= MAX_IMAGES) {
-            alert(`Максимум ${MAX_IMAGES} изображений`);
-            break;
-        }
-
-        if (file.size > MAX_IMAGE_SIZE) {
-            alert(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 10MB`);
-            continue;
-        }
-
-                // Максимум 5 изображений
-                if (uploadedImages.length >= 10) {
-                    alert('Максимум 10 изображений');
+            for (const file of files) {
+                if (uploadedImages.length >= MAX_IMAGES) {
+                    showErrorModal(`Максимум ${MAX_IMAGES} изображений`);
                     break;
                 }
 
-                // Проверка типа файла
-                if (!file.type.startsWith('image/')) {
-                    alert(`Файл "${file.name}" не является изображением`);
+                if (file.size > MAX_IMAGE_SIZE) {
+                    showErrorModal(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 10MB`);
                     continue;
                 }
 
-                console.log('Processing image:', {
+                if (!file.type.startsWith('image/')) {
+                    showErrorModal(`Файл "${file.name}" не является изображением`);
+                    continue;
+                }
+
                     name: file.name,
                     size: (file.size / 1024).toFixed(0) + 'KB',
                     type: file.type
                 });
 
-                // Показываем индикатор загрузки
                 const loadingItem = document.createElement('div');
                 loadingItem.className = 'image-preview-item';
                 loadingItem.style.opacity = '0.5';
@@ -1934,23 +1872,19 @@ function toggleMediaContent(newsId) {
                 previewGrid.appendChild(loadingItem);
 
                 try {
-                    // Умное сжатие с адаптивным качеством
                     const compressedDataUrl = await smartCompressImage(file);
 
                     const sizeInKB = (compressedDataUrl.length * 3 / 4 / 1024).toFixed(0);
-                    console.log('Compressed image size:', sizeInKB + 'KB');
 
-                    // Финальная проверка размера
-                    const maxBase64Size = 1.5 * 1024 * 1024; // 1.5MB в base64 (чтобы было место для других данных)
+                    const maxBase64Size = 1.5 * 1024 * 1024;
                     if (compressedDataUrl.length > maxBase64Size) {
-                        alert(`Не удалось достаточно сжать изображение "${file.name}". Попробуйте изображение меньшего разрешения.`);
+                        showErrorModal(`Не удалось достаточно сжать изображение "${file.name}". Попробуйте изображение меньшего разрешения.`);
                         previewGrid.removeChild(loadingItem);
                         continue;
                     }
 
                     uploadedImages.push(compressedDataUrl);
 
-                    // Заменяем индикатор загрузки на превью
                     loadingItem.style.opacity = '1';
                     loadingItem.innerHTML = `
                 <img src="${compressedDataUrl}">
@@ -1959,62 +1893,62 @@ function toggleMediaContent(newsId) {
             `;
                 } catch (err) {
                     console.error('Image compression error:', err);
-                    alert(`Ошибка обработки изображения "${file.name}": ${err.message}`);
+                    showErrorModal(`Ошибка обработки изображения "${file.name}": ${err.message}`);
                     previewGrid.removeChild(loadingItem);
                 }
             }
+
             updateCounters();
             e.target.value = '';
         });
 
-        // Загрузка видео
-document.getElementById('video-upload-area').addEventListener('click', () => {
-    document.getElementById('video-input').click();
-});
+        // Video upload handler
+        document.getElementById('video-upload-area').addEventListener('click', () => {
+            document.getElementById('video-input').click();
+        });
 
-document.getElementById('video-input').addEventListener('change', async (e) => {
-    const files = Array.from(e.target.files);
-    const previewGrid = document.getElementById('video-preview-grid');
+        document.getElementById('video-input').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            const previewGrid = document.getElementById('video-preview-grid');
 
-    for (const file of files) {
-        if (uploadedVideos.length >= MAX_VIDEOS) {
-            alert(`Максимум ${MAX_VIDEOS} видео`);
-            break;
-        }
+            for (const file of files) {
+                if (uploadedVideos.length >= MAX_VIDEOS) {
+                    showErrorModal(`Максимум ${MAX_VIDEOS} видео`);
+                    break;
+                }
 
-        if (file.size > MAX_VIDEO_SIZE) {
-            alert(`Видео "${file.name}" слишком большое (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 200MB`);
-            continue;
-        }
+                if (file.size > MAX_VIDEO_SIZE) {
+                    showErrorModal(`Видео "${file.name}" слишком большое (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 100MB`);
+                    continue;
+                }
 
-        // ← ОБНОВЛЕНО: добавлена проверка MOV
-        if (!['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'].includes(file.type)) {
-            alert(`Файл "${file.name}" имеет неподдерживаемый формат. Используйте MP4, WebM, OGG или MOV`);
-            continue;
-        }
+                if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+                    showErrorModal(`Файл "${file.name}" имеет неподдерживаемый формат. Используйте MP4, WebM, OGG или MOV`);
+                    continue;
+                }
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const videoDataUrl = e.target.result;
-            uploadedVideos.push(videoDataUrl);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const videoDataUrl = e.target.result;
+                    uploadedVideos.push(videoDataUrl);
 
-            const sizeInMB = (file.size / 1024 / 1024).toFixed(1);
-            const previewItem = document.createElement('div');
-            previewItem.className = 'video-preview-item';
-            previewItem.innerHTML = `
-                <video controls preload="metadata">
-                    <source src="${videoDataUrl}" type="${file.type}">
-                </video>
-                <button type="button" class="remove-image" onclick="removeVideo(${uploadedVideos.length - 1})">×</button>
-                <div style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${sizeInMB}MB</div>
-            `;
-            previewGrid.appendChild(previewItem);
-            updateCounters();
-        };
-        reader.readAsDataURL(file);
-    }
-    e.target.value = '';
-});
+                    const sizeInMB = (file.size / 1024 / 1024).toFixed(1);
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'video-preview-item';
+                    previewItem.innerHTML = `
+                        <video controls preload="metadata">
+                            <source src="${videoDataUrl}" type="${file.type}">
+                        </video>
+                        <button type="button" class="remove-image" onclick="removeVideo(${uploadedVideos.length - 1})">×</button>
+                        <div style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${sizeInMB}MB</div>
+                    `;
+                    previewGrid.appendChild(previewItem);
+                    updateCounters();
+                };
+                reader.readAsDataURL(file);
+            }
+            e.target.value = '';
+        });
 
         // Умная функция сжатия с адаптивным качеством
         async function smartCompressImage(file) {
@@ -2057,7 +1991,6 @@ document.getElementById('video-input').addEventListener('change', async (e) => {
                             compressedDataUrl = await compressToSize(img, maxWidth, quality);
                         }
 
-                        console.log('Final compression:', {
                             originalSize: file.size,
                             compressedSize: (compressedDataUrl.length * 3 / 4).toFixed(0) + ' bytes',
                             originalDimensions: `${originalWidth}x${originalHeight}`,
@@ -2136,7 +2069,6 @@ document.getElementById('video-input').addEventListener('change', async (e) => {
                         // Конвертируем в base64 с заданным качеством
                         const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
-                        console.log('Image compressed:', {
                             originalSize: file.size,
                             compressedSize: (compressedDataUrl.length * 3 / 4).toFixed(0) + ' bytes',
                             originalDimensions: `${img.width}x${img.height}`,
@@ -2175,53 +2107,55 @@ document.getElementById('video-input').addEventListener('change', async (e) => {
         }
 
         function removeVideo(index) {
-    uploadedVideos.splice(index, 1);
-    const previewGrid = document.getElementById('video-preview-grid');
-    previewGrid.innerHTML = '';
-    uploadedVideos.forEach((video, idx) => {
-        const sizeInMB = (video.length * 3 / 4 / 1024 / 1024).toFixed(1);
-        const previewItem = document.createElement('div');
-        previewItem.className = 'video-preview-item';
-        previewItem.innerHTML = `
-            <video controls preload="metadata"><source src="${video}"></video>
-            <button type="button" class="remove-image" onclick="removeVideo(${idx})">×</button>
-            <div style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${sizeInMB}MB</div>
-        `;
-        previewGrid.appendChild(previewItem);
-    });
-    updateCounters();
-}
+            uploadedVideos.splice(index, 1);
+            const previewGrid = document.getElementById('video-preview-grid');
+            previewGrid.innerHTML = '';
+            uploadedVideos.forEach((video, idx) => {
+                const sizeInMB = (video.length * 3 / 4 / 1024 / 1024).toFixed(1);
+                const previewItem = document.createElement('div');
+                previewItem.className = 'video-preview-item';
+                previewItem.innerHTML = `
+                    <video controls preload="metadata"><source src="${video}"></video>
+                    <button type="button" class="remove-image" onclick="removeVideo(${idx})">×</button>
+                    <div style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${sizeInMB}MB</div>
+                `;
+                previewGrid.appendChild(previewItem);
+            });
+            updateCounters();
+        }
 
-function updateCounters() {
-    const imagesCounter = document.getElementById('images-counter');
-    const videosCounter = document.getElementById('videos-counter');
-    
-    if (imagesCounter) {
-        imagesCounter.textContent = `${uploadedImages.length} / ${MAX_IMAGES} изображений`;
-        
-        if (uploadedImages.length >= MAX_IMAGES) {
-            imagesCounter.classList.add('error');
-        } else if (uploadedImages.length >= MAX_IMAGES * 0.8) {
-            imagesCounter.classList.add('warning');
-            imagesCounter.classList.remove('error');
-        } else {
-            imagesCounter.classList.remove('warning', 'error');
+        function updateCounters() {
+            const imagesCounter = document.getElementById('images-counter');
+            const videosCounter = document.getElementById('videos-counter');
+
+            if (imagesCounter) {
+                imagesCounter.textContent = `${uploadedImages.length} / ${MAX_IMAGES} изображений`;
+
+                if (uploadedImages.length >= MAX_IMAGES) {
+                    imagesCounter.classList.add('error');
+                    imagesCounter.classList.remove('warning');
+                } else if (uploadedImages.length >= MAX_IMAGES * 0.8) {
+                    imagesCounter.classList.add('warning');
+                    imagesCounter.classList.remove('error');
+                } else {
+                    imagesCounter.classList.remove('warning', 'error');
+                }
+            }
+
+            if (videosCounter) {
+                videosCounter.textContent = `${uploadedVideos.length} / ${MAX_VIDEOS} видео`;
+
+                if (uploadedVideos.length >= MAX_VIDEOS) {
+                    videosCounter.classList.add('error');
+                    videosCounter.classList.remove('warning');
+                } else if (uploadedVideos.length >= MAX_VIDEOS * 0.8) {
+                    videosCounter.classList.add('warning');
+                    videosCounter.classList.remove('error');
+                } else {
+                    videosCounter.classList.remove('warning', 'error');
+                }
+            }
         }
-    }
-    
-    if (videosCounter) {
-        videosCounter.textContent = `${uploadedVideos.length} / ${MAX_VIDEOS} видео`;
-        
-        if (uploadedVideos.length >= MAX_VIDEOS) {
-            videosCounter.classList.add('error');
-        } else if (uploadedVideos.length >= MAX_VIDEOS * 0.8) {
-            videosCounter.classList.add('warning');
-            videosCounter.classList.remove('error');
-        } else {
-            videosCounter.classList.remove('warning', 'error');
-        }
-    }
-}
 
         // Замените обработчик отправки формы в вашем HTML на этот код
 
@@ -2232,8 +2166,6 @@ function updateCounters() {
             const content = document.getElementById('news-content').value.trim();
             const tag = document.getElementById('news-tag').value;
 
-            console.log('=== SUBMIT FORM START ===');
-            console.log('Form data:', {
                 title: title.substring(0, 50) + '...',
                 contentLength: content.length,
                 tag: tag,
@@ -2241,7 +2173,7 @@ function updateCounters() {
             });
 
             if (!title || !content) {
-                alert('Заполните все поля');
+                showErrorModal('Заполните все поля');
                 return;
             }
 
@@ -2251,14 +2183,13 @@ function updateCounters() {
 
             try {
                 const payload = {
-    title: title,
-    content: content,
-    tag: tag,
-    images: uploadedImages,
-    videos: uploadedVideos
-};
+                    title: title,
+                    content: content,
+                    tag: tag,
+                    images: uploadedImages,
+                    videos: uploadedVideos
+                };
 
-                console.log('Preparing request:', {
                     url: API_BASE + "/news",
                     method: 'POST',
                     hasToken: !!token,
@@ -2266,7 +2197,6 @@ function updateCounters() {
                     payloadSize: JSON.stringify(payload).length
                 });
 
-                console.log('Sending request...');
                 const res = await fetch(API_BASE + "/news", {
                     method: 'POST',
                     headers: {
@@ -2276,7 +2206,6 @@ function updateCounters() {
                     body: JSON.stringify(payload)
                 });
 
-                console.log('Response received:', {
                     status: res.status,
                     statusText: res.statusText,
                     ok: res.ok,
@@ -2284,27 +2213,24 @@ function updateCounters() {
                 });
 
                 const responseText = await res.text();
-                console.log('Response text:', responseText);
 
                 let responseData;
                 try {
                     responseData = JSON.parse(responseText);
-                    console.log('Response data parsed:', responseData);
                 } catch (parseErr) {
                     console.error('Failed to parse response as JSON:', parseErr);
                     throw new Error('Сервер вернул некорректный ответ: ' + responseText.substring(0, 100));
                 }
 
                 if (res.ok) {
-                    console.log('=== SUBMIT SUCCESS ===');
-                    alert('Новость опубликована!');
+                    showSuccessModal('Новость опубликована!');
                     document.getElementById('create-news-modal').classList.remove('active');
                     document.getElementById('create-news-form').reset();
-uploadedImages = [];
-uploadedVideos = [];
-document.getElementById('image-preview-grid').innerHTML = '';
-document.getElementById('video-preview-grid').innerHTML = '';
-updateCounters();
+                    uploadedImages = [];
+                    uploadedVideos = [];
+                    document.getElementById('image-preview-grid').innerHTML = '';
+                    document.getElementById('video-preview-grid').innerHTML = '';
+                    updateCounters();
                     await loadNews();
                 } else {
                     console.error('=== SUBMIT FAILED ===');
@@ -2318,7 +2244,7 @@ updateCounters();
                         errorMsg += '\nТип: ' + responseData.type;
                     }
 
-                    alert(errorMsg);
+                    showErrorModal(errorMsg);
                 }
             } catch (err) {
                 console.error('=== SUBMIT EXCEPTION ===');
@@ -2327,11 +2253,10 @@ updateCounters();
                 console.error('Error message:', err.message);
                 console.error('Error stack:', err.stack);
 
-                alert('Ошибка публикации: ' + err.message);
+                showErrorModal('Ошибка публикации: ' + err.message);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Опубликовать новость';
-                console.log('=== SUBMIT FORM END ===');
             }
         });
 
@@ -2342,61 +2267,62 @@ updateCounters();
             } catch (err) {
                 console.error('Init error:', err);
             } finally {
-                document.getElementById('page-loader').style.display = 'none';
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.classList.add('loaded');
+                    // Stop hymn if playing
+                    const loaderAudio = document.getElementById('loader-audio');
+                    if (loaderAudio) {
+                        loaderAudio.pause();
+                        loaderAudio.currentTime = 0;
+                    }
+                }
             }
         });
 
-        // Скрыть загрузчик после загрузки
+        // Page fully loaded
         window.addEventListener('load', () => {
-            document.getElementById('page-loader').style.display = 'none';
-
+            // Loader bereits in DOMContentLoaded versteckt
         });
 
         // Открыть изображение в полном размере
-function openImageFullscreen(imageSrc) {
-    let overlay = document.getElementById('image-fullscreen-overlay');
+        function openImageFullscreen(imageSrc) {
+            let overlay = document.getElementById('image-fullscreen-overlay');
 
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'image-fullscreen-overlay';
-        overlay.className = 'image-fullscreen-overlay';
-        overlay.innerHTML = '<button class="fullscreen-close" onclick="closeImageFullscreen()">×</button>';
-        document.body.appendChild(overlay);
-        
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                closeImageFullscreen();
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'image-fullscreen-overlay';
+                overlay.className = 'image-fullscreen-overlay';
+                overlay.innerHTML = '<button class="fullscreen-close" onclick="closeImageFullscreen()">×</button>';
+                document.body.appendChild(overlay);
+
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        closeImageFullscreen();
+                    }
+                });
             }
-        });
-    }
 
-    const existingImg = overlay.querySelector('img');
-    if (existingImg) existingImg.remove();
+            const existingImg = overlay.querySelector('img');
+            if (existingImg) existingImg.remove();
 
-    const img = document.createElement('img');
-    img.src = imageSrc;
-    img.onclick = (e) => e.stopPropagation();
-    overlay.appendChild(img);
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.onclick = (e) => e.stopPropagation();
+            overlay.appendChild(img);
 
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-// Закрыть полноэкранное изображение
-function closeImageFullscreen() {
-    const overlay = document.getElementById('image-fullscreen-overlay');
-    if (overlay) {
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Закрытие по клавише Escape
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeImageFullscreen();
-    }
-});
+        // Закрыть полноэкранное изображение
+        function closeImageFullscreen() {
+            const overlay = document.getElementById('image-fullscreen-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
 
         // Закрытие по клавише Escape
         document.addEventListener('keydown', (e) => {
@@ -2663,7 +2589,6 @@ document.addEventListener('keydown', (e) => {
         });
 
     </script>
-    <script src="../assets/js/main.js?v=5"></script>
 </body>
 
 </html>
