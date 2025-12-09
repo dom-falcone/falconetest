@@ -1860,10 +1860,7 @@
                     continue;
                 }
 
-                    name: file.name,
-                    size: (file.size / 1024).toFixed(0) + 'KB',
-                    type: file.type
-                });
+
 
                 const loadingItem = document.createElement('div');
                 loadingItem.className = 'image-preview-item';
@@ -1991,13 +1988,7 @@
                             compressedDataUrl = await compressToSize(img, maxWidth, quality);
                         }
 
-                            originalSize: file.size,
-                            compressedSize: (compressedDataUrl.length * 3 / 4).toFixed(0) + ' bytes',
-                            originalDimensions: `${originalWidth}x${originalHeight}`,
-                            finalMaxWidth: maxWidth,
-                            finalQuality: quality,
-                            compressionRatio: ((1 - (compressedDataUrl.length * 3 / 4) / file.size) * 100).toFixed(1) + '%'
-                        });
+
 
                         resolve(compressedDataUrl);
                     };
@@ -2069,11 +2060,7 @@
                         // Конвертируем в base64 с заданным качеством
                         const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
-                            originalSize: file.size,
-                            compressedSize: (compressedDataUrl.length * 3 / 4).toFixed(0) + ' bytes',
-                            originalDimensions: `${img.width}x${img.height}`,
-                            newDimensions: `${width}x${height}`
-                        });
+
 
                         resolve(compressedDataUrl);
                     };
@@ -2166,11 +2153,7 @@
             const content = document.getElementById('news-content').value.trim();
             const tag = document.getElementById('news-tag').value;
 
-                title: title.substring(0, 50) + '...',
-                contentLength: content.length,
-                tag: tag,
-                imagesCount: uploadedImages.length
-            });
+
 
             if (!title || !content) {
                 showErrorModal('Заполните все поля');
@@ -2190,12 +2173,7 @@
                     videos: uploadedVideos
                 };
 
-                    url: API_BASE + "/news",
-                    method: 'POST',
-                    hasToken: !!token,
-                    tokenPreview: token ? token.substring(0, 20) + '...' : 'none',
-                    payloadSize: JSON.stringify(payload).length
-                });
+
 
                 const res = await fetch(API_BASE + "/news", {
                     method: 'POST',
@@ -2206,11 +2184,7 @@
                     body: JSON.stringify(payload)
                 });
 
-                    status: res.status,
-                    statusText: res.statusText,
-                    ok: res.ok,
-                    headers: Object.fromEntries(res.headers.entries())
-                });
+
 
                 const responseText = await res.text();
 
