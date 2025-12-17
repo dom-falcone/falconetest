@@ -2591,10 +2591,11 @@ function closeMobileChat() {
     
     chatArea.classList.remove('mobile-show');
     chatArea.classList.add('chat-area-empty');
+    chatArea.style.display = '';
     chatsSidebar.classList.remove('mobile-hidden');
     document.body.classList.remove('mobile-chat-open');
     
-    // Показываем плавающую кнопку обратно
+    // Показываем плавающую кнопку обратно только на мобильных
     if (floatingBtn && window.innerWidth <= 768) {
         floatingBtn.style.display = 'flex';
     }
