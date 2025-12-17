@@ -1123,7 +1123,7 @@
     }
 
     .chat-area.mobile-show {
-        display: flex;
+        display: flex !important;
     }
 
     /* Скрываем header при открытом чате */
@@ -1598,7 +1598,12 @@ async function openChat(chatId, userId, userName, userAvatar) {
     // Показываем область чата
     const chatArea = document.getElementById('chat-area');
     chatArea.classList.remove('chat-area-empty');
-    chatArea.classList.add(isMobile ? 'mobile-show' : '');
+    if (isMobile) {
+        chatArea.classList.add('mobile-show');
+    }
+    
+    // На десктопе просто показываем чат без специальных классов
+    chatArea.style.display = 'flex';
     
     chatArea.innerHTML = `
         <div class="chat-header">
@@ -2578,7 +2583,7 @@ function playNotificationSound(soundType) {
             if (messagesCheckInterval) clearInterval(messagesCheckInterval);
         });
 
-        // Функция для закрытия чата на мобильных
+// Функция для закрытия чата на мобильных
 function closeMobileChat() {
     const chatArea = document.getElementById('chat-area');
     const chatsSidebar = document.querySelector('.chats-sidebar');
