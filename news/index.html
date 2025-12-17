@@ -13,24 +13,579 @@
 
     <style>
         :root {
-            --color-primary: #ff1744;
-            --color-primary-glow: rgba(255, 23, 68, 0.4);
+            --color-primary: #c41e3a;
+            --color-primary-dark: #8b0000;
+            --color-primary-glow: rgba(196, 30, 58, 0.4);
             --color-bg: #050505;
-            --color-surface: #0d0d0d;
-            --color-surface-elevated: #141414;
+            --color-surface: #0a0808;
+            --color-surface-elevated: #120d0e;
             --color-accent: #ff6b6b;
             --color-gold: #ffd700;
+            --color-blood: #8b0000;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-fast: all 0.2s ease;
-            --glass-bg: rgba(15, 15, 15, 0.8);
-            --glass-border: rgba(255, 23, 68, 0.15);
+            --glass-bg: rgba(15, 10, 12, 0.9);
+            --glass-border: rgba(139, 0, 0, 0.25);
+        }
+
+        /* Atmospheric Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at top center, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(196, 30, 58, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at top left, rgba(100, 0, 0, 0.1) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Page Header Enhancement */
+        .page-header {
+            position: relative;
+            overflow: hidden;
+            height: 70vh;
+            align-items: flex-start;
+            padding-top: 8rem;
+        }
+
+        .page-header::before {
+            display: none;
+        }
+
+        .page-header::after {
+            display: none;
+        }
+
+        /* ==================== NEWSPAPER WELDING ANIMATION ==================== */
+        .newspaper-frame {
+            position: absolute;
+            top: 76%;
+            left: 25%;
+            transform: translate(-50%, -50%) rotate(-6deg);
+            width: 24%;
+            max-width: 300px;
+            height: 30%;
+            max-height: 180px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .newspaper-frame svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Main welding stroke */
+        .weld-stroke {
+            fill: none;
+            stroke: url(#weldGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1500;
+            stroke-dashoffset: 1500;
+            animation: weldTrace 6s ease-in-out infinite;
+            filter: url(#weldGlow);
+        }
+
+        /* Secondary glow stroke for extra intensity */
+        .weld-stroke-glow {
+            fill: none;
+            stroke: rgba(255, 80, 80, 0.8);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100 1400;
+            stroke-dashoffset: 1500;
+            animation: weldTrace 6s ease-in-out infinite;
+            filter: blur(4px);
+            opacity: 0.7;
+        }
+
+        /* Inner subtle stroke */
+        .weld-stroke-inner {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 60 1440;
+            stroke-dashoffset: 1500;
+            animation: weldTrace 6s ease-in-out infinite;
+        }
+
+        @keyframes weldTrace {
+            0% {
+                stroke-dashoffset: 1500;
+            }
+
+            100% {
+                stroke-dashoffset: -1500;
+            }
+        }
+
+        /* Spark particles at weld point */
+        .weld-spark {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow:
+                0 0 6px 2px rgba(255, 100, 100, 1),
+                0 0 15px 5px rgba(255, 50, 50, 0.8),
+                0 0 30px 10px rgba(139, 0, 0, 0.5);
+            animation: sparkMove 6s ease-in-out infinite, sparkFlicker 0.1s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .weld-spark:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .weld-spark:nth-child(2) {
+            animation-delay: 0.05s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .weld-spark:nth-child(3) {
+            animation-delay: 0.1s;
+            width: 3px;
+            height: 3px;
+        }
+
+        @keyframes sparkFlicker {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.3);
+            }
+        }
+
+        @keyframes sparkMove {
+            0% {
+                offset-distance: 0%;
+                opacity: 1;
+            }
+
+            100% {
+                offset-distance: 100%;
+                opacity: 1;
+            }
+        }
+
+        /* Ambient glow around the newspaper */
+        .newspaper-ambient-glow {
+            position: absolute;
+            top: 76%;
+            left: 25%;
+            transform: translate(-50%, -50%) rotate(-6deg);
+            width: 26%;
+            max-width: 330px;
+            height: 34%;
+            max-height: 220px;
+            background: radial-gradient(ellipse at center,
+                    rgba(139, 0, 0, 0.2) 0%,
+                    rgba(139, 0, 0, 0.08) 40%,
+                    transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: ambientPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes ambientPulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) rotate(-6deg) scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) rotate(-6deg) scale(1.02);
+            }
+        }
+
+        /* ==================== CLICKABLE NEWSPAPER ==================== */
+        .newspaper-clickable {
+            position: absolute;
+            top: 76%;
+            left: 25%;
+            transform: translate(-50%, -50%) rotate(-6deg);
+            width: 24%;
+            max-width: 300px;
+            height: 30%;
+            max-height: 180px;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
+        }
+
+        .newspaper-clickable:hover {
+            transform: translate(-50%, -50%) rotate(-4deg) perspective(500px) rotateX(8deg) scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .newspaper-clickable::after {
+            content: '🔍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 3rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 15px rgba(139, 0, 0, 0.8));
+        }
+
+        .newspaper-clickable:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* ==================== NEWSPAPER LIGHTBOX ==================== */
+        .newspaper-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 99999;
+            cursor: zoom-out;
+            overflow: hidden;
+        }
+
+        .newspaper-lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .newspaper-lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: newspaperZoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .newspaper-lightbox.closing .newspaper-lightbox-content {
+            animation: newspaperZoomOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes newspaperZoomIn {
+            0% {
+                transform: scale(0.3) rotate(-15deg) translateY(100px);
+                opacity: 0;
+                filter: blur(20px);
+            }
+
+            50% {
+                transform: scale(1.05) rotate(2deg) translateY(-10px);
+                opacity: 1;
+                filter: blur(0);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg) translateY(0);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        @keyframes newspaperZoomOut {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+
+            100% {
+                transform: scale(0.3) rotate(15deg) translateY(100px);
+                opacity: 0;
+                filter: blur(20px);
+            }
+        }
+
+        .newspaper-lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow:
+                0 0 100px rgba(139, 0, 0, 0.5),
+                0 0 200px rgba(139, 0, 0, 0.3),
+                0 25px 80px rgba(0, 0, 0, 0.8);
+            border: 3px solid rgba(139, 0, 0, 0.5);
+        }
+
+        .newspaper-lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 0, 0, 0.3);
+            border: 2px solid rgba(196, 30, 58, 0.5);
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100000;
+            animation: buttonFadeIn 0.6s ease 0.3s both;
+        }
+
+        @keyframes buttonFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0) rotate(-180deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .newspaper-lightbox-close:hover {
+            background: var(--color-primary);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(196, 30, 58, 0.6);
+        }
+
+        /* Glow particles effect in lightbox */
+        .lightbox-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .lightbox-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(196, 30, 58, 0.8), transparent);
+            border-radius: 50%;
+            animation: floatParticle 4s ease-in-out infinite;
+        }
+
+        .lightbox-particle:nth-child(1) {
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .lightbox-particle:nth-child(2) {
+            left: 20%;
+            top: 80%;
+            animation-delay: 0.5s;
+        }
+
+        .lightbox-particle:nth-child(3) {
+            left: 80%;
+            top: 30%;
+            animation-delay: 1s;
+        }
+
+        .lightbox-particle:nth-child(4) {
+            left: 90%;
+            top: 70%;
+            animation-delay: 1.5s;
+        }
+
+        .lightbox-particle:nth-child(5) {
+            left: 50%;
+            top: 10%;
+            animation-delay: 2s;
+        }
+
+        .lightbox-particle:nth-child(6) {
+            left: 30%;
+            top: 50%;
+            animation-delay: 2.5s;
+        }
+
+        .lightbox-particle:nth-child(7) {
+            left: 70%;
+            top: 90%;
+            animation-delay: 3s;
+        }
+
+        .lightbox-particle:nth-child(8) {
+            left: 40%;
+            top: 40%;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes floatParticle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+
+            25% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1);
+            }
+
+            75% {
+                opacity: 0.5;
+                transform: translateY(-60px) scale(0.5);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .newspaper-clickable {
+                width: 40%;
+                max-width: 280px;
+            }
+
+            .newspaper-clickable::after {
+                font-size: 2rem;
+            }
+
+            .newspaper-lightbox-close {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 22px;
+            }
+        }
+
+        /* Floating ember particles */
+        .ember-particles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 80%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: visible;
+        }
+
+        .ember {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(135deg, #ff6b6b, #c41e3a);
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 100, 100, 0.6);
+            animation: emberFloat 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .ember:nth-child(1) {
+            left: 10%;
+            top: 30%;
+            animation-delay: 0s;
+        }
+
+        .ember:nth-child(2) {
+            left: 85%;
+            top: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .ember:nth-child(3) {
+            left: 90%;
+            top: 60%;
+            animation-delay: 1s;
+        }
+
+        .ember:nth-child(4) {
+            left: 15%;
+            top: 80%;
+            animation-delay: 1.5s;
+        }
+
+        .ember:nth-child(5) {
+            left: 50%;
+            top: 10%;
+            animation-delay: 2s;
+        }
+
+        .ember:nth-child(6) {
+            left: 70%;
+            top: 90%;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes emberFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translateY(-5px) scale(1);
+            }
+
+            90% {
+                opacity: 0.5;
+                transform: translateY(-30px) scale(0.5);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-40px) scale(0);
+            }
+        }
+
+        /* Ensure page header content is above the animation */
+        .page-header .container {
+            position: relative;
+            z-index: 10;
         }
 
         /* Premium News Container */
         #news-container {
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 2rem;
+        }
+
+        /* Contact Button Override - Dark Style */
+        .floating-contact-btn {
+            background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 50%, #1a1a1a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-contact-btn:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 50%, #2a2a2a 100%);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
         }
     </style>
     <link rel="stylesheet" href="../assets/css/user-menu.css?v=1">
@@ -40,37 +595,24 @@
             position: fixed;
             bottom: 30px;
             left: 30px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, var(--color-primary), #ff4569);
-            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 8px 30px rgba(255, 23, 68, 0.5), 0 0 0 0 rgba(255, 23, 68, 0.4);
+            box-shadow: none;
             transition: var(--transition);
             z-index: 100;
             border: none;
-            animation: pulse-btn 2s infinite;
-        }
-
-        @keyframes pulse-btn {
-
-            0%,
-            100% {
-                box-shadow: 0 8px 30px rgba(255, 23, 68, 0.5), 0 0 0 0 rgba(255, 23, 68, 0.4);
-            }
-
-            50% {
-                box-shadow: 0 8px 30px rgba(255, 23, 68, 0.5), 0 0 0 15px rgba(255, 23, 68, 0);
-            }
+            animation: none;
         }
 
         .admin-create-btn:hover {
-            transform: scale(1.15) rotate(90deg);
-            box-shadow: 0 12px 40px rgba(255, 23, 68, 0.7);
-            animation: none;
+            transform: scale(1.2);
+            box-shadow: none;
         }
 
         .admin-create-btn::before,
@@ -82,13 +624,13 @@
         }
 
         .admin-create-btn::before {
-            width: 26px;
+            width: 30px;
             height: 3px;
         }
 
         .admin-create-btn::after {
             width: 3px;
-            height: 26px;
+            height: 30px;
         }
 
         /* Create News Modal */
@@ -100,7 +642,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             z-index: 1000;
             overflow-y: auto;
             padding: 2rem 1rem;
@@ -125,14 +667,17 @@
         }
 
         .create-news-content {
-            background: linear-gradient(145deg, var(--color-surface-elevated), var(--color-surface));
-            border: 1px solid rgba(255, 23, 68, 0.2);
-            border-radius: 24px;
+            background: linear-gradient(165deg, rgba(20, 10, 12, 0.98) 0%, rgba(10, 5, 6, 0.99) 100%);
+            border: 1px solid rgba(139, 0, 0, 0.4);
+            border-left: 5px solid var(--color-blood);
+            border-radius: 20px;
             max-width: 800px;
             width: 100%;
             padding: 2.5rem;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(255, 23, 68, 0.1);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7),
+                0 0 120px rgba(139, 0, 0, 0.15),
+                inset 0 0 100px rgba(139, 0, 0, 0.03);
         }
 
         .modal-close {
@@ -141,10 +686,10 @@
             right: 1.5rem;
             width: 44px;
             height: 44px;
-            background: rgba(255, 23, 68, 0.1);
-            border: 1px solid rgba(255, 23, 68, 0.3);
+            background: rgba(139, 0, 0, 0.15);
+            border: 1px solid rgba(139, 0, 0, 0.4);
             border-radius: 50%;
-            color: white;
+            color: rgba(255, 255, 255, 0.8);
             font-size: 24px;
             cursor: pointer;
             transition: var(--transition);
@@ -156,6 +701,7 @@
         .modal-close:hover {
             background: var(--color-primary);
             transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 25px rgba(139, 0, 0, 0.5);
         }
 
         .create-news-form {
@@ -180,8 +726,8 @@
         .form-group input,
         .form-group textarea,
         .form-group select {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 23, 68, 0.2);
+            background: rgba(139, 0, 0, 0.05);
+            border: 1px solid rgba(139, 0, 0, 0.25);
             border-radius: 12px;
             padding: 1rem;
             color: white;
@@ -195,8 +741,8 @@
         .form-group select:focus {
             outline: none;
             border-color: var(--color-primary);
-            background: rgba(255, 23, 68, 0.05);
-            box-shadow: 0 0 20px rgba(255, 23, 68, 0.15);
+            background: rgba(139, 0, 0, 0.1);
+            box-shadow: 0 0 25px rgba(139, 0, 0, 0.2);
         }
 
         .form-group textarea {
@@ -205,18 +751,18 @@
         }
 
         .image-upload-area {
-            border: 2px dashed rgba(255, 23, 68, 0.3);
+            border: 2px dashed rgba(139, 0, 0, 0.4);
             border-radius: 16px;
             padding: 2.5rem;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            background: rgba(255, 23, 68, 0.02);
+            background: rgba(139, 0, 0, 0.03);
         }
 
         .image-upload-area:hover {
             border-color: var(--color-primary);
-            background: rgba(255, 23, 68, 0.08);
+            background: rgba(139, 0, 0, 0.1);
             transform: scale(1.01);
         }
 
@@ -227,7 +773,7 @@
         .upload-icon {
             font-size: 3.5rem;
             margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(255, 23, 68, 0.5));
+            filter: drop-shadow(0 0 15px rgba(139, 0, 0, 0.6));
         }
 
         .image-preview-grid {
@@ -242,7 +788,8 @@
             aspect-ratio: 1;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 0, 0, 0.2);
         }
 
         .image-preview-item img {
@@ -262,7 +809,7 @@
             right: 8px;
             width: 28px;
             height: 28px;
-            background: var(--color-primary);
+            background: var(--color-blood);
             border: none;
             border-radius: 50%;
             color: white;
@@ -272,16 +819,16 @@
             justify-content: center;
             font-size: 18px;
             transition: var(--transition);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 15px rgba(139, 0, 0, 0.5);
         }
 
         .remove-image:hover {
             transform: scale(1.1);
-            background: #ff0033;
+            background: var(--color-primary);
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, var(--color-primary), #ff4569);
+            background: linear-gradient(135deg, var(--color-blood), var(--color-primary));
             border: none;
             border-radius: 14px;
             padding: 1.2rem 2.5rem;
@@ -292,11 +839,12 @@
             transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            box-shadow: 0 6px 25px rgba(139, 0, 0, 0.4);
         }
 
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.5);
+            box-shadow: 0 12px 40px rgba(139, 0, 0, 0.6);
         }
 
         .submit-btn:disabled {
@@ -307,14 +855,15 @@
 
         /* ==================== NEWS ITEM PREMIUM DESIGN ==================== */
         .news-item {
-            background: linear-gradient(165deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
+            background: linear-gradient(165deg, rgba(20, 10, 12, 0.95) 0%, rgba(10, 5, 6, 0.98) 100%);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            border-radius: 20px;
             padding: 0;
             margin-bottom: 0;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 80px rgba(139, 0, 0, 0.03);
         }
 
         .news-item::before {
@@ -323,24 +872,21 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-primary), #ff6b6b, var(--color-primary));
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-blood), var(--color-primary), var(--color-blood), transparent);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
         }
 
-        @keyframes gradientShift {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
+        .news-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .news-item:hover::before {
@@ -348,13 +894,17 @@
         }
 
         .news-item:hover {
-            border-color: rgba(255, 23, 68, 0.3);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 23, 68, 0.1);
+            border-color: rgba(196, 30, 58, 0.5);
+            transform: translateY(-8px) translateX(3px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 50px rgba(139, 0, 0, 0.15),
+                inset 0 0 100px rgba(139, 0, 0, 0.05);
         }
 
         .news-item-inner {
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .news-header {
@@ -381,24 +931,23 @@
         }
 
         .news-author-avatar {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            min-height: 50px;
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            min-height: 52px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid transparent;
-            background: linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
-                linear-gradient(135deg, var(--color-primary), #ff6b6b) border-box;
+            border: 3px solid var(--color-blood);
             flex-shrink: 0;
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.2);
-            margin-top: 5px;
+            box-shadow: 0 4px 20px rgba(139, 0, 0, 0.4);
+            margin-top: 3px;
         }
 
         .news-author-avatar:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
+            box-shadow: 0 6px 30px rgba(139, 0, 0, 0.6);
+            border-color: var(--color-primary);
         }
 
         .news-author-info {
@@ -432,7 +981,7 @@
         }
 
         .news-tag {
-            background: linear-gradient(135deg, var(--color-primary), #ff6b6b);
+            background: linear-gradient(135deg, var(--color-blood), var(--color-primary));
             color: white;
             padding: 0.5rem 1.2rem;
             border-radius: 25px;
@@ -440,19 +989,20 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+            box-shadow: 0 4px 20px rgba(139, 0, 0, 0.4);
             transition: var(--transition);
+            border: 1px solid rgba(196, 30, 58, 0.3);
         }
 
         .news-tag:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
+            box-shadow: 0 6px 25px rgba(139, 0, 0, 0.5);
         }
 
         .delete-news-btn {
-            background: rgba(255, 23, 68, 0.15);
+            background: rgba(139, 0, 0, 0.15);
             color: #ff8a80;
-            border: 1px solid rgba(255, 23, 68, 0.4);
+            border: 1px solid rgba(139, 0, 0, 0.4);
             padding: 0.5rem 1rem;
             border-radius: 8px;
             font-size: 0.85rem;
@@ -463,8 +1013,8 @@
         }
 
         .delete-news-btn:hover {
-            background: rgba(255, 23, 68, 0.3);
-            border-color: rgba(255, 23, 68, 0.6);
+            background: rgba(139, 0, 0, 0.3);
+            border-color: rgba(196, 30, 58, 0.6);
             transform: translateY(-2px);
         }
 
@@ -474,10 +1024,19 @@
             font-weight: 800;
             margin-bottom: 1.2rem;
             line-height: 1.3;
-            background: linear-gradient(to right, #ffffff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .news-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-blood), var(--color-primary));
+            border-radius: 2px;
         }
 
         .news-content {
@@ -496,12 +1055,13 @@
         }
 
         .news-image {
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
             cursor: pointer;
             transition: var(--transition);
             position: relative;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 0, 0, 0.2);
         }
 
         .news-image::after {
@@ -518,7 +1078,8 @@
 
         .news-image:hover {
             transform: scale(1.03);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 23, 68, 0.2);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 0, 0, 0.2);
+            border-color: rgba(196, 30, 58, 0.4);
         }
 
         .news-image:hover::after {
@@ -534,7 +1095,7 @@
         }
 
         .news-image:hover img {
-            filter: brightness(0.8);
+            filter: brightness(0.75);
         }
 
         /* News Actions Bar */
@@ -542,7 +1103,7 @@
             display: flex;
             gap: 1.5rem;
             padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(139, 0, 0, 0.15);
             flex-wrap: wrap;
         }
 
@@ -550,8 +1111,8 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(139, 0, 0, 0.08);
+            border: 1px solid rgba(139, 0, 0, 0.2);
             border-radius: 30px;
             padding: 0.6rem 1.2rem;
             color: rgba(255, 255, 255, 0.7);
@@ -562,15 +1123,16 @@
         }
 
         .action-btn:hover {
-            background: rgba(255, 23, 68, 0.1);
-            border-color: rgba(255, 23, 68, 0.3);
+            background: rgba(139, 0, 0, 0.15);
+            border-color: rgba(196, 30, 58, 0.4);
             color: var(--color-primary);
             transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.2);
         }
 
         .action-btn.liked {
-            background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(255, 107, 107, 0.2));
-            border-color: rgba(255, 23, 68, 0.4);
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.25), rgba(196, 30, 58, 0.2));
+            border-color: rgba(196, 30, 58, 0.5);
             color: var(--color-primary);
         }
 
@@ -601,9 +1163,10 @@
         .comments-section {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.3);
+            background: linear-gradient(165deg, rgba(15, 8, 10, 0.9) 0%, rgba(10, 5, 6, 0.95) 100%);
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 0, 0, 0.2);
+            border-left: 4px solid var(--color-blood);
         }
 
         .comment-input-area {
@@ -615,8 +1178,8 @@
 
         .comment-input-area textarea {
             flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(139, 0, 0, 0.05);
+            border: 1px solid rgba(139, 0, 0, 0.2);
             border-radius: 14px;
             padding: 1rem;
             color: white;
@@ -629,12 +1192,12 @@
         .comment-input-area textarea:focus {
             outline: none;
             border-color: var(--color-primary);
-            background: rgba(255, 23, 68, 0.05);
-            box-shadow: 0 0 20px rgba(255, 23, 68, 0.1);
+            background: rgba(139, 0, 0, 0.1);
+            box-shadow: 0 0 25px rgba(139, 0, 0, 0.15);
         }
 
         .comment-submit-btn {
-            background: linear-gradient(135deg, var(--color-primary), #ff6b6b);
+            background: linear-gradient(135deg, var(--color-blood), var(--color-primary));
             border: none;
             border-radius: 14px;
             padding: 1rem 1.8rem;
@@ -643,11 +1206,12 @@
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.3);
         }
 
         .comment-submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 23, 68, 0.4);
+            box-shadow: 0 10px 35px rgba(139, 0, 0, 0.5);
         }
 
         .comment-item {
@@ -655,15 +1219,16 @@
             gap: 1rem;
             margin-bottom: 1rem;
             padding: 1.2rem;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(139, 0, 0, 0.05);
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 0, 0, 0.15);
             transition: var(--transition);
         }
 
         .comment-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 23, 68, 0.15);
+            background: rgba(139, 0, 0, 0.1);
+            border-color: rgba(196, 30, 58, 0.25);
+            transform: translateX(5px);
         }
 
         .comment-avatar {
@@ -672,8 +1237,8 @@
             min-width: 42px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--color-primary);
-            box-shadow: 0 3px 10px rgba(255, 23, 68, 0.2);
+            border: 2px solid var(--color-blood);
+            box-shadow: 0 3px 15px rgba(139, 0, 0, 0.3);
         }
 
         .comment-content {
@@ -707,7 +1272,7 @@
 
         .comment-text .mention:hover {
             text-decoration: underline;
-            text-shadow: 0 0 10px rgba(255, 23, 68, 0.5);
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
         }
 
         .comment-date {
@@ -717,8 +1282,8 @@
         }
 
         .delete-news-btn {
-            background: rgba(255, 23, 68, 0.15);
-            border: 1px solid rgba(255, 23, 68, 0.4);
+            background: rgba(139, 0, 0, 0.15);
+            border: 1px solid rgba(139, 0, 0, 0.4);
             color: white;
             padding: 0.5rem 1.2rem;
             border-radius: 10px;
@@ -731,7 +1296,7 @@
         .delete-news-btn:hover {
             background: var(--color-primary);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.3);
+            box-shadow: 0 6px 25px rgba(139, 0, 0, 0.4);
         }
 
         /* Loading Spinner */
@@ -751,7 +1316,7 @@
             display: inline-block;
             width: 50px;
             height: 50px;
-            border: 4px solid rgba(255, 23, 68, 0.2);
+            border: 4px solid rgba(139, 0, 0, 0.3);
             border-top-color: var(--color-primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -765,8 +1330,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.97);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(12px);
             z-index: 9999;
             align-items: center;
             justify-content: center;
@@ -783,7 +1348,8 @@
             max-height: 90%;
             object-fit: contain;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(139, 0, 0, 0.2);
+            border: 1px solid rgba(139, 0, 0, 0.3);
         }
 
         .news-image {
@@ -1340,6 +1906,159 @@
                 padding: 0 1rem 1rem 1rem;
             }
         }
+
+        .comment-context-menu {
+            position: absolute;
+            background: linear-gradient(165deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 0.5rem;
+            z-index: 1000;
+            min-width: 160px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 0, 0, 0.2);
+            animation: menuAppear 0.2s ease;
+        }
+
+        @keyframes menuAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .context-menu-item:hover {
+            background: rgba(139, 0, 0, 0.15);
+            color: white;
+        }
+
+        .context-menu-item.delete-item {
+            color: #ff8a80;
+        }
+
+        .context-menu-item.delete-item:hover {
+            background: rgba(255, 23, 68, 0.15);
+            color: #ff5252;
+        }
+
+        .context-menu-item svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        /* Comment Header with Menu Button */
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-menu-btn {
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            line-height: 1;
+            background: none;
+            border: none;
+        }
+
+        .comment-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Comment Footer with Actions */
+        .comment-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .comment-like-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(139, 0, 0, 0.08);
+            border: 1px solid rgba(139, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .comment-like-btn:hover:not(:disabled) {
+            background: rgba(139, 0, 0, 0.15);
+            border-color: rgba(196, 30, 58, 0.4);
+            color: var(--color-primary);
+            transform: translateY(-1px);
+        }
+
+        .comment-like-btn.liked {
+            background: rgba(139, 0, 0, 0.25);
+            border-color: rgba(196, 30, 58, 0.5);
+            color: var(--color-primary);
+        }
+
+        .comment-like-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .comment-like-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reset-date-btn {
+            background: rgba(139, 0, 0, 0.15);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            color: var(--color-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 0.9rem;
+        }
+
+        .reset-date-btn:hover {
+            background: rgba(139, 0, 0, 0.25);
+            border-color: rgba(196, 30, 58, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -1363,66 +2082,181 @@
     </div>
 
     <header class="topbar">
-        <div class="container topbar-inner">
-            <div class="brand">
-                <a href="../homepage">
-                    <div class="logo-mark"
-                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover;">
-                    </div>
-                    <span class="brand-title">Dom Falcone</span>
-                </a>
-            </div>
-            <nav class="nav">
-                <a href="../about">О доме</a>
-                <a href="../history">История</a>
-                <a href="../enemies">Противники</a>
-                <a href="../news" class="active">Новости</a>
-            </nav>
-            <!-- Initially hidden to prevent flash - shown by sync localStorage check -->
-            <div class="auth-action" id="auth-action" style="display: none;">
-                <a href="../login" class="btn-login">Войти</a>
-            </div>
-            <div class="user-menu" id="user-menu" style="display: none;">
-                <div style="position: relative;">
-                    <a href="../messages" class="notification-bell" style="text-decoration: none;">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
-                        </svg>
-                        <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
-                    </a>
-                </div>
-                <div style="position: relative;">
-                    <div class="notification-bell" id="notification-bell">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
-                        </svg>
-                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
-                    </div>
-                    <div class="notifications-dropdown" id="notifications-dropdown">
-                        <!-- ... -->
-                    </div>
-                </div>
-                <a href="../dashboard" class="user-profile-info">
-                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-                    <div class="user-details">
-                        <span class="user-display-name" id="header-display-name">User</span>
-                        <div class="user-points-badge">
-                            <span>⭐</span>
-                            <span id="header-points">0</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
+    <div class="container topbar-inner">
+        <div class="brand">
+            <a href="../homepage">
+                <div class="logo-mark"
+                    style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                <span class="brand-title">Dom Falcone</span>
+            </a>
         </div>
-    </header>
+        
+        <!-- Desktop Navigation -->
+        <nav class="nav">
+            <a href="../about">О доме</a>
+            <a href="../history">История</a>
+            <a href="../enemies">Противники</a>
+            <a href="../news">Новости</a>
+        </nav>
+
+        <!-- Burger Menu Button -->
+        <div class="burger-menu" id="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+
+        <!-- Кнопка "Войти" (показывается когда не авторизован) -->
+        <div class="auth-action" id="auth-action" style="display: none;">
+            <a href="../login" class="btn-login">Войти</a>
+        </div>
+
+        <!-- User Menu (показывается когда авторизован) -->
+        <div class="user-menu" id="user-menu" style="display: none;">
+            <!-- Кнопка сообщений -->
+            <div style="position: relative;">
+                <a href="../messages" class="notification-bell" style="text-decoration: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
+                    </svg>
+                    <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+                </a>
+            </div>
+
+            <!-- Кнопка уведомлений -->
+            <div style="position: relative;">
+                <div class="notification-bell" id="notification-bell">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
+                    </svg>
+                    <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                </div>
+
+                <!-- Выпадающий список уведомлений -->
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notifications-header">
+                        <h3>Уведомления</h3>
+                        <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+                    </div>
+                    <div id="notifications-list">
+                        <div class="no-notifications">Нет уведомлений</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Профиль пользователя -->
+            <a href="../dashboard" class="user-profile-info">
+                <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                <div class="user-details">
+                    <span class="user-display-name" id="header-display-name">User</span>
+                    <div class="user-points-badge">
+                        <span>⭐</span>
+                        <span id="header-points">0</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-links">
+        <a href="../about">О доме</a>
+        <a href="../history">История</a>
+        <a href="../enemies">Противники</a>
+        <a href="../news">Новости</a>
+        <a href="../dashboard" class="mobile-nav-profile">Профиль</a>
+        <a href="../messages" class="mobile-nav-messages">Сообщения</a>
+    </div>
+    <div class="mobile-nav-footer">
+        <div class="site-version"></div>
+    </div>
+</nav>
+
 
     <div class="page-header"
-        style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), url('../assets/images/news-background.jpg') center/cover no-repeat; background-position: center 55%;">
+        style="background: url('../assets/images/news-background.png') center/cover no-repeat; background-position: center 20%;">
+
+        <!-- Ambient Glow Effect -->
+        <div class="newspaper-ambient-glow"></div>
+
+        <!-- Newspaper Welding Frame Animation -->
+        <div class="newspaper-frame">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+                <defs>
+                    <!-- Welding gradient - bright center, fading edges -->
+                    <linearGradient id="weldGradient" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#ff3333" stop-opacity="0" />
+                        <stop offset="40%" stop-color="#ff6b6b" stop-opacity="1" />
+                        <stop offset="50%" stop-color="#ffffff" stop-opacity="1" />
+                        <stop offset="60%" stop-color="#ff6b6b" stop-opacity="1" />
+                        <stop offset="100%" stop-color="#8b0000" stop-opacity="0" />
+                    </linearGradient>
+
+                    <!-- Glow filter for welding effect -->
+                    <filter id="weldGlow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feFlood flood-color="#ff4444" flood-opacity="0.6" />
+                        <feComposite in2="coloredBlur" operator="in" />
+                        <feMerge>
+                            <feMergeNode />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Newspaper outline path - trapezoid following the paper edges with perspective -->
+                <!-- Outer glow layer -->
+                <path d="M 25,25 L 385,15 L 380,275 L 15,290 Z" class="weld-stroke-glow" />
+
+                <!-- Main welding stroke -->
+                <path d="M 25,25 L 385,15 L 380,275 L 15,290 Z" class="weld-stroke" />
+
+                <!-- Inner bright core -->
+                <path d="M 25,25 L 385,15 L 380,275 L 15,290 Z" class="weld-stroke-inner" />
+            </svg>
+        </div>
+
+        <!-- Floating Ember Particles -->
+        <div class="ember-particles">
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+        </div>
+
+        <!-- Clickable Newspaper Zone -->
+        <div class="newspaper-clickable" id="newspaper-clickable" title="Нажмите, чтобы открыть газету"></div>
+
         <div class="container">
             <h1>Хроники Дома</h1>
             <p>Последние вести с полей сражений и жизни Семьи</p>
+        </div>
+    </div>
+
+    <!-- Newspaper Lightbox Overlay -->
+    <div class="newspaper-lightbox" id="newspaper-lightbox">
+        <div class="lightbox-particles">
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+            <div class="lightbox-particle"></div>
+        </div>
+        <button class="newspaper-lightbox-close" id="newspaper-lightbox-close">&times;</button>
+        <div class="newspaper-lightbox-content">
+            <img src="../assets/images/newspaper-fullsize.jpg" alt="Dom Falcone News" class="newspaper-lightbox-img">
         </div>
     </div>
 
@@ -1448,6 +2282,18 @@
                         <option value="События">События</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label>Дата публикации</label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input type="datetime-local" id="news-date" style="flex: 1;">
+                        <button type="button" class="reset-date-btn" onclick="resetNewsDate()">Сейчас</button>
+                    </div>
+                    <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-top: 0.5rem;">
+                        Оставьте пустым для текущей даты и времени
+                    </p>
+                </div>
+
                 <div class="form-group">
                     <label>Заголовок</label>
                     <input type="text" id="news-title" placeholder="Введите заголовок новости" required>
@@ -1496,9 +2342,10 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <small>© Dom Falcone 2025. Все права защищены. Прям реально защищены.</small>
             <div class="site-version"></div>
             <div class="footer-links">
+                <a href="../faq">FAQ</a>
                 <a href="../privacy">Политика конфиденциальности</a>
                 <a href="../agreement">Пользовательское соглашение</a>
                 <a href="../imprint">Сведения о владельце сайта</a>
@@ -1647,7 +2494,7 @@
                         <div class="media-header" onclick="toggleMediaContent(${news.id})">
                             <div class="media-header-left">
                                 <div class="media-icon">
-                                    ${news.videos && news.videos.length > 0 ? '🎬' : '📸'}
+                                    <img src="../assets/images/media-icon.png" alt="Media" style="width: 28px; height: 28px; filter: invert(1);">
                                 </div>
                                 <div class="media-info">
                                     <div class="media-title">Медиафайлы</div>
@@ -1775,14 +2622,48 @@
                 const data = await res.json();
                 const section = document.getElementById(`comments-${newsId}`);
 
-                let html = token ? `<div class="comment-input-area"><textarea placeholder="Написать комментарий..." id="comment-input-${newsId}"></textarea><button class="comment-submit-btn" onclick="postComment(${newsId})">Отправить</button></div>` : '';
+                let html = token ? `
+            <div class="comment-input-area">
+                <textarea placeholder="Написать комментарий..." id="comment-input-${newsId}"></textarea>
+                <button class="comment-submit-btn" onclick="postComment(${newsId})">Отправить</button>
+            </div>
+        ` : '';
 
                 if (data.comments && data.comments.length > 0) {
                     data.comments.forEach(comment => {
                         const commentDate = new Date(comment.created_at).toLocaleString('ru-RU');
                         const processedContent = escapeHtml(comment.content).replace(/@(\w+)/g, '<span class="mention">@$1</span>');
                         const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Crect fill='%23ff1744' width='36' height='36'/%3E%3C/svg%3E";
-                        html += `<div class="comment-item"><img src="${comment.avatar || defaultAvatar}" class="comment-avatar"><div class="comment-content"><div class="comment-author">${escapeHtml(comment.display_name)}</div><div class="comment-text">${processedContent}</div><div class="comment-date">${commentDate}</div></div></div>`;
+
+                        const canModify = currentUser && (comment.user_id === currentUser.id || currentUser.role === 'admin');
+
+                        html += `
+                    <div class="comment-item" id="comment-${comment.id}">
+                        <img src="${comment.avatar || defaultAvatar}" class="comment-avatar">
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <div class="comment-author">${escapeHtml(comment.display_name)}</div>
+                                ${canModify ? `
+                                    <div class="comment-menu-btn" onclick="showCommentMenu(event, ${comment.id})">⋮</div>
+                                ` : ''}
+                            </div>
+                            <div class="comment-text" id="comment-text-${comment.id}">${processedContent}</div>
+                            <div class="comment-footer">
+                                <div class="comment-date">${commentDate}</div>
+                                <div class="comment-actions">
+                                    <button class="comment-like-btn ${comment.user_liked ? 'liked' : ''}" 
+                                            onclick="toggleCommentLike(${comment.id}, this)"
+                                            ${!token ? 'disabled' : ''}>
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+                                        </svg>
+                                        <span>${comment.likes_count || 0}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
                     });
                 }
                 section.innerHTML = html;
@@ -1809,6 +2690,146 @@
                 console.error('Error:', err);
             }
         }
+
+        let commentMenuOpen = null;
+
+        function showCommentMenu(event, commentId) {
+            event.stopPropagation();
+            closeCommentMenu();
+
+            const menu = document.createElement('div');
+            menu.className = 'comment-context-menu';
+            menu.id = 'comment-context-menu';
+
+            const comment = document.getElementById(`comment-${commentId}`);
+            const isOwn = currentUser && comment.querySelector('.comment-author').textContent === currentUser.display_name;
+
+            menu.innerHTML = `
+        ${isOwn ? `
+            <div class="context-menu-item" onclick="editComment(${commentId}, event)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                </svg>
+                Редактировать
+            </div>
+        ` : ''}
+        <div class="context-menu-item delete-item" onclick="deleteComment(${commentId}, event)">
+            <svg viewBox="0 0 24 24">
+                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+            </svg>
+            Удалить
+        </div>
+    `;
+
+            document.body.appendChild(menu);
+
+            const rect = event.target.getBoundingClientRect();
+            menu.style.position = 'fixed';
+            menu.style.left = rect.left + 'px';
+            menu.style.top = (rect.bottom + 5) + 'px';
+
+            const menuRect = menu.getBoundingClientRect();
+            if (menuRect.right > window.innerWidth) {
+                menu.style.left = (rect.right - menuRect.width) + 'px';
+            }
+            if (menuRect.bottom > window.innerHeight) {
+                menu.style.top = (rect.top - menuRect.height - 5) + 'px';
+            }
+
+            commentMenuOpen = commentId;
+        }
+
+        function closeCommentMenu() {
+            const menu = document.getElementById('comment-context-menu');
+            if (menu) menu.remove();
+            commentMenuOpen = null;
+        }
+
+        async function editComment(commentId, event) {
+            event.stopPropagation();
+            closeCommentMenu();
+
+            const textEl = document.getElementById(`comment-text-${commentId}`);
+            const originalText = textEl.innerHTML.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
+
+            const newText = prompt('Редактировать комментарий:', originalText);
+            if (!newText || newText.trim() === originalText.trim()) return;
+
+            try {
+                const res = await fetch(API_BASE + `/comments/${commentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ content: newText.trim() })
+                });
+
+                if (res.ok) {
+                    textEl.innerHTML = escapeHtml(newText.trim()).replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+                } else {
+                    alert('Ошибка редактирования');
+                }
+            } catch (err) {
+                console.error('Edit error:', err);
+                alert('Ошибка редактирования');
+            }
+        }
+
+        async function deleteComment(commentId, event) {
+            event.stopPropagation();
+            closeCommentMenu();
+
+            if (!confirm('Удалить комментарий?')) return;
+
+            try {
+                const res = await fetch(API_BASE + `/comments/${commentId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (res.ok) {
+                    document.getElementById(`comment-${commentId}`).remove();
+                } else {
+                    alert('Ошибка удаления');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert('Ошибка удаления');
+            }
+        }
+
+        async function toggleCommentLike(commentId, button) {
+            if (!token) {
+                showErrorModal('Войдите, чтобы ставить лайки');
+                return;
+            }
+
+            try {
+                const res = await fetch(API_BASE + "/comments/like", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ commentId })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    button.classList.toggle('liked', data.liked);
+                    button.querySelector('span').textContent = data.likes_count;
+                }
+            } catch (err) {
+                console.error('Toggle like error:', err);
+            }
+        }
+
+        document.addEventListener('click', () => {
+            if (commentMenuOpen) closeCommentMenu();
+        });
+
+        document.addEventListener('scroll', closeCommentMenu, true);
 
         async function deleteNews(newsId) {
             const confirmed = await showConfirmModal('Удалить новость?');
@@ -2002,7 +3023,7 @@
             });
         }
 
-        // Вспомогательная функция сжатия до определённого размера
+        // Вспомогательная функция сжатия до определённого размера с водяным знаком
         async function compressToSize(img, maxWidth, quality) {
             return new Promise((resolve) => {
                 const canvas = document.createElement('canvas');
@@ -2024,9 +3045,34 @@
                 ctx.fillRect(0, 0, width, height);
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Конвертируем в base64 с заданным качеством
-                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-                resolve(compressedDataUrl);
+                // Добавляем водяной знак (логотип Дом Фальконе)
+                const watermark = new Image();
+                watermark.crossOrigin = 'anonymous';
+                watermark.onload = () => {
+                    // Размер водяного знака - 12% от ширины изображения
+                    const watermarkWidth = width * 0.12;
+                    const watermarkHeight = (watermark.height / watermark.width) * watermarkWidth;
+
+                    // Позиция - центр внизу с отступом
+                    const watermarkX = (width - watermarkWidth) / 2;
+                    const watermarkY = height - watermarkHeight - (height * 0.01); // 1% отступ снизу
+
+                    // Рисуем водяной знак без прозрачности
+                    ctx.drawImage(watermark, watermarkX, watermarkY, watermarkWidth, watermarkHeight);
+
+                    // Конвертируем в base64 с заданным качеством
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedDataUrl);
+                };
+
+                watermark.onerror = () => {
+                    // Если логотип не загружен, просто сохраняем без водяного знака
+                    console.warn('Водяной знак не загружен, сохранение без него');
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedDataUrl);
+                };
+
+                watermark.src = '../assets/images/falcone-watermark.png';
             });
         }
 
@@ -2152,8 +3198,7 @@
             const title = document.getElementById('news-title').value.trim();
             const content = document.getElementById('news-content').value.trim();
             const tag = document.getElementById('news-tag').value;
-
-
+            const customDate = document.getElementById('news-date').value;
 
             if (!title || !content) {
                 showErrorModal('Заполните все поля');
@@ -2165,15 +3210,24 @@
             submitBtn.textContent = 'Публикация...';
 
             try {
+                // Определяем дату публикации
+                let publicationDate;
+                if (customDate) {
+                    // Если выбрана кастомная дата
+                    publicationDate = new Date(customDate).getTime();
+                } else {
+                    // Если не выбрана - текущая дата
+                    publicationDate = Date.now();
+                }
+
                 const payload = {
                     title: title,
                     content: content,
                     tag: tag,
                     images: uploadedImages,
-                    videos: uploadedVideos
+                    videos: uploadedVideos,
+                    customDate: publicationDate // Отправляем кастомную дату
                 };
-
-
 
                 const res = await fetch(API_BASE + "/news", {
                     method: 'POST',
@@ -2184,11 +3238,9 @@
                     body: JSON.stringify(payload)
                 });
 
-
-
                 const responseText = await res.text();
-
                 let responseData;
+
                 try {
                     responseData = JSON.parse(responseText);
                 } catch (parseErr) {
@@ -2207,26 +3259,14 @@
                     updateCounters();
                     await loadNews();
                 } else {
-                    console.error('=== SUBMIT FAILED ===');
-                    console.error('Error response:', responseData);
-
                     let errorMsg = 'Ошибка: ' + (responseData.error || 'Неизвестная ошибка');
                     if (responseData.details) {
                         errorMsg += '\nДетали: ' + responseData.details;
                     }
-                    if (responseData.type) {
-                        errorMsg += '\nТип: ' + responseData.type;
-                    }
-
                     showErrorModal(errorMsg);
                 }
             } catch (err) {
-                console.error('=== SUBMIT EXCEPTION ===');
-                console.error('Error:', err);
-                console.error('Error type:', err.constructor.name);
-                console.error('Error message:', err.message);
-                console.error('Error stack:', err.stack);
-
+                console.error('Submit error:', err);
                 showErrorModal('Ошибка публикации: ' + err.message);
             } finally {
                 submitBtn.disabled = false;
@@ -2341,31 +3381,34 @@
         }
 
         // Показать тост-уведомление о новом сообщении
-        function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
-            const existingToast = document.querySelector('.toast-notification');
-            if (existingToast) existingToast.remove();
+       function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
 
-            const toast = document.createElement('div');
-            toast.className = 'toast-notification';
-            toast.innerHTML = `
+    // Проигрываем звук сообщения
+    playNotificationSound('message-notification');
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
         <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
         <div class="toast-content">
-            <div class="toast-name">${escapeHtml(senderName)}</div>
-            <div class="toast-message">${escapeHtml(messagePreview)}</div>
+            <div class="toast-name">${senderName}</div>
+            <div class="toast-message">${messagePreview}</div>
         </div>
     `;
 
-            toast.addEventListener('click', () => {
-                window.location.href = `../messages?chatWith=${senderId}`;
-            });
+    toast.addEventListener('click', () => {
+        window.location.href = `../messages?chatWith=${senderId}`;
+    });
 
-            document.body.appendChild(toast);
+    document.body.appendChild(toast);
 
-            setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 300);
-            }, 5000);
-        }
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
 
         // Проверка новых сообщений (для тост-уведомлений)
         let lastMessageCount = 0;
@@ -2423,23 +3466,150 @@
         }
 
         // Загрузка уведомлений
-        async function loadNotifications() {
-            if (!token) return;
+        let lastNotificationId = 0; // Добавьте эту переменную глобально
 
-            try {
-                const res = await fetch(API_BASE + "/notifications", {
-                    headers: { "Authorization": "Bearer " + token }
-                });
+async function loadNotifications() {
+    if (!token) return;
 
-                if (res.ok) {
-                    const data = await res.json();
-                    updateNotificationBadge(data.unread_count);
-                    renderNotifications(data.notifications);
+    try {
+        const res = await fetch(API_BASE + "/notifications", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            updateNotificationBadge(data.unread_count);
+            renderNotifications(data.notifications);
+            
+            // Проверяем новые уведомления для toast
+            if (data.notifications && data.notifications.length > 0) {
+                const latestNotif = data.notifications[0];
+                
+                // Если это новое уведомление и оно непрочитанное
+                if (latestNotif.id > lastNotificationId && latestNotif.is_read === 0) {
+                    showNotificationToast(
+                        latestNotif.type,
+                        latestNotif.title,
+                        latestNotif.message,
+                        latestNotif.id,
+                        latestNotif.related_id
+                    );
+                    lastNotificationId = latestNotif.id;
+                } else if (lastNotificationId === 0) {
+                    // Инициализация при первой загрузке
+                    lastNotificationId = latestNotif.id;
                 }
-            } catch (err) {
-                console.error('Load notifications error:', err);
             }
         }
+    } catch (err) {
+        console.error('Load notifications error:', err);
+    }
+}
+
+function showNotificationToast(type, title, message, notificationId, relatedId) {
+    // Удаляем предыдущий toast если есть
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
+
+    // Определяем иконку в зависимости от типа
+    let icon = '🔔';
+    let redirectUrl = null;
+    let soundFile = 'notification';
+
+    switch(type) {
+        case 'new_message':
+            icon = '💬';
+            soundFile = 'message-notification';
+            redirectUrl = '../messages';
+            break;
+        case 'news_like':
+            icon = '❤️';
+            redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+            break;
+        case 'news_comment':
+            icon = '💭';
+            redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+            break;
+        case 'news_friend':
+            icon = '📰';
+            redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+            break;
+        case 'news_deleted':
+            icon = '🗑️';
+            redirectUrl = '../news';
+            break;
+        case 'friend_request':
+            icon = '👥';
+            redirectUrl = '../dashboard?tab=friends';
+            break;
+        default:
+            icon = '🔔';
+    }
+
+    // Проигрываем звук
+    playNotificationSound(soundFile);
+
+    // Создаем toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+            <div class="toast-name">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    // Обработчик клика
+    toast.addEventListener('click', async () => {
+        // Отмечаем уведомление как прочитанное
+        try {
+            await fetch(API_BASE + "/notifications/read", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ notificationId })
+            });
+            await loadNotifications();
+        } catch (err) {
+            console.error('Mark notification read error:', err);
+        }
+
+        // Переходим по ссылке
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    });
+
+    document.body.appendChild(toast);
+
+    // Автоматически скрываем через 5 секунд
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function playNotificationSound(soundType) {
+    try {
+        const soundId = soundType === 'message-notification' 
+            ? 'message-notification-sound' 
+            : 'notification-sound';
+        
+        const audio = document.getElementById(soundId);
+        if (audio) {
+            audio.currentTime = 0;
+            audio.volume = 0.5; // Громкость 50%
+            audio.play().catch(err => {
+                console.log('Audio play prevented:', err);
+            });
+        }
+    } catch (err) {
+        console.error('Play sound error:', err);
+    }
+}
 
         // Обновить значок уведомлений
         function updateNotificationBadge(count) {
@@ -2453,53 +3623,62 @@
         }
 
         // Отрисовать список уведомлений
-        function renderNotifications(notifications) {
-            const dropdown = document.getElementById('notifications-dropdown');
+        // Замените функцию renderNotifications на эту версию:
 
-            // Создаём полную структуру если её нет
-            if (!dropdown.querySelector('.notifications-header')) {
-                dropdown.innerHTML = `
+function renderNotifications(notifications) {
+    const dropdown = document.getElementById('notifications-dropdown');
+
+    // Создаём полную структуру если её нет
+    if (!dropdown.querySelector('.notifications-header')) {
+        dropdown.innerHTML = `
             <div class="notifications-header">
                 <h3>Уведомления</h3>
                 <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
             </div>
             <div id="notifications-list"></div>
         `;
+    }
 
-                // Добавляем обработчик для кнопки "Прочитать все"
-                document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
-                    try {
-                        await fetch(API_BASE + "/notifications/read-all", {
-                            method: 'POST',
-                            headers: { 'Authorization': 'Bearer ' + token }
-                        });
-                        await loadNotifications();
-                    } catch (err) {
-                        console.error('Mark all read error:', err);
-                    }
-                });
-            }
+    const list = document.getElementById('notifications-list');
 
-            const list = document.getElementById('notifications-list');
+    if (!notifications || notifications.length === 0) {
+        list.innerHTML = '<div class="no-notifications">Нет уведомлений</div>';
+        return;
+    }
 
-            if (!notifications || notifications.length === 0) {
-                list.innerHTML = '<div class="no-notifications">Нет уведомлений</div>';
-                return;
-            }
+    list.innerHTML = notifications.map(notif => {
+        const time = formatNotificationTime(notif.created_at);
+        const unreadClass = notif.is_read === 0 ? 'unread' : '';
 
-            list.innerHTML = notifications.map(notif => {
-                const time = formatNotificationTime(notif.created_at);
-                const unreadClass = notif.is_read === 0 ? 'unread' : '';
-
-                return `
+        return `
             <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id}, '${notif.type}')">
                 <div class="notification-title">${escapeHtml(notif.title)}</div>
                 <div class="notification-message">${escapeHtml(notif.message)}</div>
                 <div class="notification-time">${time}</div>
             </div>
         `;
-            }).join('');
-        }
+    }).join('');
+
+    // ✅ КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Привязываем обработчик каждый раз после рендера
+    const markAllReadBtn = document.getElementById('mark-all-read-btn');
+    if (markAllReadBtn) {
+        // Удаляем старый обработчик (если есть) и добавляем новый
+        markAllReadBtn.replaceWith(markAllReadBtn.cloneNode(true));
+        const newBtn = document.getElementById('mark-all-read-btn');
+        
+        newBtn.addEventListener('click', async () => {
+            try {
+                await fetch(API_BASE + "/notifications/read-all", {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                await loadNotifications();
+            } catch (err) {
+                console.error('Mark all read error:', err);
+            }
+        });
+    }
+}
 
         // Форматировать время уведомления
         function formatNotificationTime(timestamp) {
@@ -2562,7 +3741,78 @@
             }
         });
 
+        // ==================== NEWSPAPER LIGHTBOX ====================
+        const newspaperClickable = document.getElementById('newspaper-clickable');
+        const newspaperLightbox = document.getElementById('newspaper-lightbox');
+        const newspaperLightboxClose = document.getElementById('newspaper-lightbox-close');
+
+        function openNewspaperLightbox() {
+            newspaperLightbox.classList.add('active');
+            newspaperLightbox.classList.remove('closing');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNewspaperLightbox() {
+            newspaperLightbox.classList.add('closing');
+            setTimeout(() => {
+                newspaperLightbox.classList.remove('active');
+                newspaperLightbox.classList.remove('closing');
+                document.body.style.overflow = '';
+            }, 400);
+        }
+
+        // Open lightbox when clicking on newspaper area
+        if (newspaperClickable) {
+            newspaperClickable.addEventListener('click', openNewspaperLightbox);
+        }
+
+        // Close lightbox when clicking close button
+        if (newspaperLightboxClose) {
+            newspaperLightboxClose.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeNewspaperLightbox();
+            });
+        }
+
+        // Close lightbox when clicking on background
+        if (newspaperLightbox) {
+            newspaperLightbox.addEventListener('click', (e) => {
+                if (e.target === newspaperLightbox) {
+                    closeNewspaperLightbox();
+                }
+            });
+        }
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && newspaperLightbox?.classList.contains('active')) {
+                closeNewspaperLightbox();
+            }
+        });
+
+        // Функция сброса даты на текущую
+        function resetNewsDate() {
+            const dateInput = document.getElementById('news-date');
+            const now = new Date();
+            // Форматируем в формат datetime-local (YYYY-MM-DDTHH:MM)
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
     </script>
+
+    <!-- Audio for notifications -->
+<audio id="notification-sound" preload="auto">
+    <source src="../assets/audio/notification.mp3" type="audio/mpeg">
+</audio>
+<audio id="message-notification-sound" preload="auto">
+    <source src="../assets/audio/message-notification.mp3" type="audio/mpeg">
+</audio>
+
 </body>
 
 </html>
