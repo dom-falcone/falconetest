@@ -1,3 +1,65 @@
+// ==================== ПРОВЕРКА СТАТУСА САЙТА ====================
+(async function checkSiteStatus() {
+    // Не проверяем на странице 404
+    if (window.location.pathname.includes('/404')) return;
+
+    const API_BASE = 'https://dom-falcone-auth.dom-falcone-official.workers.dev/api';
+
+    try {
+        const res = await fetch(API_BASE + '/site-status');
+
+        if (res.ok) {
+            const data = await res.json();
+
+            if (!data.enabled) {
+                // Проверяем, не админ ли это
+                const token = localStorage.getItem('auth_token');
+
+                if (token) {
+                    const userRes = await fetch(API_BASE + '/me', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+
+                    if (userRes.ok) {
+                        const user = await userRes.json();
+
+                        // Админы могут заходить даже при отключенном сайте
+                        if (user.role === 'admin') {
+                            console.log('🔐 Admin access: site disabled but admin logged in');
+
+                            // Показываем предупреждение админу
+                            const warningBanner = document.createElement('div');
+                            warningBanner.style.cssText = `
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(135deg, #d32f2f, #f44336);
+                                color: white;
+                                padding: 0.8rem;
+                                text-align: center;
+                                font-weight: 700;
+                                z-index: 999999;
+                                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                            `;
+                            warningBanner.innerHTML = '⚠️ САЙТ ОТКЛЮЧЕН - Видно только администраторам';
+                            document.body.prepend(warningBanner);
+
+                            return;
+                        }
+                    }
+                }
+
+                // Перенаправляем обычных пользователей на 404
+                window.location.replace('../404');
+            }
+        }
+    } catch (err) {
+        console.error('Site status check error:', err);
+        // При ошибке не блокируем доступ (fail-safe)
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // Create canvas for embers effect
     const canvas = document.createElement('canvas');
@@ -663,22 +725,23 @@ document.addEventListener('DOMContentLoaded', updateStrangerTimer);
 
 // Add Site Version Label
 document.addEventListener('DOMContentLoaded', () => {
-    const versionText = 'Версия сайта: 1.6.5. Идет разработка.';
+    const versionText = 'Версия сайта: 1.6.8. Идет разработка.';
 
-    // Try to find existing version div first
-    const existingVersion = document.querySelector('.site-footer .site-version');
-    if (existingVersion) {
-        existingVersion.textContent = versionText;
-        return;
-    }
+    // Update ALL .site-version elements (footer + mobile menu)
+    const versionElements = document.querySelectorAll('.site-version');
+    versionElements.forEach(el => {
+        el.textContent = versionText;
+    });
 
-    // Fallback: create and insert if not found
-    const footerSmall = document.querySelector('.site-footer .container small');
-    if (footerSmall) {
-        const versionDiv = document.createElement('div');
-        versionDiv.className = 'site-version';
-        versionDiv.textContent = versionText;
-        footerSmall.insertAdjacentElement('afterend', versionDiv);
+    // Fallback: create and insert in footer if not found
+    if (versionElements.length === 0) {
+        const footerSmall = document.querySelector('.site-footer .container small');
+        if (footerSmall) {
+            const versionDiv = document.createElement('div');
+            versionDiv.className = 'site-version';
+            versionDiv.textContent = versionText;
+            footerSmall.insertAdjacentElement('afterend', versionDiv);
+        }
     }
 });
 // --- Page Loader Logic ---
@@ -772,6 +835,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Compare folder names (case-insensitive)
         if (linkPageName.toLowerCase() === currentPageName.toLowerCase()) {
+            link.classList.add('active');
+        }
+    });
+})();
+
+// ==================== BURGER MENU ====================
+(function initBurgerMenu() {
+    const burgerMenu = document.getElementById('burger-menu');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const body = document.body;
+
+    if (!burgerMenu || !mobileNav || !mobileNavOverlay) return;
+
+    function toggleMenu() {
+        burgerMenu.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+        mobileNavOverlay.classList.toggle('active');
+        body.classList.toggle('mobile-menu-open');
+    }
+
+    function closeMenu() {
+        burgerMenu.classList.remove('active');
+        mobileNav.classList.remove('active');
+        mobileNavOverlay.classList.remove('active');
+        body.classList.remove('mobile-menu-open');
+    }
+
+    // Toggle menu on burger click
+    burgerMenu.addEventListener('click', toggleMenu);
+
+    // Close menu on overlay click
+    mobileNavOverlay.addEventListener('click', closeMenu);
+
+    // Close menu on link click
+    const mobileNavLinks = mobileNav.querySelectorAll('a');
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close menu on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+
+    // Highlight active page
+    const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
+    mobileNavLinks.forEach(link => {
+        const href = link.getAttribute('href').replace('../', '').replace('/', '');
+        if (href === currentPage || (currentPage === '' && href === 'homepage')) {
             link.classList.add('active');
         }
     });

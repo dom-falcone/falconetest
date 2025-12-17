@@ -404,6 +404,91 @@
             margin-top: 0.4rem;
         }
 
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        /* Контекстное меню сообщений */
+        .message-context-menu {
+            position: absolute;
+            background: linear-gradient(165deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 12px;
+            padding: 0.5rem;
+            z-index: 1000;
+            min-width: 160px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 23, 68, 0.2);
+            animation: menuAppear 0.2s ease;
+        }
+
+        @keyframes menuAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .context-menu-item:hover {
+            background: rgba(255, 23, 68, 0.15);
+        }
+
+        .context-menu-item svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .context-menu-item.delete-item {
+            color: #ff4444;
+        }
+
+        .context-menu-item.delete-item:hover {
+            background: rgba(255, 68, 68, 0.2);
+        }
+
+        .message-content {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .message.own .message-content:hover {
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.9), rgba(255, 107, 107, 0.9));
+        }
+
+        .message-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .message-action-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .delete-msg-btn:hover {
+            background: rgba(255, 23, 68, 0.3);
+            border-color: var(--color-primary);
+        }
+
         .message.own .message-time {
             text-align: right;
             color: rgba(255, 255, 255, 0.7);
@@ -744,6 +829,445 @@
                 padding: 1rem;
             }
         }
+
+        .delete-chat-btn {
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .delete-chat-btn:hover {
+            background: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .delete-chat-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .chat-menu-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-menu-btn:hover {
+            background: rgba(255, 23, 68, 0.2);
+            border-color: rgba(255, 23, 68, 0.3);
+            transform: scale(1.05);
+        }
+
+        .chat-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* ==================== EDIT MESSAGE MODAL ==================== */
+        .edit-message-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .edit-message-modal.active {
+            display: flex;
+        }
+
+        .edit-message-modal-content {
+            background: linear-gradient(165deg, #1a1a1a, #0d0d0d);
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 23, 68, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        .edit-message-modal-title {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .edit-message-modal textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .edit-message-modal textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: rgba(255, 23, 68, 0.05);
+            box-shadow: 0 0 25px rgba(255, 23, 68, 0.15);
+        }
+
+        .edit-message-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-edit-save {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--color-primary), #ff6b6b);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-edit-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-edit-cancel {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-edit-cancel:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== DELETE CONFIRM MODAL ==================== */
+        .delete-confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .delete-confirm-modal.active {
+            display: flex;
+        }
+
+        .delete-confirm-modal-content {
+            background: linear-gradient(165deg, #1a1a1a, #0d0d0d);
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 23, 68, 0.2);
+            animation: slideUp 0.3s ease;
+            max-width: 400px;
+        }
+
+        .delete-confirm-modal-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .delete-confirm-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-delete-yes {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--color-primary), #ff6b6b);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-delete-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-delete-no {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-delete-no:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== DATE DIVIDERS ==================== */
+.date-divider {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0 1.5rem 0;
+    gap: 1rem;
+}
+
+.date-divider::before,
+.date-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 23, 68, 0.3), transparent);
+}
+
+.date-divider-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 1rem;
+    background: rgba(255, 23, 68, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 23, 68, 0.2);
+}
+
+/* ==================== MOBILE FIXES ==================== */
+@media (max-width: 768px) {
+    .messages-container {
+        grid-template-columns: 1fr;
+        height: calc(100vh - 60px);
+    }
+
+    /* По умолчанию показываем список чатов */
+    .chats-sidebar {
+        display: flex;
+    }
+
+    .chat-area {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 100;
+        background: var(--color-bg);
+    }
+
+    /* Когда чат открыт */
+    .chats-sidebar.mobile-hidden {
+        display: none;
+    }
+
+    .chat-area.mobile-show {
+        display: flex;
+    }
+
+    /* Скрываем header при открытом чате */
+    body.mobile-chat-open {
+        overflow: hidden;
+    }
+
+    body.mobile-chat-open .topbar {
+        display: none;
+    }
+
+    body.mobile-chat-open .messages-container {
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    /* Адаптация header чата */
+    .chat-header {
+        padding: 1rem;
+    }
+
+    .chat-header-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .chat-header-info h3 {
+        font-size: 1rem;
+    }
+
+    /* Кнопка "Назад" для мобильных */
+    .mobile-back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 23, 68, 0.1);
+        border: 1px solid rgba(255, 23, 68, 0.3);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .mobile-back-btn:hover {
+        background: var(--color-primary);
+        transform: scale(1.05);
+    }
+
+    .mobile-back-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+    }
+
+    /* Адаптация сообщений */
+    .messages-area {
+        padding: 1rem;
+    }
+
+    .message {
+        max-width: 85%;
+    }
+
+    .message-content {
+        padding: 0.8rem 1rem;
+    }
+
+    .message-text {
+        font-size: 0.9rem;
+    }
+
+    /* Адаптация ввода */
+    .message-input-area {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    .message-input-area textarea {
+        font-size: 0.9rem;
+        padding: 0.8rem 1rem;
+    }
+
+    .send-btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    /* Модалка друзей */
+    .modal {
+        max-width: 95%;
+        max-height: 85vh;
+    }
+
+    .modal-header,
+    .modal-search,
+    .modal-content {
+        padding: 1rem;
+    }
+
+    /* Список чатов */
+    .chats-header {
+        padding: 1.2rem;
+    }
+
+    .chats-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .new-chat-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .chat-item {
+        padding: 1rem;
+        margin: 0.2rem 0.5rem;
+    }
+
+    .chat-avatar {
+        width: 46px;
+        height: 46px;
+    }
+
+    .chat-name {
+        font-size: 0.95rem;
+    }
+
+    .chat-last-message {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .message {
+        max-width: 90%;
+    }
+
+    .modal {
+        max-width: 100%;
+        border-radius: 0;
+    }
+}
+
     </style>
 
     <link rel="stylesheet" href="../assets/css/user-menu.css?v=1">
@@ -758,76 +1282,103 @@
     </div>
 
     <header class="topbar">
-        <div class="container topbar-inner">
-            <div class="brand">
-                <a href="../homepage">
-                    <div class="logo-mark"
-                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
-                    <span class="brand-title">Dom Falcone</span>
-                </a>
-            </div>
-            <nav class="nav">
-                <a href="../about">О доме</a>
-                <a href="../history">История</a>
-                <a href="../enemies">Противники</a>
-                <a href="../news">Новости</a>
-            </nav>
-
-            <!-- Кнопка "Войти" (показывается когда не авторизован) -->
-            <!-- Initially hidden to prevent flash - shown by sync localStorage check -->
-            <div class="auth-action" id="auth-action" style="display: none;">
-                <a href="../login" class="btn-login">Войти</a>
-            </div>
-
-            <!-- User Menu (показывается когда авторизован) -->
-            <div class="user-menu" id="user-menu" style="display: none;">
-                <!-- Кнопка сообщений -->
-                <div style="position: relative;">
-                    <a href="../messages" class="notification-bell" style="text-decoration: none;">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
-                        </svg>
-                        <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
-                    </a>
-                </div>
-
-                <!-- Кнопка уведомлений -->
-                <div style="position: relative;">
-                    <div class="notification-bell" id="notification-bell">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
-                        </svg>
-                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
-                    </div>
-
-                    <!-- Выпадающий список уведомлений -->
-                    <div class="notifications-dropdown" id="notifications-dropdown">
-                        <div class="notifications-header">
-                            <h3>Уведомления</h3>
-                            <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
-                        </div>
-                        <div id="notifications-list">
-                            <div class="no-notifications">Нет уведомлений</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Профиль пользователя -->
-                <a href="../dashboard" class="user-profile-info">
-                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-                    <div class="user-details">
-                        <span class="user-display-name" id="header-display-name">User</span>
-                        <div class="user-points-badge">
-                            <span>⭐</span>
-                            <span id="header-points">0</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
+    <div class="container topbar-inner">
+        <div class="brand">
+            <a href="../homepage">
+                <div class="logo-mark"
+                    style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                <span class="brand-title">Dom Falcone</span>
+            </a>
         </div>
-    </header>
+        
+        <!-- Desktop Navigation -->
+        <nav class="nav">
+            <a href="../about">О доме</a>
+            <a href="../history">История</a>
+            <a href="../enemies">Противники</a>
+            <a href="../news">Новости</a>
+        </nav>
+
+        <!-- Burger Menu Button -->
+        <div class="burger-menu" id="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+
+        <!-- Кнопка "Войти" (показывается когда не авторизован) -->
+        <div class="auth-action" id="auth-action" style="display: none;">
+            <a href="../login" class="btn-login">Войти</a>
+        </div>
+
+        <!-- User Menu (показывается когда авторизован) -->
+        <div class="user-menu" id="user-menu" style="display: none;">
+            <!-- Кнопка сообщений -->
+            <div style="position: relative;">
+                <a href="../messages" class="notification-bell" style="text-decoration: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
+                    </svg>
+                    <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+                </a>
+            </div>
+
+            <!-- Кнопка уведомлений -->
+            <div style="position: relative;">
+                <div class="notification-bell" id="notification-bell">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
+                    </svg>
+                    <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                </div>
+
+                <!-- Выпадающий список уведомлений -->
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notifications-header">
+                        <h3>Уведомления</h3>
+                        <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+                    </div>
+                    <div id="notifications-list">
+                        <div class="no-notifications">Нет уведомлений</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Профиль пользователя -->
+            <a href="../dashboard" class="user-profile-info">
+                <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                <div class="user-details">
+                    <span class="user-display-name" id="header-display-name">User</span>
+                    <div class="user-points-badge">
+                        <span>⭐</span>
+                        <span id="header-points">0</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-links">
+        <a href="../about">О доме</a>
+        <a href="../history">История</a>
+        <a href="../enemies">Противники</a>
+        <a href="../news">Новости</a>
+        <a href="../dashboard" class="mobile-nav-profile">Профиль</a>
+        <a href="../messages" class="mobile-nav-messages">Сообщения</a>
+    </div>
+    <div class="mobile-nav-footer">
+        <div class="site-version"></div>
+    </div>
+</nav>
+
 
     <main class="content-section" style="padding: 2rem 0;">
         <div class="container">
@@ -866,9 +1417,10 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <small>© Dom Falcone 2025. Все права защищены. Прям реально защищены.</small>
             <div class="site-version"></div>
             <div class="footer-links">
+                <a href="../faq">FAQ</a>
                 <a href="../privacy">Политика конфиденциальности</a>
                 <a href="../agreement">Пользовательское соглашение</a>
                 <a href="../imprint">Сведения о владельце сайта</a>
@@ -1021,24 +1573,51 @@
         }
 
         // ============ ОТКРЫТИЕ ЧАТА (ИСПРАВЛЕНО) ============
-        async function openChat(chatId, userId, userName, userAvatar) {
-            currentChatId = chatId;
-            currentChatUserId = userId; // Сохраняем ID собеседника
-            lastMessagesData = [];
+async function openChat(chatId, userId, userName, userAvatar) {
+    currentChatId = chatId;
+    currentChatUserId = userId;
+    lastMessagesData = [];
 
-            // Обновляем активный чат в списке
-            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget?.classList.add('active');
+    // Обновляем активный чат в списке
+    document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+    event.currentTarget?.classList.add('active');
 
-            // Показываем область чата
-            const chatArea = document.getElementById('chat-area');
-            chatArea.classList.remove('chat-area-empty');
-            chatArea.innerHTML = `
+    // МОБИЛЬНАЯ АДАПТАЦИЯ
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        document.querySelector('.chats-sidebar').classList.add('mobile-hidden');
+        document.body.classList.add('mobile-chat-open');
+        
+        // Скрываем плавающую кнопку при открытии чата
+        const floatingBtn = document.querySelector('.floating-contact-btn');
+        if (floatingBtn) {
+            floatingBtn.style.display = 'none';
+        }
+    }
+
+    // Показываем область чата
+    const chatArea = document.getElementById('chat-area');
+    chatArea.classList.remove('chat-area-empty');
+    chatArea.classList.add(isMobile ? 'mobile-show' : '');
+    
+    chatArea.innerHTML = `
         <div class="chat-header">
+            ${isMobile ? `
+                <button class="mobile-back-btn" onclick="closeMobileChat()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/>
+                    </svg>
+                </button>
+            ` : ''}
             <img src="${userAvatar || getDefaultAvatar(userName)}" class="chat-header-avatar">
-            <div class="chat-header-info" style="cursor: pointer;" onclick="window.location.href='../profile?id=${userId}'">
+            <div class="chat-header-info" style="flex: 1; cursor: pointer;" onclick="window.location.href='../profile?id=${userId}'">
                 <h3 style="transition: color 0.3s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='white'">${escapeHtml(userName)}</h3>
             </div>
+            <button class="chat-menu-btn" onclick="showChatMenu(event, ${chatId})" title="Меню чата">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
+                </svg>
+            </button>
         </div>
         <div class="messages-area" id="messages-area"></div>
         <div class="message-input-area">
@@ -1049,29 +1628,42 @@
         </div>
     `;
 
-            // Автоматическое изменение размера textarea
-            const textarea = document.getElementById('message-input');
-            textarea.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-            });
+    // Остальной код остается без изменений...
+    const textarea = document.getElementById('message-input');
+    textarea.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+    });
 
-            // Отправка по Enter
-            textarea.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            document.getElementById('send-btn').addEventListener('click', sendMessage);
-
-            await loadMessages();
-            await markChatAsRead(chatId);
-
-            if (messagesPollingInterval) clearInterval(messagesPollingInterval);
-            messagesPollingInterval = setInterval(loadMessages, 3000);
+    textarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
         }
+    });
+
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+    await loadMessages();
+    await markChatAsRead(chatId);
+
+    if (messagesPollingInterval) clearInterval(messagesPollingInterval);
+    messagesPollingInterval = setInterval(loadMessages, 3000);
+}
+    const chatArea = document.getElementById('chat-area');
+    const chatsSidebar = document.querySelector('.chats-sidebar');
+    
+    chatArea.classList.remove('mobile-show');
+    chatArea.classList.add('chat-area-empty');
+    chatsSidebar.classList.remove('mobile-hidden');
+    
+    currentChatId = null;
+    currentChatUserId = null;
+    
+    if (messagesPollingInterval) {
+        clearInterval(messagesPollingInterval);
+        messagesPollingInterval = null;
+    }
 
         // ============ СООБЩЕНИЯ ============
         async function loadMessages() {
@@ -1091,66 +1683,406 @@
             }
         }
 
+        let contextMenuOpen = null;
+
         function renderMessages(messages) {
-            const area = document.getElementById('messages-area');
-            if (!area) return;
+    const area = document.getElementById('messages-area');
+    if (!area) return;
 
-            const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
-            const messagesChanged = JSON.stringify(messages) !== JSON.stringify(lastMessagesData);
+    const scrolledToBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
+    const messagesChanged = JSON.stringify(messages) !== JSON.stringify(lastMessagesData);
 
-            if (!messagesChanged) return;
+    if (!messagesChanged) return;
 
-            const onlyNewMessages = lastMessagesData.length > 0 &&
-                messages.length > lastMessagesData.length &&
-                JSON.stringify(messages.slice(0, lastMessagesData.length)) ===
-                JSON.stringify(lastMessagesData);
+    closeContextMenu();
 
-            if (onlyNewMessages) {
-                const newMessages = messages.slice(lastMessagesData.length);
-                newMessages.forEach(msg => {
-                    const isOwn = msg.sender_id === currentUser.id;
-                    const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', {
-                        hour: '2-digit', minute: '2-digit'
-                    });
+    const onlyNewMessages = lastMessagesData.length > 0 &&
+        messages.length > lastMessagesData.length &&
+        JSON.stringify(messages.slice(0, lastMessagesData.length)) ===
+        JSON.stringify(lastMessagesData);
 
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message ${isOwn ? 'own' : ''}`;
-                    messageDiv.innerHTML = `
+    // Функция для группировки сообщений по датам
+    const groupMessagesByDate = (messages) => {
+        const groups = [];
+        let currentDate = null;
+        let currentGroup = [];
+
+        messages.forEach(msg => {
+            const msgDate = new Date(msg.created_at);
+            const dateKey = msgDate.toDateString();
+
+            if (dateKey !== currentDate) {
+                if (currentGroup.length > 0) {
+                    groups.push({ date: currentDate, messages: currentGroup });
+                }
+                currentDate = dateKey;
+                currentGroup = [msg];
+            } else {
+                currentGroup.push(msg);
+            }
+        });
+
+        if (currentGroup.length > 0) {
+            groups.push({ date: currentDate, messages: currentGroup });
+        }
+
+        return groups;
+    };
+
+    // Функция для форматирования даты разделителя
+    const formatDateDivider = (dateString) => {
+        const date = new Date(dateString);
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        const isToday = date.toDateString() === today.toDateString();
+        const isYesterday = date.toDateString() === yesterday.toDateString();
+
+        if (isToday) return 'Сегодня';
+        if (isYesterday) return 'Вчера';
+
+        // Форматируем как "15 декабря"
+        return date.toLocaleDateString('ru-RU', { 
+            day: 'numeric', 
+            month: 'long' 
+        });
+    };
+
+    if (onlyNewMessages) {
+        // Добавляем только новые сообщения
+        const newMessages = messages.slice(lastMessagesData.length);
+        
+        newMessages.forEach(msg => {
+            // Проверяем, нужен ли новый разделитель даты
+            const lastElement = area.lastElementChild;
+            const msgDate = new Date(msg.created_at).toDateString();
+            
+            let needsDateDivider = true;
+            if (lastElement) {
+                if (lastElement.classList.contains('date-divider')) {
+                    needsDateDivider = false;
+                } else if (lastElement.classList.contains('message')) {
+                    const lastMsgId = lastElement.dataset.messageId;
+                    const lastMsg = lastMessagesData.find(m => m.id == lastMsgId);
+                    if (lastMsg) {
+                        const lastMsgDate = new Date(lastMsg.created_at).toDateString();
+                        needsDateDivider = lastMsgDate !== msgDate;
+                    }
+                }
+            }
+
+            if (needsDateDivider) {
+                const divider = document.createElement('div');
+                divider.className = 'date-divider';
+                divider.innerHTML = `<div class="date-divider-text">${formatDateDivider(msgDate)}</div>`;
+                area.appendChild(divider);
+            }
+
+            const isOwn = msg.sender_id === currentUser.id;
+            const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', {
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            messageDiv.dataset.messageId = msg.id;
+            messageDiv.innerHTML = `
                 <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" 
                      class="message-avatar">
-                <div class="message-content">
+                <div class="message-content" ${isOwn ? `onclick="showMessageMenu(event, ${msg.id})"` : ''}>
                     <div class="message-text">${escapeHtml(msg.content)}</div>
                     <div class="message-time">${time}</div>
                 </div>
             `;
-                    area.appendChild(messageDiv);
-                });
-            } else {
-                area.innerHTML = messages.map(msg => {
-                    const isOwn = msg.sender_id === currentUser.id;
-                    const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', {
-                        hour: '2-digit', minute: '2-digit'
-                    });
+            area.appendChild(messageDiv);
+        });
+    } else {
+        // Перерисовываем все сообщения с разделителями
+        const groupedMessages = groupMessagesByDate(messages);
+        
+        area.innerHTML = groupedMessages.map(group => {
+            const dateDivider = `
+                <div class="date-divider">
+                    <div class="date-divider-text">${formatDateDivider(group.date)}</div>
+                </div>
+            `;
 
-                    return `
-                <div class="message ${isOwn ? 'own' : ''}">
-                    <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" 
-                         class="message-avatar">
-                    <div class="message-content">
-                        <div class="message-text">${escapeHtml(msg.content)}</div>
-                        <div class="message-time">${time}</div>
+            const messagesHtml = group.messages.map(msg => {
+                const isOwn = msg.sender_id === currentUser.id;
+                const time = new Date(msg.created_at).toLocaleTimeString('ru-RU', {
+                    hour: '2-digit', minute: '2-digit'
+                });
+
+                return `
+                    <div class="message ${isOwn ? 'own' : ''}" data-message-id="${msg.id}">
+                        <img src="${msg.sender_avatar || getDefaultAvatar(msg.sender_name)}" 
+                             class="message-avatar">
+                        <div class="message-content" ${isOwn ? `onclick="showMessageMenu(event, ${msg.id})"` : ''}>
+                            <div class="message-text">${escapeHtml(msg.content)}</div>
+                            <div class="message-time">${time}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return dateDivider + messagesHtml;
+        }).join('');
+    }
+
+    lastMessagesData = JSON.parse(JSON.stringify(messages));
+
+    if (scrolledToBottom || onlyNewMessages) {
+        area.scrollTop = area.scrollHeight;
+    }
+}
+
+        function showMessageMenu(event, messageId) {
+            event.stopPropagation();
+
+            // Закрываем предыдущее меню
+            closeContextMenu();
+
+            const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
+            const messageText = messageEl.querySelector('.message-text').innerHTML.replace(/<br>/g, '\n');
+
+            const menu = document.createElement('div');
+            menu.className = 'message-context-menu';
+            menu.id = 'context-menu';
+
+            menu.innerHTML = `
+        <div class="context-menu-item" onclick="editMessage(${messageId}, event)">
+            <svg viewBox="0 0 24 24">
+                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+            </svg>
+            Редактировать
+        </div>
+        <div class="context-menu-item delete-item" onclick="deleteMessage(${messageId}, event)">
+            <svg viewBox="0 0 24 24">
+                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+            </svg>
+            Удалить
+        </div>
+    `;
+
+            document.body.appendChild(menu);
+
+            // Позиционируем меню
+            const rect = event.target.closest('.message-content').getBoundingClientRect();
+            menu.style.position = 'fixed';
+            menu.style.left = rect.left + 'px';
+            menu.style.top = (rect.bottom + 5) + 'px';
+
+            // Проверяем, не выходит ли меню за пределы экрана
+            const menuRect = menu.getBoundingClientRect();
+            if (menuRect.right > window.innerWidth) {
+                menu.style.left = (rect.right - menuRect.width) + 'px';
+            }
+            if (menuRect.bottom > window.innerHeight) {
+                menu.style.top = (rect.top - menuRect.height - 5) + 'px';
+            }
+
+            contextMenuOpen = messageId;
+        }
+
+        function closeContextMenu() {
+            const menu = document.getElementById('context-menu');
+            if (menu) {
+                menu.remove();
+            }
+            contextMenuOpen = null;
+        }
+
+        async function editMessage(messageId, event) {
+            event.stopPropagation();
+            closeContextMenu();
+
+            const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
+            const textEl = messageEl.querySelector('.message-text');
+            const originalText = textEl.innerHTML.replace(/<br>/g, '\n');
+
+            // Create edit modal
+            const modal = document.createElement('div');
+            modal.className = 'edit-message-modal active';
+            modal.id = 'edit-message-modal';
+            modal.innerHTML = `
+                <div class="edit-message-modal-content">
+                    <div class="edit-message-modal-title">Редактировать сообщение</div>
+                    <textarea id="edit-message-textarea">${escapeHtml(originalText)}</textarea>
+                    <div class="edit-message-modal-buttons">
+                        <button class="btn-edit-save">Сохранить</button>
+                        <button class="btn-edit-cancel">Отмена</button>
                     </div>
                 </div>
             `;
-                }).join('');
-            }
+            document.body.appendChild(modal);
 
-            lastMessagesData = JSON.parse(JSON.stringify(messages));
+            const textarea = modal.querySelector('#edit-message-textarea');
+            const saveBtn = modal.querySelector('.btn-edit-save');
+            const cancelBtn = modal.querySelector('.btn-edit-cancel');
 
-            if (scrolledToBottom || onlyNewMessages) {
-                area.scrollTop = area.scrollHeight;
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+            const closeEditModal = () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 300);
+            };
+
+            cancelBtn.addEventListener('click', closeEditModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeEditModal();
+            });
+
+            saveBtn.addEventListener('click', async () => {
+                const newText = textarea.value.trim();
+                if (!newText || newText === originalText.trim()) {
+                    closeEditModal();
+                    return;
+                }
+
+                try {
+                    const res = await fetch(API_BASE + `/messages/${messageId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({ content: newText })
+                    });
+
+                    if (res.ok) {
+                        textEl.innerHTML = escapeHtml(newText);
+                        closeEditModal();
+                    } else {
+                        showErrorModal('Ошибка редактирования');
+                    }
+                } catch (err) {
+                    console.error('Edit error:', err);
+                    showErrorModal('Ошибка редактирования');
+                }
+            });
+        }
+
+        async function deleteMessage(messageId, event) {
+            event.stopPropagation();
+            closeContextMenu();
+
+            // Create delete confirm modal
+            const modal = document.createElement('div');
+            modal.className = 'delete-confirm-modal active';
+            modal.id = 'delete-confirm-modal';
+            modal.innerHTML = `
+                <div class="delete-confirm-modal-content">
+                    <div class="delete-confirm-modal-text">Удалить сообщение?</div>
+                    <div class="delete-confirm-modal-buttons">
+                        <button class="btn-delete-yes">Да</button>
+                        <button class="btn-delete-no">Отмена</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const yesBtn = modal.querySelector('.btn-delete-yes');
+            const noBtn = modal.querySelector('.btn-delete-no');
+
+            const closeDeleteModal = () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 300);
+            };
+
+            noBtn.addEventListener('click', closeDeleteModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeDeleteModal();
+            });
+
+            yesBtn.addEventListener('click', async () => {
+                closeDeleteModal();
+                try {
+                    const res = await fetch(API_BASE + `/messages/${messageId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+
+                    if (res.ok) {
+                        document.querySelector(`[data-message-id="${messageId}"]`).remove();
+                        await loadChats(); // Обновляем список чатов
+                    } else {
+                        showErrorModal('Ошибка удаления');
+                    }
+                } catch (err) {
+                    console.error('Delete error:', err);
+                    showErrorModal('Ошибка удаления');
+                }
+            });
+        }
+
+        function showChatMenu(event, chatId) {
+            event.stopPropagation();
+            closeContextMenu();
+
+            const menu = document.createElement('div');
+            menu.className = 'message-context-menu';
+            menu.id = 'context-menu';
+
+            menu.innerHTML = `
+        <div class="context-menu-item delete-item" onclick="deleteChat(${chatId}, event)">
+            <svg viewBox="0 0 24 24">
+                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+            </svg>
+            Удалить чат
+        </div>
+    `;
+
+            document.body.appendChild(menu);
+
+            const rect = event.target.closest('button').getBoundingClientRect();
+            menu.style.position = 'fixed';
+            menu.style.right = (window.innerWidth - rect.right) + 'px';
+            menu.style.top = (rect.bottom + 5) + 'px';
+        }
+
+        async function deleteChat(chatId, event) {
+            event.stopPropagation();
+            closeContextMenu();
+
+            if (!confirm('Удалить весь чат? Это действие нельзя отменить.')) return;
+
+            try {
+                const res = await fetch(API_BASE + `/chats/${chatId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (res.ok) {
+                    currentChatId = null;
+                    currentChatUserId = null;
+                    document.getElementById('chat-area').className = 'chat-area chat-area-empty';
+                    document.getElementById('chat-area').innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18"/>
+                </svg>
+                <p>Выберите чат, чтобы начать переписку</p>
+            `;
+                    await loadChats();
+                } else {
+                    alert('Ошибка удаления чата');
+                }
+            } catch (err) {
+                console.error('Delete chat error:', err);
+                alert('Ошибка удаления чата');
             }
         }
+
+        // Закрываем меню при клике вне его
+        document.addEventListener('click', (e) => {
+            if (contextMenuOpen && !e.target.closest('.message-context-menu')) {
+                closeContextMenu();
+            }
+        });
+
+        // Закрываем меню при скролле
+        document.addEventListener('scroll', closeContextMenu, true);
 
         async function sendMessage() {
             const textarea = document.getElementById('message-input');
@@ -1443,52 +2375,68 @@
         }
 
         async function checkNewMessages() {
-            if (!token) return;
+    if (!token) return;
 
-            try {
-                const res = await fetch(API_BASE + "/messages/unread-count", {
+    try {
+        const res = await fetch(API_BASE + "/messages/unread-count", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+
+            // Проверяем новые сообщения и показываем toast только если это НЕ текущий чат
+            if (data.unread_count > lastMessageCount && lastMessageCount > 0) {
+                const chatsRes = await fetch(API_BASE + "/chats", {
                     headers: { "Authorization": "Bearer " + token }
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
+                if (chatsRes.ok) {
+                    const chatsData = await chatsRes.json();
+                    const latestChat = chatsData.chats.find(c => c.unread_count > 0);
 
-                    if (data.unread_count > lastMessageCount && lastMessageCount > 0) {
-                        const chatsRes = await fetch(API_BASE + "/chats", {
-                            headers: { "Authorization": "Bearer " + token }
-                        });
-
-                        if (chatsRes.ok) {
-                            const chatsData = await chatsRes.json();
-                            const latestChat = chatsData.chats.find(c => c.unread_count > 0);
-
-                            if (latestChat && latestChat.last_message) {
-                                showMessageToast(
-                                    latestChat.other_user.name,
-                                    latestChat.other_user.avatar,
-                                    latestChat.last_message.content,
-                                    latestChat.chat_id,
-                                    latestChat.other_user.id
-                                );
-                            }
-                        }
+                    // Показываем toast только если сообщение НЕ из текущего открытого чата
+                    if (latestChat && latestChat.last_message && 
+                        latestChat.other_user.id !== currentChatUserId) {
+                        
+                        showMessageToast(
+                            latestChat.other_user.name,
+                            latestChat.other_user.avatar,
+                            latestChat.last_message.content,
+                            latestChat.chat_id,
+                            latestChat.other_user.id
+                        );
+                    } else if (latestChat && latestChat.other_user.id === currentChatUserId) {
+                        // Если сообщение от текущего собеседника, только проигрываем звук
+                        playNotificationSound('message-notification');
                     }
-
-                    lastMessageCount = data.unread_count;
-                    updateMessagesBadge(data.unread_count);
                 }
-            } catch (err) {
-                console.error('Check new messages error:', err);
             }
+
+            lastMessageCount = data.unread_count;
+            updateMessagesBadge(data.unread_count);
         }
+    } catch (err) {
+        console.error('Check new messages error:', err);
+    }
+}
 
         function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
-            const existingToast = document.querySelector('.toast-notification');
-            if (existingToast) existingToast.remove();
+    // Не показываем toast если это текущий открытый чат
+    if (senderId === currentChatUserId) {
+        playNotificationSound('message-notification');
+        return;
+    }
 
-            const toast = document.createElement('div');
-            toast.className = 'toast-notification';
-            toast.innerHTML = `
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
+
+    // Проигрываем звук
+    playNotificationSound('message-notification');
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
         <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
         <div class="toast-content">
             <div class="toast-name">${escapeHtml(senderName)}</div>
@@ -1496,17 +2444,36 @@
         </div>
     `;
 
-            toast.addEventListener('click', () => {
-                window.location.href = `../messages?chatWith=${senderId}`;
+    toast.addEventListener('click', () => {
+        window.location.href = `../messages?chatWith=${senderId}`;
+    });
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function playNotificationSound(soundType) {
+    try {
+        const soundId = soundType === 'message-notification' 
+            ? 'message-notification-sound' 
+            : 'notification-sound';
+        
+        const audio = document.getElementById(soundId);
+        if (audio) {
+            audio.currentTime = 0;
+            audio.volume = 0.5; // Громкость 50%
+            audio.play().catch(err => {
+                console.log('Audio play prevented:', err);
             });
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 300);
-            }, 5000);
         }
+    } catch (err) {
+        console.error('Play sound error:', err);
+    }
+}
 
         // ============ УТИЛИТЫ ============
         function formatMessageTime(timestamp) {
@@ -1610,7 +2577,42 @@
             if (notificationsInterval) clearInterval(notificationsInterval);
             if (messagesCheckInterval) clearInterval(messagesCheckInterval);
         });
+
+        // Функция для закрытия чата на мобильных
+function closeMobileChat() {
+    const chatArea = document.getElementById('chat-area');
+    const chatsSidebar = document.querySelector('.chats-sidebar');
+    const floatingBtn = document.querySelector('.floating-contact-btn');
+    
+    chatArea.classList.remove('mobile-show');
+    chatArea.classList.add('chat-area-empty');
+    chatsSidebar.classList.remove('mobile-hidden');
+    document.body.classList.remove('mobile-chat-open');
+    
+    // Показываем плавающую кнопку обратно
+    if (floatingBtn && window.innerWidth <= 768) {
+        floatingBtn.style.display = 'flex';
+    }
+    
+    currentChatId = null;
+    currentChatUserId = null;
+    
+    if (messagesPollingInterval) {
+        clearInterval(messagesPollingInterval);
+        messagesPollingInterval = null;
+    }
+}
+
     </script>
+
+    <!-- Audio for notifications -->
+<audio id="notification-sound" preload="auto">
+    <source src="../assets/audio/notification.mp3" type="audio/mpeg">
+</audio>
+<audio id="message-notification-sound" preload="auto">
+    <source src="../assets/audio/message-notification.mp3" type="audio/mpeg">
+</audio>
+
 </body>
 
 </html>

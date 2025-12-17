@@ -35,76 +35,103 @@
 
     <!-- Header -->
     <header class="topbar">
-        <div class="container topbar-inner">
-            <div class="brand">
-                <a href="../homepage">
-                    <div class="logo-mark"
-                        style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
-                    <span class="brand-title">Dom Falcone</span>
-                </a>
-            </div>
-            <nav class="nav">
-                <a href="../about">О доме</a>
-                <a href="../history">История</a>
-                <a href="../enemies">Противники</a>
-                <a href="../news">Новости</a>
-            </nav>
-
-            <!-- Кнопка "Войти" (показывается когда не авторизован) -->
-            <!-- Initially hidden to prevent flash - shown by sync localStorage check -->
-            <div class="auth-action" id="auth-action" style="display: none;">
-                <a href="../login" class="btn-login">Войти</a>
-            </div>
-
-            <!-- User Menu (показывается когда авторизован) -->
-            <div class="user-menu" id="user-menu" style="display: none;">
-                <!-- Кнопка сообщений -->
-                <div style="position: relative;">
-                    <a href="../messages" class="notification-bell" style="text-decoration: none;">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
-                        </svg>
-                        <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
-                    </a>
-                </div>
-
-                <!-- Кнопка уведомлений -->
-                <div style="position: relative;">
-                    <div class="notification-bell" id="notification-bell">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
-                        </svg>
-                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
-                    </div>
-
-                    <!-- Выпадающий список уведомлений -->
-                    <div class="notifications-dropdown" id="notifications-dropdown">
-                        <div class="notifications-header">
-                            <h3>Уведомления</h3>
-                            <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
-                        </div>
-                        <div id="notifications-list">
-                            <div class="no-notifications">Нет уведомлений</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Профиль пользователя -->
-                <a href="../dashboard" class="user-profile-info">
-                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
-                    <div class="user-details">
-                        <span class="user-display-name" id="header-display-name">User</span>
-                        <div class="user-points-badge">
-                            <span>⭐</span>
-                            <span id="header-points">0</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
+    <div class="container topbar-inner">
+        <div class="brand">
+            <a href="../homepage">
+                <div class="logo-mark"
+                    style="background: url('../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                <span class="brand-title">Dom Falcone</span>
+            </a>
         </div>
-    </header>
+        
+        <!-- Desktop Navigation -->
+        <nav class="nav">
+            <a href="../about">О доме</a>
+            <a href="../history">История</a>
+            <a href="../enemies">Противники</a>
+            <a href="../news">Новости</a>
+        </nav>
+
+        <!-- Burger Menu Button -->
+        <div class="burger-menu" id="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+
+        <!-- Кнопка "Войти" (показывается когда не авторизован) -->
+        <div class="auth-action" id="auth-action" style="display: none;">
+            <a href="../login" class="btn-login">Войти</a>
+        </div>
+
+        <!-- User Menu (показывается когда авторизован) -->
+        <div class="user-menu" id="user-menu" style="display: none;">
+            <!-- Кнопка сообщений -->
+            <div style="position: relative;">
+                <a href="../messages" class="notification-bell" style="text-decoration: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
+                    </svg>
+                    <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+                </a>
+            </div>
+
+            <!-- Кнопка уведомлений -->
+            <div style="position: relative;">
+                <div class="notification-bell" id="notification-bell">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
+                    </svg>
+                    <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                </div>
+
+                <!-- Выпадающий список уведомлений -->
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notifications-header">
+                        <h3>Уведомления</h3>
+                        <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+                    </div>
+                    <div id="notifications-list">
+                        <div class="no-notifications">Нет уведомлений</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Профиль пользователя -->
+            <a href="../dashboard" class="user-profile-info">
+                <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                <div class="user-details">
+                    <span class="user-display-name" id="header-display-name">User</span>
+                    <div class="user-points-badge">
+                        <span>⭐</span>
+                        <span id="header-points">0</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-links">
+        <a href="../about">О доме</a>
+        <a href="../history">История</a>
+        <a href="../enemies">Противники</a>
+        <a href="../news">Новости</a>
+        <a href="../dashboard" class="mobile-nav-profile">Профиль</a>
+        <a href="../messages" class="mobile-nav-messages">Сообщения</a>
+    </div>
+    <div class="mobile-nav-footer">
+        <div class="site-version"></div>
+    </div>
+</nav>
+
 
 
     <!-- Main Content -->
@@ -137,9 +164,10 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <small>© Дом Фальконе — 2025. Все права защищены. Прям реально защищены.</small>
+            <small>© Dom Falcone 2025. Все права защищены. Прям реально защищены.</small>
             <div class="site-version"></div>
             <div class="footer-links">
+                <a href="../faq">FAQ</a>
                 <a href="../privacy">Политика конфиденциальности</a>
                 <a href="../agreement">Пользовательское соглашение</a>
                 <a href="../imprint">Сведения о владельце сайта</a>
