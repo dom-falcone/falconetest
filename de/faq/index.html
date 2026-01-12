@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Dom Falcone</title>
+    <link rel="stylesheet" href="../../assets/css/style.css?v=6">
+    <link rel="icon" href="../../assets/images/Falcone-circle.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/user-menu.css?v=1">
+    <style>
+        .faq-section {
+            min-height: 100vh;
+            padding: 120px 20px 80px;
+            position: relative;
+        }
+
+        /* Background atmospheric effect */
+        .faq-section::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(139, 0, 0, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(196, 30, 58, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .faq-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .faq-title {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            color: #c41e3a;
+            text-shadow: 0 0 60px rgba(196, 30, 58, 0.5),
+                0 0 120px rgba(139, 0, 0, 0.3);
+            letter-spacing: 0.15em;
+            position: relative;
+            display: inline-block;
+        }
+
+        .faq-title::before,
+        .faq-title::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b0000;
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .faq-title::before {
+            left: -60px;
+        }
+
+        .faq-title::after {
+            right: -60px;
+        }
+
+        .faq-subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .faq-decoration {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .faq-decoration-line {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b0000, transparent);
+        }
+
+        .faq-decoration-diamond {
+            width: 10px;
+            height: 10px;
+            background: #c41e3a;
+            transform: rotate(45deg);
+            box-shadow: 0 0 15px rgba(196, 30, 58, 0.6);
+        }
+
+        /* FAQ List Container */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Individual FAQ Item */
+        .faq-item {
+            background: linear-gradient(165deg, rgba(20, 10, 12, 0.9) 0%, rgba(10, 5, 6, 0.95) 100%);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            border-left: 4px solid #8b0000;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #8b0000, #c41e3a, #8b0000);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(196, 30, 58, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(139, 0, 0, 0.15);
+            transform: translateX(5px);
+        }
+
+        .faq-item:hover::before {
+            opacity: 1;
+        }
+
+        .faq-item.active {
+            border-color: rgba(196, 30, 58, 0.6);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(139, 0, 0, 0.2),
+                inset 0 0 80px rgba(139, 0, 0, 0.05);
+        }
+
+        .faq-item.active::before {
+            opacity: 1;
+        }
+
+        /* Question Button */
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 1.5rem 70px 1.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(139, 0, 0, 0.05);
+        }
+
+        .faq-question-text {
+            font-family: 'Titillium Web', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+
+        .faq-item.active .faq-question-text {
+            color: #c41e3a;
+        }
+
+        /* Cross/Plus Icon - Styled like the reference images */
+        .faq-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Four-pointed star design */
+        .faq-icon::before,
+        .faq-icon::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(180deg, #c41e3a, #8b0000);
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-icon::before {
+            width: 20px;
+            height: 4px;
+        }
+
+        .faq-icon::after {
+            width: 4px;
+            height: 20px;
+        }
+
+        /* Star points (decorative) */
+        .faq-icon-star {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+        }
+
+        .faq-icon-star::before,
+        .faq-icon-star::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ff4500;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .faq-icon-star::before {
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .faq-icon-star::after {
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Active state - transform to X */
+        .faq-item.active .faq-icon::after {
+            height: 0;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            animation: iconPulse 0.4s ease;
+        }
+
+        @keyframes iconPulse {
+
+            0%,
+            100% {
+                transform: translateY(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateY(-50%) scale(1.2);
+            }
+        }
+
+        /* Answer Section */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            border-top: 1px solid rgba(139, 0, 0, 0.2);
+            padding-top: 1.5rem;
+            margin-top: 0;
+            position: relative;
+        }
+
+        .faq-answer-content::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1.5rem;
+            width: 3px;
+            height: calc(100% - 3rem);
+            background: linear-gradient(180deg, #c41e3a, transparent);
+            border-radius: 2px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* Decorative Quote Mark */
+        .faq-answer-content::after {
+            content: '"';
+            position: absolute;
+            right: 1rem;
+            bottom: 0.5rem;
+            font-size: 4rem;
+            color: rgba(139, 0, 0, 0.15);
+            font-family: 'Cinzel', serif;
+            line-height: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .faq-title {
+                font-size: 2.5rem;
+                letter-spacing: 0.1em;
+            }
+
+            .faq-title::before,
+            .faq-title::after {
+                display: none;
+            }
+
+            .faq-question-text {
+                font-size: 0.95rem;
+            }
+
+            .faq-question {
+                padding: 1.2rem 60px 1.2rem 1.2rem;
+            }
+
+            .faq-answer-content {
+                font-size: 0.95rem;
+                padding: 0 1.2rem 1.2rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-text">Bitte warten. Wird geladen.</div>
+            <div class="loader-hymn-section">
+                <div class="loader-hymn-label">Hymne des Hauses Falcone</div>
+                <div class="loader-player-container">
+                    <div class="loader-play-btn" id="loader-play-btn">
+                        <div class="loader-play-icon"></div>
+                    </div>
+                    <div class="loader-progress-container">
+                        <div class="loader-progress-bar" id="loader-progress"></div>
+                    </div>
+                </div>
+                <audio id="loader-audio" src="../../assets/audio/hymn.mp3"></audio>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div class="brand">
+                <a href="../homepage">
+                    <div class="logo-mark"
+                        style="background: url('../../assets/images/Falcone.png') no-repeat center/cover;"></div>
+                    <span class="brand-title">Dom Falcone</span>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="nav">
+                <a href="../about">Über das Haus</a>
+                <a href="../history">Geschichte</a>
+                <a href="../enemies">Feinde</a>
+                <a href="../news">Neuigkeiten</a>
+            </nav>
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <a href="../../ru/faq">RU</a>
+                <span class="divider">|</span>
+                <a href="#" class="active">DE</a>
+            </div>
+
+            <!-- Burger Menu Button -->
+            <div class="burger-menu" id="burger-menu">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </div>
+
+            <!-- Кнопка "Anmelden" (показывается когда не авторизован) -->
+            <div class="auth-action" id="auth-action" style="display: none;">
+                <a href="../login" class="btn-login">Anmelden</a>
+            </div>
+
+            <!-- User Menu (показывается когда авторизован) -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <!-- Кнопка сообщений -->
+                <div style="position: relative;">
+                    <a href="../messages" class="notification-bell" style="text-decoration: none;">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
+                        </svg>
+                        <span class="notification-badge" id="messages-badge" style="display: none;">0</span>
+                    </a>
+                </div>
+
+                <!-- Кнопка уведомлений -->
+                <div style="position: relative;">
+                    <div class="notification-bell" id="notification-bell">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12,22A2,2 0 0,1 10,20H14A2,2 0 0,1 12,22M18,16V11C18,7.93 16.37,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16M12,6A5,5 0 0,1 17,11V17H7V11A5,5 0 0,1 12,6Z" />
+                        </svg>
+                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                    </div>
+
+                    <!-- Выпадающий список уведомлений -->
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                        <div class="notifications-header">
+                            <h3>Benachrichtigungen</h3>
+                            <button class="mark-all-read" id="mark-all-read-btn">Alle gelesen</button>
+                        </div>
+                        <div id="notifications-list">
+                            <div class="no-notifications">Keine Benachrichtigungen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profil пользователя -->
+                <a href="../dashboard" class="user-profile-info">
+                    <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
+                    <div class="user-details">
+                        <span class="user-display-name" id="header-display-name">User</span>
+                        <div class="user-points-badge">
+                            <span>⭐</span>
+                            <span id="header-points">0</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-nav" id="mobile-nav">
+        <div class="mobile-nav-links">
+            <a href="../about">Über das Haus</a>
+            <a href="../history">Geschichte</a>
+            <a href="../enemies">Feinde</a>
+            <a href="../news">Neuigkeiten</a>
+            <a href="../dashboard" class="mobile-nav-profile">Profil</a>
+            <a href="../messages" class="mobile-nav-messages">Nachrichten</a>
+        </div>
+        <div class="mobile-nav-footer">
+            <div class="site-version"></div>
+        </div>
+    </nav>
+
+
+
+    <!-- Main Content -->
+    <main class="faq-section">
+        <div class="faq-container">
+            <div class="faq-header">
+                <h1 class="faq-title">FAQ</h1>
+                <p class="faq-subtitle">Häufig gestellte Fragen</p>
+                <div class="faq-decoration">
+                    <div class="faq-decoration-line"></div>
+                    <div class="faq-decoration-diamond"></div>
+                    <div class="faq-decoration-line"></div>
+                </div>
+            </div>
+
+            <div class="faq-list">
+                <!-- Вопрос 1 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Warum Haus Falcone?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Darum.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 4 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Wie wird man Mitglied des Hauses Falcone?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Man kommt nicht zum Haus — man wird berufen. Wenn der Don dich würdig findet, erhältst du
+                            eine Einladung. Bis dahin — beweise deine Treue.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 6 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Wer ist Don Falcone?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Don Falcone ist der legendäre Gründer und ewige Anführer der Familie. Seine Weisheit ist
+                            grenzenlos,
+                            seine Macht absolut und seine Liebe zum Bier — legendär.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Was kann man auf unserer Seite machen?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Auf unserer Seite können Sie Konten erstellen, mit anderen Mitgliedern des Hauses Falcone
+                            über
+                            Privatnachrichten kommunizieren, Benachrichtigungen über wichtige Ereignisse erhalten und
+                            Punkte sammeln.
+                            Wir arbeiten ständig an der Verbesserung der Funktionalität.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Was ist der Sinn des Projekts?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Der Sinn des Projekts ist, etwas zu hinterlassen. Wir versuchen, eine Gemeinschaft
+                            von Gleichgesinnten in der digitalen Welt zu vereinen.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Was ist das Ziel des Projekts?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Unser Ziel ist es, eine einzigartige Website zu schaffen, die nicht nur die Werte und
+                            Traditionen des Hauses Falcone widerspiegelt, sondern auch den Nutzern ein fesselndes
+                            Erlebnis bietet.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Warum sollten Sie unsere Seite ausprobieren?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Sicher haben Sie soziale Netzwerke wie VKontakte, Telegram, Twitter usw. benutzt. Aber das
+                            sind einfache, standardmäßige Plattformen. Auf unserer Website bieten wir Ihnen eine
+                            einzigartige Möglichkeit, etwas Neues zu erleben. Danke, dass Sie bei uns sind!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 3 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Ist das überhaupt ein ernstes Projekt?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolut, trotz des scheinbar humorvollen Ansatzes. Unser Team arbeitet täglich
+                            am Projekt und steckt Herzblut hinein. Wir brennen für das, was wir tun.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Wie lange hat die Entwicklung der Seite gedauert?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Für die Entwicklung der Grundstruktur wurde eine Woche schlafloser Nächte aufgewendet.
+                            Das Projekt wurde in 3 Wochen realisiert. Wir haben 2 Stunden pro Tag geschlafen,
+                            um Ihnen unsere Idee so schnell wie möglich zu präsentieren.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 6 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Was bedeutet unser Wappen?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Das Wappen des Hauses Falcone wurde von Dimone de Patrone erschaffen. Im Zentrum
+                            befindet sich das Symbol der Stadt Osnabrück. Um das Symbol windet sich ein Lorbeerkranz,
+                            der den Sieg des Hauses Falcone symbolisiert. Die Inschriften "Una Fides" (Ein Glaube)
+                            und "Unus Dominus" (Ein Don) verkörpern die Werte der Familie.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 5 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Warum gibt es so viel Bier auf der Seite?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Bier ist nicht nur ein Getränk, es ist das heilige Elixier des Hauses Falcone.
+                            Jede Versammlung beginnt mit dem Zischen des entweichenden Kohlendioxids beim
+                            Öffnen einer Bierflasche. Es vereint uns und erinnert an unsere Größe.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопрос 7 -->
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span class="faq-question-text">Wozu braucht die Seite eine Hymne?</span>
+                        <div class="faq-icon"></div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Jede sich selbst respektierende Familie hat eine Hymne. Die Hymne des Hauses Falcone
+                            ist nicht nur Musik, es ist ein Manifest, das alle Familienmitglieder vereint.
+                            Der rituelle Tanz wurde genau zu dieser heiligen Musik aufgeführt.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <small>© Dom Falcone 2026. Alle Rechte vorbehalten. Wirklich alle.</small>
+            <div class="site-version"></div>
+            <div class="footer-links">
+                <a href="../faq">FAQ</a>
+                <a href="../privacy">Datenschutz</a>
+                <a href="../agreement">Nutzungsbedingungen</a>
+                <a href="../imprint">Impressum</a>
+                <a href="../developers">Entwickler</a>
+                <a href="../hymn">Wappen & Hymne</a>
+            </div>
+        </div>
+    </footer>
+
+    <a href="../contact" class="floating-contact-btn">
+        <img src="../../assets/images/phone-icon.png" alt="Contact">
+        <span class="btn-text">Kontakt zum Haus</span>
+    </a>
+
+
+    <script src="../../assets/js/main.js?v=6"></script>
+    <script>
+        const API_BASE = "https://dom-falcone-auth.dom-falcone-official.workers.dev/api";
+        const token = localStorage.getItem('auth_token');
+        let notificationsInterval;
+        let messagesCheckInterval;
+        let lastMessageCount = 0;
+
+        // ============ SYNCHRONOUS AUTH CHECK (prevents flash) ============
+        (function syncAuthCheck() {
+            const authAction = document.getElementById('auth-action');
+            const userMenu = document.getElementById('user-menu');
+
+            if (token) {
+                if (authAction) authAction.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'flex';
+            } else {
+                if (authAction) authAction.style.display = 'block';
+                if (userMenu) userMenu.style.display = 'none';
+            }
+        })();
+
+        // ============ ЗАГРУЗКА HEADER ============
+        async function loadUserHeader() {
+            if (!token) {
+                document.getElementById('auth-action').style.display = 'block';
+                document.getElementById('user-menu').style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch(API_BASE + "/me", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (res.ok) {
+                    const currentUser = await res.json();
+                    document.getElementById('auth-action').style.display = 'none';
+                    document.getElementById('user-menu').style.display = 'flex';
+                    document.getElementById('header-display-name').textContent = currentUser.display_name || currentUser.email.split('@')[0];
+                    document.getElementById('header-points').textContent = currentUser.points || 0;
+
+                    const avatar = document.getElementById('header-avatar');
+                    if (currentUser.avatar_url) {
+                        avatar.src = currentUser.avatar_url;
+                    } else {
+                        const initial = currentUser.display_name ? currentUser.display_name[0].toUpperCase() : 'U';
+                        avatar.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23ff1744' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                    }
+
+                    loadNotifications();
+                    loadUnreadMessagesCount();
+
+                    if (notificationsInterval) clearInterval(notificationsInterval);
+                    notificationsInterval = setInterval(loadNotifications, 30000);
+
+                    if (messagesCheckInterval) clearInterval(messagesCheckInterval);
+                    messagesCheckInterval = setInterval(checkNewMessages, 5000);
+                } else {
+                    localStorage.removeItem('auth_token');
+                    document.getElementById('auth-action').style.display = 'block';
+                    document.getElementById('user-menu').style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                document.getElementById('auth-action').style.display = 'block';
+                document.getElementById('user-menu').style.display = 'none';
+            }
+        }
+
+        // ============ УВЕДОМЛЕНИЯ ============
+        let lastNotificationId = 0; // Добавьте эту переменную глобально
+
+        async function loadNotifications() {
+            if (!token) return;
+
+            try {
+                const res = await fetch(API_BASE + "/notifications", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    updateNotificationBadge(data.unread_count);
+                    renderNotifications(data.notifications);
+
+                    // Проверяем новые уведомления для toast
+                    if (data.notifications && data.notifications.length > 0) {
+                        const latestNotif = data.notifications[0];
+
+                        // Если это новое уведомление и оно непрочитанное
+                        if (latestNotif.id > lastNotificationId && latestNotif.is_read === 0) {
+                            showNotificationToast(
+                                latestNotif.type,
+                                latestNotif.title,
+                                latestNotif.message,
+                                latestNotif.id,
+                                latestNotif.related_id
+                            );
+                            lastNotificationId = latestNotif.id;
+                        } else if (lastNotificationId === 0) {
+                            // Инициализация при первой загрузке
+                            lastNotificationId = latestNotif.id;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Load notifications error:', err);
+            }
+        }
+
+        function showNotificationToast(type, title, message, notificationId, relatedId) {
+            // Удаляем предыдущий toast если есть
+            const existingToast = document.querySelector('.toast-notification');
+            if (existingToast) existingToast.remove();
+
+            // Определяем иконку в зависимости от типа
+            let icon = '🔔';
+            let redirectUrl = null;
+            let soundFile = 'notification';
+
+            switch (type) {
+                case 'new_message':
+                    icon = '💬';
+                    soundFile = 'message-notification';
+                    redirectUrl = '../messages';
+                    break;
+                case 'news_like':
+                    icon = '❤️';
+                    redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+                    break;
+                case 'news_comment':
+                    icon = '💭';
+                    redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+                    break;
+                case 'news_friend':
+                    icon = '📰';
+                    redirectUrl = relatedId ? `../news?id=${relatedId}` : '../news';
+                    break;
+                case 'news_deleted':
+                    icon = '🗑️';
+                    redirectUrl = '../news';
+                    break;
+                case 'friend_request':
+                    icon = '👥';
+                    redirectUrl = '../dashboard?tab=friends';
+                    break;
+                default:
+                    icon = '🔔';
+            }
+
+            // Проигрываем звук
+            playNotificationSound(soundFile);
+
+            // Создаем toast
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+            <div class="toast-name">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+            // Обработчик клика
+            toast.addEventListener('click', async () => {
+                // Отмечаем уведомление как прочитанное
+                try {
+                    await fetch(API_BASE + "/notifications/read", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({ notificationId })
+                    });
+                    await loadNotifications();
+                } catch (err) {
+                    console.error('Mark notification read error:', err);
+                }
+
+                // Переходим по ссылке
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            });
+
+            document.body.appendChild(toast);
+
+            // Автоматически скрываем через 5 секунд
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        function playNotificationSound(soundType) {
+            try {
+                const soundId = soundType === 'message-notification'
+                    ? 'message-notification-sound'
+                    : 'notification-sound';
+
+                const audio = document.getElementById(soundId);
+                if (audio) {
+                    audio.currentTime = 0;
+                    audio.volume = 0.5; // Громкость 50%
+                    audio.play().catch(err => {
+                        console.log('Audio play prevented:', err);
+                    });
+                }
+            } catch (err) {
+                console.error('Play sound error:', err);
+            }
+        }
+
+        function showMessageToast(senderName, senderAvatar, messagePreview, chatId, senderId) {
+            const existingToast = document.querySelector('.toast-notification');
+            if (existingToast) existingToast.remove();
+
+            // Проигрываем звук сообщения
+            playNotificationSound('message-notification');
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.innerHTML = `
+        <img src="${senderAvatar || getDefaultAvatar(senderName)}" class="toast-avatar">
+        <div class="toast-content">
+            <div class="toast-name">${senderName}</div>
+            <div class="toast-message">${messagePreview}</div>
+        </div>
+    `;
+
+            toast.addEventListener('click', () => {
+                window.location.href = `../messages?chatWith=${senderId}`;
+            });
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        function updateNotificationBadge(count) {
+            const badge = document.getElementById('notification-badge');
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderNotifications(notifications) {
+            const list = document.getElementById('notifications-list');
+
+            if (!notifications || notifications.length === 0) {
+                list.innerHTML = '<div class="no-notifications">Keine Benachrichtigungen</div>';
+                return;
+            }
+
+            list.innerHTML = notifications.map(n => `
+                <div class="notification-item ${n.is_read ? '' : 'unread'}" data-id="${n.id}">
+                    <div class="notification-content">
+                        <p>${n.message}</p>
+                        <span class="notification-time">${formatTime(n.created_at)}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            list.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.addEventListener('click', () => markAsRead(item.dataset.id));
+            });
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+
+            if (diff < 60000) return 'Только что';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' мин. назад';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' ч. назад';
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        async function markAsRead(id) {
+            try {
+                await fetch(API_BASE + `/notifications/${id}/read`, {
+                    method: 'PATCH',
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                loadNotifications();
+            } catch (err) {
+                console.error('Mark as read error:', err);
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                await fetch(API_BASE + "/notifications/read-all", {
+                    method: 'PATCH',
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                loadNotifications();
+            } catch (err) {
+                console.error('Mark all as read error:', err);
+            }
+        }
+
+        // ============ СООБЩЕНИЯ ============
+        async function loadUnreadMessagesCount() {
+            if (!token) return;
+
+            try {
+                const res = await fetch(API_BASE + "/messages/unread-count", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    updateMessagesBadge(data.count);
+                    lastMessageCount = data.count;
+                }
+            } catch (err) {
+                console.error('Load messages count error:', err);
+            }
+        }
+
+        function updateMessagesBadge(count) {
+            const badge = document.getElementById('messages-badge');
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        async function checkNewMessages() {
+            if (!token) return;
+
+            try {
+                const res = await fetch(API_BASE + "/messages/unread-count", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.count !== lastMessageCount) {
+                        updateMessagesBadge(data.count);
+                        lastMessageCount = data.count;
+                    }
+                }
+            } catch (err) {
+                console.error('Check messages error:', err);
+            }
+        }
+
+        // ============ ИНИЦИАЛИЗАЦИЯ ============
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserHeader();
+
+            // Notifications dropdown toggle
+            const bell = document.getElementById('notification-bell');
+            const dropdown = document.getElementById('notifications-dropdown');
+
+            if (bell && dropdown) {
+                bell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!dropdown.contains(e.target) && !bell.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+
+            // Mark all as read button
+            const markAllBtn = document.getElementById('mark-all-read-btn');
+            if (markAllBtn) {
+                markAllBtn.addEventListener('click', markAllAsRead);
+            }
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    // Close other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+
+    <!-- Audio for notifications -->
+    <audio id="notification-sound" preload="auto">
+        <source src="../../assets/audio/notification.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="message-notification-sound" preload="auto">
+        <source src="../../assets/audio/message-notification.mp3" type="audio/mpeg">
+    </audio>
+    <script src="../../assets/js/analytics.js"></script>
+</body>
+
+</html>
