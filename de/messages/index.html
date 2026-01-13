@@ -1277,7 +1277,7 @@
 <body>
     <div id="page-loader">
         <div class="loader-content">
-            <div class="loader-text">Загрузка сообщений...</div>
+            <div class="loader-text">Nachrichten werden geladen...</div>
         </div>
     </div>
 
@@ -1395,18 +1395,18 @@
                     <div class="chats-header">
                         <div class="chats-header-top">
                             <h2>Nachrichten</h2>
-                            <button class="new-chat-btn" id="new-chat-btn" title="Начать новый чат">
+                            <button class="new-chat-btn" id="new-chat-btn" title="Neuen Chat starten">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                 </svg>
                             </button>
                         </div>
                         <div class="chats-search">
-                            <input type="text" id="chat-search" placeholder="Поиск чатов...">
+                            <input type="text" id="chat-search" placeholder="Chats suchen...">
                         </div>
                     </div>
                     <div class="chats-list" id="chats-list">
-                        <div class="no-chats">Нет активных чатов</div>
+                        <div class="no-chats">Keine aktiven Chats</div>
                     </div>
                 </div>
 
@@ -1416,7 +1416,7 @@
                         <path
                             d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" />
                     </svg>
-                    <p>Выберите чат, чтобы начать переписку</p>
+                    <p>Wählen Sie einen Chat, um zu schreiben</p>
                 </div>
             </div>
         </div>
@@ -1552,7 +1552,7 @@
             const list = document.getElementById('chats-list');
 
             if (!chats || chats.length === 0) {
-                list.innerHTML = '<div class="no-chats">Нет активных чатов</div>';
+                list.innerHTML = '<div class="no-chats">Keine aktiven Chats</div>';
                 return;
             }
 
@@ -1868,13 +1868,13 @@ async function openChat(chatId, userId, userName, userAvatar) {
             <svg viewBox="0 0 24 24">
                 <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
             </svg>
-            Редактировать
+            Bearbeiten
         </div>
         <div class="context-menu-item delete-item" onclick="deleteMessage(${messageId}, event)">
             <svg viewBox="0 0 24 24">
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
             </svg>
-            Удалить
+            Entfernen
         </div>
     `;
 
@@ -1920,11 +1920,11 @@ async function openChat(chatId, userId, userName, userAvatar) {
             modal.id = 'edit-message-modal';
             modal.innerHTML = `
                 <div class="edit-message-modal-content">
-                    <div class="edit-message-modal-title">Редактировать сообщение</div>
+                    <div class="edit-message-modal-title">Nachricht bearbeiten</div>
                     <textarea id="edit-message-textarea">${escapeHtml(originalText)}</textarea>
                     <div class="edit-message-modal-buttons">
-                        <button class="btn-edit-save">Сохранить</button>
-                        <button class="btn-edit-cancel">Отмена</button>
+                        <button class="btn-edit-save">Speichern</button>
+                        <button class="btn-edit-cancel">Abbrechen</button>
                     </div>
                 </div>
             `;
@@ -1968,11 +1968,11 @@ async function openChat(chatId, userId, userName, userAvatar) {
                         textEl.innerHTML = escapeHtml(newText);
                         closeEditModal();
                     } else {
-                        showErrorModal('Ошибка редактирования');
+                        showErrorModal('Bearbeitungsfehler');
                     }
                 } catch (err) {
                     console.error('Edit error:', err);
-                    showErrorModal('Ошибка редактирования');
+                    showErrorModal('Bearbeitungsfehler');
                 }
             });
         }
@@ -1987,10 +1987,10 @@ async function openChat(chatId, userId, userName, userAvatar) {
             modal.id = 'delete-confirm-modal';
             modal.innerHTML = `
                 <div class="delete-confirm-modal-content">
-                    <div class="delete-confirm-modal-text">Удалить сообщение?</div>
+                    <div class="delete-confirm-modal-text">Nachricht löschen?</div>
                     <div class="delete-confirm-modal-buttons">
-                        <button class="btn-delete-yes">Да</button>
-                        <button class="btn-delete-no">Отмена</button>
+                        <button class="btn-delete-yes">Ja</button>
+                        <button class="btn-delete-no">Abbrechen</button>
                     </div>
                 </div>
             `;
@@ -2021,11 +2021,11 @@ async function openChat(chatId, userId, userName, userAvatar) {
                         document.querySelector(`[data-message-id="${messageId}"]`).remove();
                         await loadChats(); // Обновляем список чатов
                     } else {
-                        showErrorModal('Ошибка удаления');
+                        showErrorModal('Löschfehler');
                     }
                 } catch (err) {
                     console.error('Delete error:', err);
-                    showErrorModal('Ошибка удаления');
+                    showErrorModal('Löschfehler');
                 }
             });
         }
@@ -2043,7 +2043,7 @@ async function openChat(chatId, userId, userName, userAvatar) {
             <svg viewBox="0 0 24 24">
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
             </svg>
-            Удалить чат
+            Entfernen чат
         </div>
     `;
 
@@ -2059,7 +2059,7 @@ async function openChat(chatId, userId, userName, userAvatar) {
             event.stopPropagation();
             closeContextMenu();
 
-            if (!confirm('Удалить весь чат? Это действие нельзя отменить.')) return;
+            if (!confirm('Den gesamten Chat löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
 
             try {
                 const res = await fetch(API_BASE + `/chats/${chatId}`, {
@@ -2075,15 +2075,15 @@ async function openChat(chatId, userId, userName, userAvatar) {
                 <svg viewBox="0 0 24 24">
                     <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18"/>
                 </svg>
-                <p>Выберите чат, чтобы начать переписку</p>
+                <p>Wählen Sie einen Chat, um zu schreiben</p>
             `;
                     await loadChats();
                 } else {
-                    alert('Ошибка удаления чата');
+                    alert('Fehler beim Löschen des Chats');
                 }
             } catch (err) {
                 console.error('Delete chat error:', err);
-                alert('Ошибка удаления чата');
+                alert('Fehler beim Löschen des Chats');
             }
         }
 
@@ -2167,14 +2167,14 @@ async function openChat(chatId, userId, userName, userAvatar) {
             modal.innerHTML = `
         <div class="modal">
             <div class="modal-header">
-                <h3>Выберите друга</h3>
+                <h3>Freund auswählen</h3>
                 <button class="modal-close" onclick="closeFriendsModal()">×</button>
             </div>
             <div class="modal-search">
                 <input type="text" id="friend-search" placeholder="Поиск друга...">
             </div>
             <div class="modal-content" id="friends-list">
-                <div class="loading-friends">Загрузка друзей...</div>
+                <div class="loading-friends">Freunde werden geladen...</div>
             </div>
         </div>
     `;
@@ -2216,7 +2216,7 @@ async function openChat(chatId, userId, userName, userAvatar) {
             } catch (err) {
                 console.error('Load friends error:', err);
                 document.getElementById('friends-list').innerHTML =
-                    '<div class="no-friends">Ошибка загрузки друзей</div>';
+                    '<div class="no-friends">Fehler beim Laden der Freunde</div>';
             }
         }
 
@@ -2224,7 +2224,7 @@ async function openChat(chatId, userId, userName, userAvatar) {
             const list = document.getElementById('friends-list');
 
             if (!friends || friends.length === 0) {
-                list.innerHTML = '<div class="no-friends">У вас пока нет друзей</div>';
+                list.innerHTML = '<div class="no-friends">Sie haben noch keine Freunde</div>';
                 return;
             }
 
@@ -2326,10 +2326,10 @@ async function openChat(chatId, userId, userName, userAvatar) {
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }
@@ -2494,7 +2494,7 @@ function playNotificationSound(soundType) {
             const diff = now - timestamp;
             const date = new Date(timestamp);
 
-            if (diff < 60000) return 'Только что';
+            if (diff < 60000) return 'Gerade eben';
             if (diff < 3600000) return `${Math.floor(diff / 60000)} мин`;
             if (diff < 86400000) return date.toLocaleTimeString('ru-RU', {
                 hour: '2-digit', minute: '2-digit'

@@ -598,7 +598,7 @@
     <main class="developers-section">
         <div class="developers-container">
             <h1 class="developers-title">Entwickler</h1>
-            <p class="developers-subtitle">Команда, которая создала Дом Фальконе</p>
+            <p class="developers-subtitle">Das Team, das das Haus Falcone erschaffen hat</p>
 
             <div class="developers-grid">
                 <!-- Developer 1: Arkadii -->
@@ -610,7 +610,7 @@
                     <h2 class="developer-name">Arkadii Humeniuk</h2>
                     <div class="developer-role">Developer</div>
                     <p class="developer-bio">
-                        Создатель и архитектор сайта. Основатель Дома Фальконе. Ответственный за Frontend-разработку
+                        Schöpfer und Architekt der Website. Gründer des Hauses Falcone. Verantwortlich für Frontend-Entwicklung
                         сайта. Главный дизайнер проекта. Вносит свой постоянный вклад в развитие проекта своим
                         непосредственным подходом к делу, а также своей уникальной дизайнерской мыслью.
                     </p>
@@ -632,7 +632,7 @@
                     <div class="developer-role">Developer</div>
                     <p class="developer-bio">
                         Создатель и разработчик проекта. Ответственный за Backend разработку и администрирование баз
-                        данных. Главный "технарь" Дома Фальконе. Вносит вклад в развитие сайта своими техническими
+                        Daten. Der 'Technik-Chef' des Hauses Falcone. Trägt mit seinem technischen Wissen zur Entwicklung der Website bei
                         нововведениями и амбициозными идеями по развитию сайта.
                     </p>
                     <div class="developer-skills">
@@ -647,20 +647,20 @@
 
             <!-- Helpers Section -->
             <div class="helpers-section">
-                <h2 class="helpers-title">Хэлперы</h2>
-                <p class="helpers-subtitle">Помощники проекта</p>
+                <h2 class="helpers-title">Helfer</h2>
+                <p class="helpers-subtitle">Projekthelfer</p>
 
                 <div class="helpers-grid">
                     <div class="helper-card">
                         <img src="../../assets/images/anton-aheshyn.jpg" alt="Anton Aheshyn" class="helper-image">
                         <h3 class="helper-name">Anton Aheshyn</h3>
-                        <div class="helper-role">Сбор технических данных</div>
+                        <div class="helper-role">Technische Datenerfassung</div>
                     </div>
 
                     <div class="helper-card">
                         <img src="../../assets/images/mykhailo-kurlat.png" alt="Mykhailo Kurlat" class="helper-image">
                         <h3 class="helper-name">Mykhailo Kurlat</h3>
-                        <div class="helper-role">Графический дизайн</div>
+                        <div class="helper-role">Grafikdesign</div>
                     </div>
                 </div>
             </div>
@@ -671,13 +671,13 @@
 
             <div class="team-quote">
                 <p>«Мы создаём не просто сайт — мы создаём историю»</p>
-                <span>— Команда разработчиков Дома Фальконе</span>
+                <span>— Das Entwicklerteam des Hauses Falcone</span>
             </div>
 
             <!-- Donation Section -->
             <div class="donation-section">
                 <h2 class="donation-title"><span class="donation-heart">❤️</span> Поддержать Семью</h2>
-                <p class="donation-subtitle">Верность награждается. Щедрость — помнится.</p>
+                <p class="donation-subtitle">Treue награждается. Щедрость — помнится.</p>
 
                 <div class="donation-content">
                     <div class="donation-qr">
@@ -686,10 +686,10 @@
 
                     <div class="donation-info">
                         <p>
-                            Дом Фальконе строится не только на крови и чести, но и на поддержке тех,
+                            Das Haus Falcone wird nicht nur auf Blut und Ehre gebaut, sondern auch auf der Unterstützung derer,
                             кто верит в наше дело. Ваш вклад укрепляет Семью, расширяет наше влияние
                             и приближает день нашего абсолютного триумфа. Дон помнит каждого,
-                            кто стоит рядом с Домом.
+                            die dem Haus zur Seite stehen.
                         </p>
                         <a href="https://www.paypal.com/pool/9kMd29jH59?sr=ancr" target="_blank"
                             rel="noopener noreferrer" class="donation-btn">
@@ -982,10 +982,10 @@
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Личный кабинет - Dom Falcone</title>
+    <title>Persönlicher Bereich - Dom Falcone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
@@ -820,8 +820,8 @@
     <main>
         <div class="dashboard-page-header">
             <div class="container">
-                <h1>Личный кабинет</h1>
-                <p>Место, где вы правите своим профилем и держите друзей под наблюдением</p>
+                <h1>Persönlicher Bereich</h1>
+                <p>Der Ort, an dem Sie Ihr Profil verwalten und Ihre Freunde im Blick behalten</p>
             </div>
         </div>
 
@@ -829,12 +829,12 @@
             <div class="dashboard-tabs">
                 <button class="tab-btn active" data-tab="profile">Profil</button>
                 <button class="tab-btn" data-tab="friends">
-                    Друзья <span id="friends-count" style="opacity: 0.6;">(0)</span>
+                    Freunde <span id="friends-count" style="opacity: 0.6;">(0)</span>
                 </button>
                 <button class="tab-btn" data-tab="requests">
                     Запросы <span id="requests-count" style="opacity: 0.6;">(0)</span>
                 </button>
-                <button class="tab-btn" data-tab="search">Найти друзей</button>
+                <button class="tab-btn" data-tab="search">Freunde finden</button>
             </div>
 
             <!-- TAB: ПРОФИЛЬ -->
@@ -847,12 +847,12 @@
                                     <img id="avatar-img" src="" alt="Avatar" style="display: none;">
                                     <span id="avatar-initials">?</span>
                                 </div>
-                                <div class="profile-name" id="display-name">Загрузка...</div>
+                                <div class="profile-name" id="display-name">Wird geladen...</div>
                                 <div class="profile-email" id="email">...</div>
 
                                 <div class="rank-badge">
-                                    <div class="rank-name" id="rank-name">Загрузка...</div>
-                                    <div class="rank-points" id="points">0 очков</div>
+                                    <div class="rank-name" id="rank-name">Wird geladen...</div>
+                                    <div class="rank-points" id="points">0 Punkte</div>
                                     <div class="progress-bar">
                                         <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
                                     </div>
@@ -863,65 +863,65 @@
                                 </div>
 
                                 <div class="bio-section">
-                                    <div class="bio-text" id="bio">Биография не указана</div>
+                                    <div class="bio-text" id="bio">Keine Biografie angegeben</div>
                                 </div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-primary" id="edit-btn">Редактировать</button>
-                                    <button class="btn btn-secondary" id="logout-btn">Выйти</button>
+                                    <button class="btn btn-primary" id="edit-btn">Bearbeiten</button>
+                                    <button class="btn btn-secondary" id="logout-btn">Abmelden</button>
                                 </div>
                             </div>
 
                             <div class="edit-form" id="edit-form">
                                 <div class="card-header">
-                                    <h3 class="card-title">Редактирование профиля</h3>
+                                    <h3 class="card-title">Profil bearbeiten</h3>
                                 </div>
 
                                 <div id="edit-message"></div>
 
                                 <div class="form-group">
-                                    <label>Отображаемое имя</label>
+                                    <label>Anzeigename</label>
                                     <input type="text" id="edit-name" placeholder="Ваше имя">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Биография</label>
+                                    <label>Biografie</label>
                                     <textarea id="edit-bio" placeholder="Расскажите о себе..."></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Аватарка</label>
+                                    <label>Avatar</label>
                                     <input type="file" id="avatar-input"
                                         accept="image/jpeg,image/png,image/gif,image/webp">
                                     <button type="button" class="btn btn-secondary btn-small" id="remove-avatar-btn"
-                                        style="margin-top: 0.5rem;">Удалить аватарку</button>
+                                        style="margin-top: 0.5rem;">Avatar löschen</button>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Новый пароль (оставьте пустым, если не меняете)</label>
-                                    <input type="password" id="edit-password" placeholder="Минимум 8 символов">
+                                    <label>Neues Passwort (leer lassen, wenn Sie es nicht ändern)</label>
+                                    <input type="password" id="edit-password" placeholder="Mindestens 8 Zeichen">
                                 </div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-primary" id="save-btn">Сохранить</button>
-                                    <button class="btn btn-secondary" id="cancel-btn">Отмена</button>
+                                    <button class="btn btn-primary" id="save-btn">Speichern</button>
+                                    <button class="btn btn-secondary" id="cancel-btn">Abbrechen</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card" style="margin-top: 2rem;">
                             <div class="card-header">
-                                <h3 class="card-title">Статистика</h3>
+                                <h3 class="card-title">Statistik</h3>
                             </div>
                             <div class="stat-grid">
                                 <a href="../leaderboard" class="stat-item"
                                     style="text-decoration: none; cursor: pointer;">
                                     <div class="stat-value" id="user-rank">-</div>
-                                    <div class="stat-label">Место в рейтинге</div>
+                                    <div class="stat-label">Ranglistenplatz</div>
                                 </a>
                                 <div class="stat-item">
                                     <div class="stat-value" id="total-users">-</div>
-                                    <div class="stat-label">Всего участников</div>
+                                    <div class="stat-label">Teilnehmer insgesamt</div>
                                 </div>
                             </div>
                             <!-- ДОБАВЬТЕ ЭТУ КНОПКУ -->
@@ -941,7 +941,7 @@
                             <div style="padding: 1rem 0;">
                                 <button class="toggle-site-btn" id="toggle-site-btn" onclick="toggleSiteStatus()">
                                     <span id="toggle-site-icon">🔴</span>
-                                    <span id="toggle-site-text">Загрузка...</span>
+                                    <span id="toggle-site-text">Wird geladen...</span>
                                 </button>
                                 <p
                                     style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 1rem; line-height: 1.6;">
@@ -956,12 +956,12 @@
                     <div>
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Последняя активность</h3>
+                                <h3 class="card-title">Letzte Aktivität</h3>
                             </div>
                             <ul class="activity-list" id="activity-list">
                                 <li class="activity-item">
                                     <div class="activity-info">
-                                        <div class="activity-type">Загрузка...</div>
+                                        <div class="activity-type">Wird geladen...</div>
                                         <div class="activity-time">...</div>
                                     </div>
                                 </li>
@@ -975,7 +975,7 @@
             <div class="tab-content" id="friends-tab">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Мои друзья</h3>
+                        <h3 class="card-title">Meine Freunde</h3>
                     </div>
                     <div id="friends-list"></div>
                 </div>
@@ -985,7 +985,7 @@
             <div class="tab-content" id="requests-tab">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Входящие запросы</h3>
+                        <h3 class="card-title">Anmeldenящие запросы</h3>
                     </div>
                     <div id="requests-list"></div>
                 </div>
@@ -995,7 +995,7 @@
             <div class="tab-content" id="search-tab">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Найти друзей</h3>
+                        <h3 class="card-title">Freunde finden</h3>
                     </div>
                     <div class="search-box">
                         <input type="text" id="search-input" placeholder="Введите имя или email...">
@@ -1114,7 +1114,7 @@
                     headers: { "Authorization": "Bearer " + token }
                 });
 
-                if (!res.ok) throw new Error('Ошибка загрузки профиля');
+                if (!res.ok) throw new Error('Ladefehler профиля');
 
                 const data = await res.json();
                 userData = data;
@@ -1125,7 +1125,7 @@
                 document.getElementById('requests-count').textContent = `(${data.friend_requests_count || 0})`;
             } catch (err) {
                 console.error('Profile load error:', err);
-                showErrorModal('Ошибка загрузки профиля. Войдите заново.');
+                showErrorModal('Fehler beim Laden des Profils. Bitte erneut anmelden.');
                 localStorage.removeItem('auth_token');
                 window.location.href = '../login';
             } finally {
@@ -1192,7 +1192,7 @@
         }
 
         function displayProfile(data) {
-            // Аватарка
+            // Avatar
             const avatarImg = document.getElementById('avatar-img');
             const avatarInitials = document.getElementById('avatar-initials');
 
@@ -1212,10 +1212,10 @@
             }
 
             // Основная информация
-            document.getElementById('display-name').textContent = data.display_name || 'Аноним';
+            document.getElementById('display-name').textContent = data.display_name || 'Anonym';
             document.getElementById('email').textContent = data.email;
-            document.getElementById('rank-name').textContent = data.rank || 'Новичок';
-            document.getElementById('points').textContent = `${data.points || 0} очков`;
+            document.getElementById('rank-name').textContent = data.rank || 'Neuling';
+            document.getElementById('points').textContent = `${data.points || 0} Punkte`;
 
             // Прогресс
             if (data.progress) {
@@ -1229,8 +1229,8 @@
                     data.progress.next === Infinity ? '∞' : data.progress.next;
             }
 
-            // Биография
-            document.getElementById('bio').textContent = data.bio || 'Биография не указана';
+            // Biografie
+            document.getElementById('bio').textContent = data.bio || 'Keine Biografie angegeben';
 
             // Активность
             displayActivity(data.recent_activity || []);
@@ -1242,12 +1242,12 @@
             const list = document.getElementById('activity-list');
 
             if (activities.length === 0) {
-                list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Активность не найдена</div></div></li>';
+                list.innerHTML = '<li class="activity-item"><div class="activity-info"><div class="activity-type">Keine Aktivität gefunden</div></div></li>';
                 return;
             }
 
             const activityNames = {
-                'registration': 'Регистрация',
+                'registration': 'Registrieren',
                 'daily_visit': 'Ежедневное посещение',
                 'post': 'Создание поста',
                 'comment': 'Комментарий',
@@ -1283,7 +1283,7 @@
             const resultsDiv = document.getElementById('search-results');
 
             if (!query || query.length < 2) {
-                resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p>Введите минимум 2 символа для поиска</p></div>';
+                resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p>Geben Sie mindestens 2 Zeichen für die Suche ein</p></div>';
                 return;
             }
 
@@ -1297,17 +1297,17 @@
                 if (data.users && data.users.length > 0) {
                     resultsDiv.innerHTML = data.users.map(user => createUserCard(user, 'search')).join('');
                 } else {
-                    resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">😕</div><p>Пользователи не найдены</p></div>';
+                    resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">😕</div><p>Keine Benutzer gefunden</p></div>';
                 }
             } catch (err) {
                 console.error('Search error:', err);
-                resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Ошибка поиска</p></div>';
+                resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Suchfehler</p></div>';
             }
         }
 
         async function loadFriends() {
             const listDiv = document.getElementById('friends-list');
-            listDiv.innerHTML = '<div style="text-align: center; padding: 2rem;">Загрузка...</div>';
+            listDiv.innerHTML = '<div style="text-align: center; padding: 2rem;">Wird geladen...</div>';
 
             try {
                 const res = await fetch(API_BASE + "/friends", {
@@ -1321,18 +1321,18 @@
                     // Aktualisiere die Anzahl im Tab
                     document.getElementById('friends-count').textContent = `(${data.friends.length})`;
                 } else {
-                    listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><p>У вас пока нет друзей. Найдите их во вкладке "Найти друзей"!</p></div>';
+                    listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><p>Sie haben noch keine Freunde. Finden Sie sie im Tab "Freunde finden"!</p></div>';
                     document.getElementById('friends-count').textContent = '(0)';
                 }
             } catch (err) {
                 console.error('Load friends error:', err);
-                listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Ошибка загрузки друзей</p></div>';
+                listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Fehler beim Laden der Freunde</p></div>';
             }
         }
 
         async function loadFriendRequests() {
             const listDiv = document.getElementById('requests-list');
-            listDiv.innerHTML = '<div style="text-align: center; padding: 2rem;">Загрузка...</div>';
+            listDiv.innerHTML = '<div style="text-align: center; padding: 2rem;">Wird geladen...</div>';
 
             try {
                 const res = await fetch(API_BASE + "/friends/requests", {
@@ -1346,12 +1346,12 @@
                     // Aktualisiere die Anzahl im Tab
                     document.getElementById('requests-count').textContent = `(${data.requests.length})`;
                 } else {
-                    listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Нет входящих запросов</p></div>';
+                    listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Keine eingehenden Anfragen</p></div>';
                     document.getElementById('requests-count').textContent = '(0)';
                 }
             } catch (err) {
                 console.error('Load requests error:', err);
-                listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Ошибка загрузки запросов</p></div>';
+                listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Fehler beim Laden der Anfragen</p></div>';
             }
         }
 
@@ -1360,22 +1360,22 @@
 
             let actions = '';
             if (type === 'search') {
-                actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Добавить</button>`;
+                actions = `<button class="btn btn-primary btn-small" onclick="sendFriendRequest(${user.id})">Hinzufügen</button>`;
             } else if (type === 'request') {
                 actions = `
-            <button class="btn btn-primary btn-small" onclick="acceptFriendRequest(${user.id})">Принять</button>
-            <button class="btn btn-danger btn-small" onclick="rejectFriendRequest(${user.id})">Отклонить</button>
+            <button class="btn btn-primary btn-small" onclick="acceptFriendRequest(${user.id})">Annehmen</button>
+            <button class="btn btn-danger btn-small" onclick="rejectFriendRequest(${user.id})">Ablehnen</button>
         `;
             } else if (type === 'friend') {
-                actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Удалить</button>`;
+                actions = `<button class="btn btn-danger btn-small" onclick="removeFriend(${user.id})">Entfernen</button>`;
             }
 
             return `
         <div class="user-card">
             <img src="${avatarSrc}" alt="${user.display_name}" class="user-avatar" style="cursor: pointer;" onclick="viewProfile(${user.id})">
             <div class="user-info" style="cursor: pointer;" onclick="viewProfile(${user.id})">
-                <div class="user-name">${user.display_name || 'Аноним'}</div>
-                <div class="user-rank">${user.rank} • ${user.points} очков</div>
+                <div class="user-name">${user.display_name || 'Anonym'}</div>
+                <div class="user-rank">${user.rank} • ${user.points} Punkte</div>
             </div>
             <div class="user-actions">
                 ${actions}
@@ -1408,7 +1408,7 @@
                 }
             } catch (err) {
                 console.error('Send request error:', err);
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
             }
         }
 
@@ -1431,16 +1431,16 @@
                     await loadFriends();
                     await loadProfile();
                 } else {
-                    showErrorModal(data.error || 'Ошибка принятия запроса');
+                    showErrorModal(data.error || 'Fehler beim Annehmen der Anfrage');
                 }
             } catch (err) {
                 console.error('Accept request error:', err);
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
             }
         }
 
         async function rejectFriendRequest(friendId) {
-            const confirmed = await showConfirmModal('Отклонить запрос в друзья?');
+            const confirmed = await showConfirmModal('Freundschaftsanfrage ablehnen?');
             if (!confirmed) return;
 
             await removeFriend(friendId);
@@ -1466,11 +1466,11 @@
                     await loadFriends();
                     await loadProfile();
                 } else {
-                    showErrorModal(data.error || 'Ошибка удаления');
+                    showErrorModal(data.error || 'Löschfehler');
                 }
             } catch (err) {
                 console.error('Remove friend error:', err);
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
             }
         }
 
@@ -1503,14 +1503,14 @@
             if (bio) updates.bio = bio;
             if (newPassword) {
                 if (newPassword.length < 8) {
-                    showMessage('Пароль должен содержать минимум 8 символов', 'error');
+                    showMessage('Passwort muss mindestens 8 Zeichen enthalten', 'error');
                     return;
                 }
                 updates.newPassword = newPassword;
             }
 
             if (Object.keys(updates).length === 0) {
-                showMessage('Нечего сохранять', 'error');
+                showMessage('Nichts zu speichern', 'error');
                 return;
             }
 
@@ -1528,16 +1528,16 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    showMessage('Profil успешно обновлен!', 'success');
+                    showMessage('Profil erfolgreich aktualisiert!', 'success');
                     setTimeout(async () => {
                         await loadProfile();
                         hideEditForm();
                     }, 1500);
                 } else {
-                    showMessage(data.error || 'Ошибка обновления', 'error');
+                    showMessage(data.error || 'Aktualisierungsfehler', 'error');
                 }
             } catch (err) {
-                showMessage('Ошибка подключения к серверу', 'error');
+                showMessage('Verbindungsfehler zum Server', 'error');
                 console.error(err);
             } finally {
                 showLoading(false);
@@ -1550,7 +1550,7 @@
 
             const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             if (!validTypes.includes(file.type)) {
-                showMessage('Неподдерживаемый формат. Используйте JPEG, PNG, GIF или WebP', 'error');
+                showMessage('Nicht unterstütztes Format. Verwenden Sie JPEG, PNG, GIF oder WebP', 'error');
                 return;
             }
 
@@ -1575,10 +1575,10 @@
                     await loadProfile();
                     hideEditForm();
                 } else {
-                    showMessage(data.error || 'Ошибка загрузки', 'error');
+                    showMessage(data.error || 'Ladefehler', 'error');
                 }
             } catch (err) {
-                showMessage('Ошибка подключения к серверу', 'error');
+                showMessage('Verbindungsfehler zum Server', 'error');
                 console.error('Upload error:', err);
             } finally {
                 showLoading(false);
@@ -1635,7 +1635,7 @@
                         tryCompress();
                     };
 
-                    img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+                    img.onerror = () => reject(new Error('Не удалось загрузить Bild'));
                     img.src = e.target.result;
                 };
 
@@ -1645,7 +1645,7 @@
         }
 
         async function deleteAvatar() {
-            const confirmed = await showConfirmModal('Удалить аватарку?');
+            const confirmed = await showConfirmModal('Avatar löschen?');
             if (!confirmed) return;
 
             showLoading(true);
@@ -1663,10 +1663,10 @@
                     showMessage(data.message, 'success');
                     await loadProfile();
                 } else {
-                    showMessage(data.error || 'Ошибка удаления', 'error');
+                    showMessage(data.error || 'Löschfehler', 'error');
                 }
             } catch (err) {
-                showMessage('Ошибка подключения к серверу', 'error');
+                showMessage('Verbindungsfehler zum Server', 'error');
                 console.error(err);
             } finally {
                 showLoading(false);
@@ -1878,10 +1878,10 @@
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }
@@ -2068,7 +2068,7 @@
                 }
             } catch (err) {
                 console.error('Load site status error:', err);
-                document.getElementById('toggle-site-text').textContent = 'Ошибка загрузки статуса';
+                document.getElementById('toggle-site-text').textContent = 'Fehler beim Laden des Status';
             }
         }
 
@@ -2080,11 +2080,11 @@
             if (enabled) {
                 btn.classList.add('enabled');
                 icon.textContent = '🟢';
-                text.textContent = 'Сайт включен (нажмите для отключения)';
+                text.textContent = 'Website aktiviert (klicken zum Deaktivieren)';
             } else {
                 btn.classList.remove('enabled');
                 icon.textContent = '🔴';
-                text.textContent = 'Сайт отключен (нажмите для включения)';
+                text.textContent = 'Website deaktiviert (klicken zum Aktivieren)';
             }
         }
 
@@ -2101,7 +2101,7 @@
 
             btn.disabled = true;
             const originalText = btn.querySelector('#toggle-site-text').textContent;
-            btn.querySelector('#toggle-site-text').textContent = 'Обработка...';
+            btn.querySelector('#toggle-site-text').textContent = 'Verarbeitung...';
 
             try {
                 const res = await fetch(API_BASE + "/site-status/toggle", {
@@ -2119,12 +2119,12 @@
                     updateSiteStatusButton(data.enabled);
                     showSuccessModal(data.message);
                 } else {
-                    showErrorModal(data.error || 'Ошибка изменения статуса');
+                    showErrorModal(data.error || 'Fehler beim Ändern des Status');
                     btn.querySelector('#toggle-site-text').textContent = originalText;
                 }
             } catch (err) {
                 console.error('Toggle site status error:', err);
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
                 btn.querySelector('#toggle-site-text').textContent = originalText;
             } finally {
                 btn.disabled = false;

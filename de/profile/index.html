@@ -531,7 +531,7 @@
         <div class="profile-page-header">
             <div class="container">
                 <h1>Profil участника</h1>
-                <p>Информация о члене Дома Фальконе</p>
+                <p>Informationen über ein Mitglied des Hauses Falcone</p>
             </div>
         </div>
 
@@ -541,34 +541,34 @@
                     <div class="profile-avatar-large" id="avatar-container">
                         <span id="avatar-initials">?</span>
                     </div>
-                    <div class="profile-display-name" id="display-name">Загрузка...</div>
+                    <div class="profile-display-name" id="display-name">Wird geladen...</div>
                     <div class="profile-rank-badge" id="rank-badge">...</div>
 
                     <div class="profile-stats">
                         <div class="profile-stat">
                             <div class="profile-stat-value" id="points">0</div>
-                            <div class="profile-stat-label">Очков</div>
+                            <div class="profile-stat-label">Punkte</div>
                         </div>
                         <div class="profile-stat friends-stat-clickable" id="friends-stat" onclick="openFriendsModal()">
                             <div class="profile-stat-value" id="friends-count">0</div>
-                            <div class="profile-stat-label">Друзей</div>
+                            <div class="profile-stat-label">Freunde</div>
                         </div>
                         <a href="../leaderboard" class="profile-stat"
                             style="text-decoration: none; cursor: pointer; transition: transform 0.2s ease;">
                             <div class="profile-stat-value" id="user-rank">-</div>
-                            <div class="profile-stat-label">Место в рейтинге</div>
+                            <div class="profile-stat-label">Ranglistenplatz</div>
                         </a>
                     </div>
 
-                    <div class="profile-bio" id="bio">Биография не указана</div>
+                    <div class="profile-bio" id="bio">Keine Biografie angegeben</div>
 
                     <div class="profile-actions">
-                        <a href="../dashboard" class="back-btn">← Назад</a>
+                        <a href="../dashboard" class="back-btn">← Zurück</a>
                         <button class="add-friend-btn" id="add-friend-btn" style="display: none;">
-                            Добавить в друзья
+                            Als Freund hinzufügen
                         </button>
                         <a href="../messages" class="message-btn" id="message-btn" style="display: none;">
-                            💬 Написать сообщение
+                            💬 Nachricht schreiben
                         </a>
                     </div>
                 </div>
@@ -578,7 +578,7 @@
                 <div class="error-state">
                     <div class="error-state-icon">😕</div>
                     <h2>Profil не найден</h2>
-                    <p>Пользователь с таким ID не существует или был удален.</p>
+                    <p>Benutzer mit dieser ID existiert nicht oder wurde gelöscht.</p>
                     <a href="../dashboard" class="back-btn" style="margin-top: 2rem;">← Вернуться в кабинет</a>
                 </div>
             </div>
@@ -588,14 +588,14 @@
         <div class="friends-modal-overlay" id="friends-modal-overlay">
             <div class="friends-modal">
                 <div class="friends-modal-header">
-                    <h3 id="friends-modal-title">Друзья</h3>
+                    <h3 id="friends-modal-title">Freunde</h3>
                     <button class="friends-modal-close" onclick="closeFriendsModal()">×</button>
                 </div>
                 <div class="friends-modal-content">
                     <div class="friends-list" id="friends-list">
                         <div class="no-friends">
                             <div class="no-friends-icon">👥</div>
-                            <p>Загрузка...</p>
+                            <p>Wird geladen...</p>
                         </div>
                     </div>
                 </div>
@@ -782,12 +782,12 @@
                     data.display_name[0].toUpperCase() : '?';
             }
 
-            document.getElementById('display-name').textContent = data.display_name || 'Аноним';
-            document.getElementById('rank-badge').textContent = data.rank || 'Новичок';
+            document.getElementById('display-name').textContent = data.display_name || 'Anonym';
+            document.getElementById('rank-badge').textContent = data.rank || 'Neuling';
             document.getElementById('points').textContent = data.points || 0;
             document.getElementById('friends-count').textContent = data.friends_count || 0;
             document.getElementById('user-rank').textContent = data.user_rank || '-';
-            document.getElementById('bio').textContent = data.bio || 'Биография не указана';
+            document.getElementById('bio').textContent = data.bio || 'Keine Biografie angegeben';
             document.title = `${data.display_name || 'Profil'} - Dom Falcone`;
 
             // Показываем кнопки только если это не свой профиль
@@ -799,16 +799,16 @@
                 addBtn.style.display = 'inline-flex';
 
                 if (data.friendship_status === 'accepted') {
-                    addBtn.textContent = '✓ Уже в друзьях';
+                    addBtn.textContent = '✓ Bereits befreundet';
                     addBtn.disabled = true;
                 } else if (data.friendship_status === 'pending_sent') {
-                    addBtn.textContent = 'Запрос отправлен';
+                    addBtn.textContent = 'Anfrage gesendet';
                     addBtn.disabled = true;
                 } else if (data.friendship_status === 'pending_received') {
-                    addBtn.textContent = 'Принять запрос';
+                    addBtn.textContent = 'Anfrage annehmen';
                     addBtn.onclick = () => acceptFriendRequest(data.id);
                 } else {
-                    addBtn.textContent = 'Добавить в друзья';
+                    addBtn.textContent = 'Als Freund hinzufügen';
                     addBtn.onclick = () => sendFriendRequest(data.id);
                 }
 
@@ -822,7 +822,7 @@
         async function sendFriendRequest(friendId) {
             const btn = document.getElementById('add-friend-btn');
             btn.disabled = true;
-            btn.textContent = 'Отправка...';
+            btn.textContent = 'Wird gesendet...';
 
             try {
                 const res = await fetch(API_BASE + "/friends/request", {
@@ -837,25 +837,25 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    btn.textContent = '✓ Запрос отправлен';
+                    btn.textContent = '✓ Anfrage gesendet';
                     showSuccessModal('Запрос в друзья отправлен');
                 } else {
-                    btn.textContent = 'Добавить в друзья';
+                    btn.textContent = 'Als Freund hinzufügen';
                     btn.disabled = false;
-                    showErrorModal(data.error || 'Ошибка отправки запроса');
+                    showErrorModal(data.error || 'Fehler beim Senden der Anfrage');
                 }
             } catch (err) {
                 console.error('Send request error:', err);
-                btn.textContent = 'Добавить в друзья';
+                btn.textContent = 'Als Freund hinzufügen';
                 btn.disabled = false;
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
             }
         }
 
         async function acceptFriendRequest(friendId) {
             const btn = document.getElementById('add-friend-btn');
             btn.disabled = true;
-            btn.textContent = 'Принимаем...';
+            btn.textContent = 'Wird angenommen...';
 
             try {
                 const res = await fetch(API_BASE + "/friends/accept", {
@@ -870,19 +870,19 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    btn.textContent = '✓ Уже в друзьях';
+                    btn.textContent = '✓ Bereits befreundet';
                     showSuccessModal('Запрос в друзья принят');
                     await loadProfile();
                 } else {
-                    btn.textContent = 'Принять запрос';
+                    btn.textContent = 'Anfrage annehmen';
                     btn.disabled = false;
-                    showErrorModal(data.error || 'Ошибка принятия запроса');
+                    showErrorModal(data.error || 'Fehler beim Annehmen der Anfrage');
                 }
             } catch (err) {
                 console.error('Accept request error:', err);
-                btn.textContent = 'Принять запрос';
+                btn.textContent = 'Anfrage annehmen';
                 btn.disabled = false;
-                showErrorModal('Ошибка подключения');
+                showErrorModal('Verbindungsfehler');
             }
         }
 
@@ -1072,10 +1072,10 @@
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }
@@ -1254,7 +1254,7 @@
 
             // Get the display name for the modal title
             const displayName = document.getElementById('display-name').textContent;
-            modalTitle.textContent = `Друзья — ${displayName}`;
+            modalTitle.textContent = `Freunde — ${displayName}`;
 
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1263,7 +1263,7 @@
             friendsList.innerHTML = `
                 <div class="no-friends">
                     <div class="no-friends-icon">⏳</div>
-                    <p>Загрузка...</p>
+                    <p>Wird geladen...</p>
                 </div>
             `;
 
@@ -1284,7 +1284,7 @@
                     friendsList.innerHTML = `
                         <div class="no-friends">
                             <div class="no-friends-icon">🔒</div>
-                            <p>Список друзей скрыт</p>
+                            <p>Freundesliste скрыт</p>
                         </div>
                     `;
                     return;
@@ -1296,7 +1296,7 @@
                 friendsList.innerHTML = `
                     <div class="no-friends">
                         <div class="no-friends-icon">❌</div>
-                        <p>Ошибка загрузки</p>
+                        <p>Ladefehler</p>
                     </div>
                 `;
             }
@@ -1315,7 +1315,7 @@
                 friendsList.innerHTML = `
                     <div class="no-friends">
                         <div class="no-friends-icon">👥</div>
-                        <p>У пользователя пока нет друзей</p>
+                        <p>Der Benutzer hat noch keine Freunde</p>
                     </div>
                 `;
                 return;
@@ -1330,8 +1330,8 @@
                     <a href="../profile?id=${friend.id}" class="friend-item">
                         ${avatarHtml}
                         <div class="friend-info">
-                            <div class="friend-name">${escapeHtml(friend.display_name || 'Аноним')}</div>
-                            <div class="friend-rank">${escapeHtml(friend.rank || 'Новичок')}</div>
+                            <div class="friend-name">${escapeHtml(friend.display_name || 'Anonym')}</div>
+                            <div class="friend-rank">${escapeHtml(friend.rank || 'Neuling')}</div>
                         </div>
                     </a>
                 `;

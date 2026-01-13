@@ -416,7 +416,7 @@
         style="background-image: url('../../assets/images/q-background.jpg'); background-position: center 18%;">
         <div class="container">
             <h1>Kontakt zum Haus</h1>
-            <p>Отправь свое послание Дону Фальконе и его семье</p>
+            <p>Senden Sie Ihre Nachricht an Don Falcone und seine Familie</p>
         </div>
     </div>
 
@@ -426,13 +426,13 @@
                 <form class="contact-form" id="contactForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="birth-name">Имя, данное при рождении:</label>
+                            <label for="birth-name">Geburtsname:</label>
                             <input type="text" id="birth-name" name="birth-name" placeholder="Введите ваше имя"
                                 required>
                         </div>
 
                         <div class="form-group">
-                            <label for="official-letter">Официальное письмо в Дом (соблюдаем структуру):</label>
+                            <label for="official-letter">Offizieller Brief ans Haus (Struktur beachten):</label>
                             <textarea id="official-letter" name="official-letter" rows="10"
                                 placeholder="Изложите суть вашего обращения..." required></textarea>
                         </div>
@@ -444,11 +444,11 @@
                             <div class="captcha-checkbox" id="captcha-checkbox">
                                 <span class="checkmark">✓</span>
                             </div>
-                            <span class="captcha-label">Подтвердите, что вы не робот</span>
+                            <span class="captcha-label">Bestätigen Sie, dass Sie kein Roboter sind</span>
                         </div>
 
                         <div id="captcha-challenge" style="display: none;">
-                            <div class="captcha-title">Выберите все изображения с Jim Beam</div>
+                            <div class="captcha-title">Wählen Sie alle Bilder mit Jim Beam</div>
                             <div class="captcha-grid" id="captcha-grid">
                                 <div class="captcha-cell" data-type="paulaner"><img src="../../assets/images/paulaner.jpg"
                                         alt="Paulaner"></div>
@@ -469,25 +469,25 @@
                                 <div class="captcha-cell" data-type="astra"><img src="../../assets/images/astra.png"
                                         alt="Astra"></div>
                             </div>
-                            <div class="captcha-attempts" id="captcha-attempts">Осталось попыток: <span
+                            <div class="captcha-attempts" id="captcha-attempts">Verbleibende Versuche: <span
                                     id="attempts-count">3</span></div>
                             <button type="button" class="captcha-verify-btn"
-                                id="captcha-verify-btn">Подтвердить</button>
+                                id="captcha-verify-btn">Bestätigen</button>
                         </div>
 
                         <div class="captcha-result" id="captcha-result">
                             <h3 id="captcha-result-title"></h3>
-                            <p class="captcha-login-hint">Чтобы отправить сообщение, <a href="../login">войдите</a> или
-                                <a href="../login">зарегистрируйтесь</a>.
+                            <p class="captcha-login-hint">Um eine Nachricht zu senden, <a href="../login">melden Sie sich an</a> или
+                                <a href="../login">registrieren Sie sich</a>.
                             </p>
-                            <button type="button" class="captcha-reset-btn" id="captcha-reset-btn">Попробовать
+                            <button type="button" class="captcha-reset-btn" id="captcha-reset-btn">Erneut versuchen
                                 снова</button>
                         </div>
 
                         <div class="captcha-blocked" id="captcha-blocked" style="display: none;">
                             <h3>⏳ Сказал же НЕТ!</h3>
-                            <p>Вы исчерпали все попытки. Подождите <span id="cooldown-timer">60:00</span> минут.</p>
-                            <p class="captcha-login-hint">Или просто <a href="../login">войдите в аккаунт</a>, чтобы
+                            <p>Sie haben alle Versuche aufgebraucht. Warten Sie <span id="cooldown-timer">60:00</span> Minuten.</p>
+                            <p class="captcha-login-hint">Oder einfach <a href="../login">melden Sie sich an в аккаунт</a>, um
                                 отправить сообщение без captcha.</p>
                         </div>
 
@@ -498,7 +498,7 @@
                     </div>
 
                     <div style="text-align: center; margin-top: 2rem;">
-                        <button type="submit" class="btn btn-primary" id="submit-btn">Отправить послание</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Nachricht senden</button>
                     </div>
                 </form>
             </div>
@@ -776,10 +776,10 @@
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }
@@ -995,9 +995,9 @@
 
             // Get message based on attempt number
             function getMessage(attemptNumber) {
-                if (attemptNumber === 1) return 'Не.';
-                if (attemptNumber === 2) return 'Нет сказал.';
-                return 'Я же сказал НЕТ.';
+                if (attemptNumber === 1) return 'Nein.';
+                if (attemptNumber === 2) return 'Ich sagte nein.';
+                return 'Ich habe NEIN gesagt.';
             }
 
             // Check if blocked
@@ -1084,7 +1084,7 @@
                 saveCaptchaData(data);
 
                 // Show "loading" effect first
-                verifyBtn.textContent = 'Проверка...';
+                verifyBtn.textContent = 'Überprüfung...';
                 verifyBtn.disabled = true;
 
                 setTimeout(() => {
@@ -1095,7 +1095,7 @@
                         result.classList.add('robot');
                         updateAttemptsDisplay();
                     }
-                    verifyBtn.textContent = 'Подтвердить';
+                    verifyBtn.textContent = 'Bestätigen';
                     verifyBtn.disabled = false;
                 }, 1500);
             });

@@ -975,7 +975,7 @@
             const now = new Date();
             const diff = now - date;
 
-            if (diff < 60000) return 'Только что';
+            if (diff < 60000) return 'Gerade eben';
             if (diff < 3600000) return Math.floor(diff / 60000) + ' мин. назад';
             if (diff < 86400000) return Math.floor(diff / 3600000) + ' ч. назад';
             return date.toLocaleDateString('ru-RU');

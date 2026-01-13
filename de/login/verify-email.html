@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Подтверждение Email - Dom Falcone</title>
+    <title>E-Mail-Bestätigung - Dom Falcone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=6">
@@ -87,10 +87,10 @@
         
         <!-- Desktop Navigation -->
         <nav class="nav">
-            <a ="../about">О доме</a>
-            <a ="../history">История</a>
-            <a ="../enemies">Противники</a>
-            <a ="../news">Новости</a>
+            <a ="../about">Über das Haus</a>
+            <a ="../history">Geschichte</a>
+            <a ="../enemies">Feinde</a>
+            <a ="../news">Neuigkeiten</a>
         </nav>
 
         <!-- Burger Menu Button -->
@@ -100,9 +100,9 @@
             <div class="burger-line"></div>
         </div>
 
-        <!-- Кнопка "Войти" (показывается когда не авторизован) -->
+        <!-- Кнопка "Anmelden" (показывается когда не авторизован) -->
         <div class="auth-action" id="auth-action" style="display: none;">
-            <a href="../login" class="btn-login">Войти</a>
+            <a href="../login" class="btn-login">Anmelden</a>
         </div>
 
         <!-- User Menu (показывается когда авторизован) -->
@@ -131,16 +131,16 @@
                 <!-- Выпадающий список уведомлений -->
                 <div class="notifications-dropdown" id="notifications-dropdown">
                     <div class="notifications-header">
-                        <h3>Уведомления</h3>
-                        <button class="mark-all-read" id="mark-all-read-btn">Прочитать все</button>
+                        <h3>Benachrichtigungen</h3>
+                        <button class="mark-all-read" id="mark-all-read-btn">Alle gelesen</button>
                     </div>
                     <div id="notifications-list">
-                        <div class="no-notifications">Нет уведомлений</div>
+                        <div class="no-notifications">Keine Benachrichtigungen</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Профиль пользователя -->
+            <!-- Benutzerprofil -->
             <a href="../dashboard" class="user-profile-info">
                 <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
                 <div class="user-details">
@@ -161,12 +161,12 @@
 <!-- Mobile Navigation Menu -->
 <nav class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav-links">
-        <a href="../about">О доме</a>
-        <a href="../history">История</a>
-        <a href="../enemies">Противники</a>
-        <a href="../news">Новости</a>
-        <a href="../dashboard" class="mobile-nav-profile">Профиль</a>
-        <a href="../messages" class="mobile-nav-messages">Сообщения</a>
+        <a href="../about">Über das Haus</a>
+        <a href="../history">Geschichte</a>
+        <a href="../enemies">Feinde</a>
+        <a href="../news">Neuigkeiten</a>
+        <a href="../dashboard" class="mobile-nav-profile">Profil</a>
+        <a href="../messages" class="mobile-nav-messages">Nachrichten</a>
     </div>
     <div class="mobile-nav-footer">
         <div class="site-version"></div>
@@ -178,22 +178,22 @@
         <div class="verification-box">
             <div id="loading" style="display: block;">
                 <div class="spinner"></div>
-                <h2>Проверка токена...</h2>
-                <p>Пожалуйста, подождите</p>
+                <h2>Token wird überprüft...</h2>
+                <p>Bitte warten</p>
             </div>
             
             <div id="success" style="display: none;">
                 <div class="success-icon">✓</div>
                 <h2>Email подтверждён!</h2>
-                <p>Ваш аккаунт успешно активирован. Вы получили бонусные очки за регистрацию!</p>
-                <a href="../login" class="btn">Войти в аккаунт</a>
+                <p>Ihr Konto wurde erfolgreich aktiviert. Sie haben Bonuspunkte für die Registrierung erhalten!</p>
+                <a href="../login" class="btn">Anmelden в аккаунт</a>
             </div>
             
             <div id="error" style="display: none;">
                 <div class="error-icon">✗</div>
-                <h2>Ошибка верификации</h2>
+                <h2>Fehler верификации</h2>
                 <p id="error-message"></p>
-                <a href="../login" class="btn">Вернуться к входу</a>
+                <a href="../login" class="btn">Zurück zur Anmeldung</a>
             </div>
         </div>
     </div>
@@ -213,7 +213,7 @@
             const token = params.get('token');
 
             if (!token) {
-                showError('Токен верификации не найден в ссылке');
+                showError('Verifizierungstoken nicht im Link gefunden');
                 return;
             }
 
@@ -224,11 +224,11 @@
                 if (res.ok && data.success) {
                     showSuccess(data.message);
                 } else {
-                    showError(data.error || 'Неверный или истекший токен');
+                    showError(data.error || 'Ungültiger oder abgelaufener Token');
                 }
             } catch (err) {
                 console.error('Verification error:', err);
-                showError('Ошибка подключения к серверу. Попробуйте позже.');
+                showError('Verbindungsfehler zum Server. Versuchen Sie es später.');
             }
         }
 

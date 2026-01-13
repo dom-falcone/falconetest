@@ -363,7 +363,7 @@
                     </div>
                 </div>
 
-                <!-- Профиль пользователя -->
+                <!-- Benutzerprofil -->
                 <a href="../dashboard" class="user-profile-info">
                     <img src="" alt="Avatar" id="header-avatar" class="header-avatar">
                     <div class="user-details">
@@ -910,7 +910,7 @@ END:VCALENDAR`;
             const list = document.getElementById('notifications-list');
 
             if (!notifications || notifications.length === 0) {
-                list.innerHTML = '<div class="no-notifications">Нет уведомлений</div>';
+                list.innerHTML = '<div class="no-notifications">Keine Benachrichtigungen</div>';
                 return;
             }
 
@@ -935,10 +935,10 @@ END:VCALENDAR`;
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }

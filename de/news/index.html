@@ -2076,13 +2076,13 @@
     <div class="page-header"
         style="background: url('../../assets/images/news-background.png') center/cover no-repeat; background-position: center 20%;">
         <div class="container" style="text-align: center;">
-            <h1>Хроники Дома</h1>
-            <p>Последние вести с полей сражений и жизни Семьи</p>
+            <h1>Chroniken des Hauses</h1>
+            <p>Neueste Nachrichten von den Schlachtfeldern und dem Leben der Familie</p>
         </div>
     </div>
 
     <!-- Clickable Newspaper Zone -->
-    <div class="newspaper-clickable" id="newspaper-clickable" title="Нажмите, чтобы открыть газету"></div>
+    <div class="newspaper-clickable" id="newspaper-clickable" title="Klicken Sie, um die Zeitung zu öffnen"></div>
 
     <!-- Newspaper Lightbox Overlay -->
     <div class="newspaper-lightbox" id="newspaper-lightbox">
@@ -2113,23 +2113,23 @@
     <div class="create-news-modal" id="create-news-modal">
         <div class="create-news-content">
             <button class="modal-close" id="modal-close">&times;</button>
-            <h2 style="color: white; margin-bottom: 1.5rem;">Создать новость</h2>
+            <h2 style="color: white; margin-bottom: 1.5rem;">Neuigkeit erstellen</h2>
             <form class="create-news-form" id="create-news-form">
                 <div class="form-group">
-                    <label>Тег</label>
+                    <label>Tag</label>
                     <select id="news-tag" required>
-                        <option value="Важное">Важное</option>
+                        <option value="Wichtig">Wichtig</option>
                         <option value="Neuigkeiten">Neuigkeiten</option>
-                        <option value="Объявление">Объявление</option>
-                        <option value="События">События</option>
+                        <option value="Ankündigung">Ankündigung</option>
+                        <option value="Ereignisse">Ereignisse</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Дата публикации</label>
+                    <label>Jaта публикации</label>
                     <div style="display: flex; gap: 1rem; align-items: center;">
                         <input type="datetime-local" id="news-date" style="flex: 1;">
-                        <button type="button" class="reset-date-btn" onclick="resetNewsDate()">Сейчас</button>
+                        <button type="button" class="reset-date-btn" onclick="resetNewsDate()">Jetzt</button>
                     </div>
                     <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-top: 0.5rem;">
                         Оставьте пустым для текущей даты и времени
@@ -2137,18 +2137,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Заголовок</label>
+                    <label>Titel</label>
                     <input type="text" id="news-title" placeholder="Введите заголовок новости" required>
                 </div>
                 <div class="form-group">
-                    <label>Содержание</label>
+                    <label>Inhalt</label>
                     <textarea id="news-content" placeholder="Напишите текст новости..." required></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Медиафайлы</label>
+                    <label>Mediendateien</label>
                     <div class="media-upload-tabs">
                         <div class="media-tab active" data-tab="images">📸 Изображения</div>
-                        <div class="media-tab" data-tab="videos">🎬 Видео</div>
+                        <div class="media-tab" data-tab="videos">🎬 Video</div>
                     </div>
 
                     <!-- Изображения -->
@@ -2156,27 +2156,27 @@
                         <div class="image-upload-area" id="image-upload-area">
                             <input type="file" id="image-input" accept="image/*" multiple>
                             <div class="upload-icon">📸</div>
-                            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить изображения</p>
-                            <p class="upload-limits">Максимум 10 изображений по 10MB каждое</p>
+                            <p style="color: rgba(255, 255, 255, 0.6);">Klicken Sie, um Bilder hochzuladen</p>
+                            <p class="upload-limits">Maximal 10 Bilder à 10MB</p>
                         </div>
-                        <div class="file-counter" id="images-counter">0 / 10 изображений</div>
+                        <div class="file-counter" id="images-counter">0 / 10 Bilder</div>
                         <div class="image-preview-grid" id="image-preview-grid"></div>
                     </div>
 
-                    <!-- Видео -->
+                    <!-- Video -->
                     <div class="media-upload-content" id="videos-content">
                         <div class="image-upload-area" id="video-upload-area">
                             <input type="file" id="video-input" accept="video/mp4,video/webm,video/ogg,video/quicktime"
                                 multiple>
                             <div class="upload-icon">🎬</div>
-                            <p style="color: rgba(255, 255, 255, 0.6);">Нажмите, чтобы загрузить видео</p>
-                            <p class="upload-limits">Максимум 10 видео по 100MB каждое (MP4, WebM, OGG, MOV)</p>
+                            <p style="color: rgba(255, 255, 255, 0.6);">Klicken Sie, um Videos hochzuladen</p>
+                            <p class="upload-limits">Maximal 10 Videos à 100MB (MP4, WebM, OGG, MOV)</p>
                         </div>
-                        <div class="file-counter" id="videos-counter">0 / 10 видео</div>
+                        <div class="file-counter" id="videos-counter">0 / 10 Videos</div>
                         <div class="image-preview-grid" id="video-preview-grid"></div>
                     </div>
                 </div>
-                <button type="submit" class="submit-btn">Опубликовать новость</button>
+                <button type="submit" class="submit-btn">Neuigkeit veröffentlichen</button>
             </form>
         </div>
     </div>
@@ -2311,12 +2311,12 @@
                         container.appendChild(createNewsCard(news));
                     });
                 } else {
-                    container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Новостей пока нет</p>';
+                    container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Noch keine Neuigkeiten</p>';
                 }
             } catch (err) {
                 console.error('Error:', err);
                 const container = document.getElementById('news-container');
-                container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Ошибка загрузки новостей</p>';
+                container.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">Fehler beim Laden der Neuigkeiten</p>';
             } finally {
                 // Loader wird in DOMContentLoaded versteckt
             }
@@ -2340,11 +2340,11 @@
                                     <img src="../../assets/images/media-icon.png" alt="Media" style="width: 28px; height: 28px; filter: invert(1);">
                                 </div>
                                 <div class="media-info">
-                                    <div class="media-title">Медиафайлы</div>
+                                    <div class="media-title">Mediendateien</div>
                                     <div class="media-count">
                                         ${news.images.length > 0 ? news.images.length + ' фото' : ''}
                                         ${news.images.length > 0 && news.videos?.length > 0 ? ' • ' : ''}
-                                        ${news.videos?.length > 0 ? news.videos.length + ' видео' : ''}
+                                        ${news.videos?.length > 0 ? news.videos.length + ' Videos' : ''}
                                     </div>
                                 </div>
                             </div>
@@ -2370,7 +2370,7 @@
                                             <div class="news-video-item">
                                                 <video controls preload="metadata">
                                                     <source src="${video}">
-                                                    Ваш браузер не поддерживает воспроизведение видео.
+                                                    Ваш браузер не поддерживает воспроизведение Videos.
                                                 </video>
                                             </div>
                                         `).join('')}
@@ -2394,7 +2394,7 @@
                         </div>
                         <div class="news-header-actions">
                             <div class="news-tag">${escapeHtml(news.tag)}</div>
-                            ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Удалить</button>` : ''}
+                            ${canDelete ? `<button class="delete-news-btn" onclick="deleteNews(${news.id})">Entfernen</button>` : ''}
                         </div>
                     </div>
                     <h2 class="news-title">${escapeHtml(news.title)}</h2>
@@ -2428,7 +2428,7 @@
 
         async function toggleLike(newsId, button) {
             if (!token) {
-                showErrorModal('Войдите, чтобы ставить лайки');
+                showErrorModal('Melden Sie sich an, um zu liken');
                 return;
             }
             try {
@@ -2467,8 +2467,8 @@
 
                 let html = token ? `
             <div class="comment-input-area">
-                <textarea placeholder="Написать комментарий..." id="comment-input-${newsId}"></textarea>
-                <button class="comment-submit-btn" onclick="postComment(${newsId})">Отправить</button>
+                <textarea placeholder="Kommentar schreiben..." id="comment-input-${newsId}"></textarea>
+                <button class="comment-submit-btn" onclick="postComment(${newsId})">Absenden</button>
             </div>
         ` : '';
 
@@ -2553,14 +2553,14 @@
                 <svg viewBox="0 0 24 24">
                     <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
                 </svg>
-                Редактировать
+                Bearbeiten
             </div>
         ` : ''}
         <div class="context-menu-item delete-item" onclick="deleteComment(${commentId}, event)">
             <svg viewBox="0 0 24 24">
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
             </svg>
-            Удалить
+            Entfernen
         </div>
     `;
 
@@ -2595,7 +2595,7 @@
             const textEl = document.getElementById(`comment-text-${commentId}`);
             const originalText = textEl.innerHTML.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
 
-            const newText = prompt('Редактировать комментарий:', originalText);
+            const newText = prompt('Bearbeiten комментарий:', originalText);
             if (!newText || newText.trim() === originalText.trim()) return;
 
             try {
@@ -2611,11 +2611,11 @@
                 if (res.ok) {
                     textEl.innerHTML = escapeHtml(newText.trim()).replace(/@(\w+)/g, '<span class="mention">@$1</span>');
                 } else {
-                    alert('Ошибка редактирования');
+                    alert('Bearbeitungsfehler');
                 }
             } catch (err) {
                 console.error('Edit error:', err);
-                alert('Ошибка редактирования');
+                alert('Bearbeitungsfehler');
             }
         }
 
@@ -2623,7 +2623,7 @@
             event.stopPropagation();
             closeCommentMenu();
 
-            if (!confirm('Удалить комментарий?')) return;
+            if (!confirm('Kommentar löschen?')) return;
 
             try {
                 const res = await fetch(API_BASE + `/comments/${commentId}`, {
@@ -2634,17 +2634,17 @@
                 if (res.ok) {
                     document.getElementById(`comment-${commentId}`).remove();
                 } else {
-                    alert('Ошибка удаления');
+                    alert('Löschfehler');
                 }
             } catch (err) {
                 console.error('Delete error:', err);
-                alert('Ошибка удаления');
+                alert('Löschfehler');
             }
         }
 
         async function toggleCommentLike(commentId, button) {
             if (!token) {
-                showErrorModal('Войдите, чтобы ставить лайки');
+                showErrorModal('Melden Sie sich an, um zu liken');
                 return;
             }
 
@@ -2675,7 +2675,7 @@
         document.addEventListener('scroll', closeCommentMenu, true);
 
         async function deleteNews(newsId) {
-            const confirmed = await showConfirmModal('Удалить новость?');
+            const confirmed = await showConfirmModal('Neuigkeit löschen?');
             if (!confirmed) return;
             try {
                 const res = await fetch(API_BASE + `/news/${newsId}`, {
@@ -2683,7 +2683,7 @@
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
                 if (res.ok) {
-                    showSuccessModal('Новость удалена');
+                    showSuccessModal('Neuigkeit gelöscht');
                     await loadNews();
                 }
             } catch (err) {
@@ -2710,17 +2710,17 @@
 
             for (const file of files) {
                 if (uploadedImages.length >= MAX_IMAGES) {
-                    showErrorModal(`Максимум ${MAX_IMAGES} изображений`);
+                    showErrorModal(`Maximum ${MAX_IMAGES} Bilder`);
                     break;
                 }
 
                 if (file.size > MAX_IMAGE_SIZE) {
-                    showErrorModal(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 10MB`);
+                    showErrorModal(`Datei "${file.name}" zu groß (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum 10MB`);
                     continue;
                 }
 
                 if (!file.type.startsWith('image/')) {
-                    showErrorModal(`Файл "${file.name}" не является изображением`);
+                    showErrorModal(`Datei "${file.name}" ist kein Bild`);
                     continue;
                 }
 
@@ -2729,7 +2729,7 @@
                 const loadingItem = document.createElement('div');
                 loadingItem.className = 'image-preview-item';
                 loadingItem.style.opacity = '0.5';
-                loadingItem.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--color-primary);">Сжатие...</div>`;
+                loadingItem.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--color-primary);">Komprimierung...</div>`;
                 previewGrid.appendChild(loadingItem);
 
                 try {
@@ -2739,7 +2739,7 @@
 
                     const maxBase64Size = 1.5 * 1024 * 1024;
                     if (compressedDataUrl.length > maxBase64Size) {
-                        showErrorModal(`Не удалось достаточно сжать изображение "${file.name}". Попробуйте изображение меньшего разрешения.`);
+                        showErrorModal(`Das Bild konnte nicht ausreichend komprimiert werden "${file.name}". Versuchen Sie ein Bild mit geringerer Auflösung.`);
                         previewGrid.removeChild(loadingItem);
                         continue;
                     }
@@ -2754,7 +2754,7 @@
             `;
                 } catch (err) {
                     console.error('Image compression error:', err);
-                    showErrorModal(`Ошибка обработки изображения "${file.name}": ${err.message}`);
+                    showErrorModal(`Fehler bei der Bildverarbeitung "${file.name}": ${err.message}`);
                     previewGrid.removeChild(loadingItem);
                 }
             }
@@ -2774,17 +2774,17 @@
 
             for (const file of files) {
                 if (uploadedVideos.length >= MAX_VIDEOS) {
-                    showErrorModal(`Максимум ${MAX_VIDEOS} видео`);
+                    showErrorModal(`Maximum ${MAX_VIDEOS} Videos`);
                     break;
                 }
 
                 if (file.size > MAX_VIDEO_SIZE) {
-                    showErrorModal(`Видео "${file.name}" слишком большое (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимум 100MB`);
+                    showErrorModal(`Video "${file.name}" zu groß (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum 100MB`);
                     continue;
                 }
 
                 if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
-                    showErrorModal(`Файл "${file.name}" имеет неподдерживаемый формат. Используйте MP4, WebM, OGG или MOV`);
+                    showErrorModal(`Datei "${file.name}" hat ein nicht unterstütztes Format. Verwenden Sie MP4, WebM, OGG oder MOV`);
                     continue;
                 }
 
@@ -2831,7 +2831,7 @@
                         // Попытка 1: Полное качество, разумный размер
                         compressedDataUrl = await compressToSize(img, maxWidth, quality);
 
-                        // Если слишком большой, уменьшаем размер
+                        // Если zu groß, уменьшаем размер
                         if (compressedDataUrl.length > 1.5 * 1024 * 1024) {
                             maxWidth = 1280;
                             quality = 0.80;
@@ -2857,11 +2857,11 @@
                         resolve(compressedDataUrl);
                     };
 
-                    img.onerror = () => reject(new Error('Ошибка загрузки изображения'));
+                    img.onerror = () => reject(new Error('Ladefehler Bilder'));
                     img.src = e.target.result;
                 };
 
-                reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+                reader.onerror = () => reject(new Error('Fehler чтения файла'));
                 reader.readAsDataURL(file);
             });
         }
@@ -2882,17 +2882,17 @@
                 canvas.width = width;
                 canvas.height = height;
 
-                // Рисуем изображение
+                // Рисуем Bild
                 const ctx = canvas.getContext('2d');
                 ctx.fillStyle = '#FFFFFF'; // Белый фон для JPEG
                 ctx.fillRect(0, 0, width, height);
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Добавляем водяной знак (логотип Дом Фальконе)
+                // Wasserzeichen hinzufügen (Logo Haus Falcone)
                 const watermark = new Image();
                 watermark.crossOrigin = 'anonymous';
                 watermark.onload = () => {
-                    // Размер водяного знака - 12% от ширины изображения
+                    // Размер водяного знака - 12% от ширины Bilder
                     const watermarkWidth = width * 0.12;
                     const watermarkHeight = (watermark.height / watermark.width) * watermarkWidth;
 
@@ -2919,7 +2919,7 @@
             });
         }
 
-        // Функция сжатия изображения
+        // Функция сжатия Bilder
         async function compressImage(file, maxWidth = 800, quality = 0.7) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -2942,7 +2942,7 @@
                         canvas.width = width;
                         canvas.height = height;
 
-                        // Рисуем изображение
+                        // Рисуем Bild
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
@@ -2954,11 +2954,11 @@
                         resolve(compressedDataUrl);
                     };
 
-                    img.onerror = () => reject(new Error('Ошибка загрузки изображения'));
+                    img.onerror = () => reject(new Error('Ladefehler Bilder'));
                     img.src = e.target.result;
                 };
 
-                reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+                reader.onerror = () => reject(new Error('Fehler чтения файла'));
                 reader.readAsDataURL(file);
             });
         }
@@ -3005,7 +3005,7 @@
             const videosCounter = document.getElementById('videos-counter');
 
             if (imagesCounter) {
-                imagesCounter.textContent = `${uploadedImages.length} / ${MAX_IMAGES} изображений`;
+                imagesCounter.textContent = `${uploadedImages.length} / ${MAX_IMAGES} Bilder`;
 
                 if (uploadedImages.length >= MAX_IMAGES) {
                     imagesCounter.classList.add('error');
@@ -3019,7 +3019,7 @@
             }
 
             if (videosCounter) {
-                videosCounter.textContent = `${uploadedVideos.length} / ${MAX_VIDEOS} видео`;
+                videosCounter.textContent = `${uploadedVideos.length} / ${MAX_VIDEOS} Videos`;
 
                 if (uploadedVideos.length >= MAX_VIDEOS) {
                     videosCounter.classList.add('error');
@@ -3044,13 +3044,13 @@
             const customDate = document.getElementById('news-date').value;
 
             if (!title || !content) {
-                showErrorModal('Заполните все поля');
+                showErrorModal('Bitte alle Felder ausfüllen');
                 return;
             }
 
             const submitBtn = e.target.querySelector('.submit-btn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Публикация...';
+            submitBtn.textContent = 'Veröffentlichung...';
 
             try {
                 // Определяем дату публикации
@@ -3102,7 +3102,7 @@
                     updateCounters();
                     await loadNews();
                 } else {
-                    let errorMsg = 'Ошибка: ' + (responseData.error || 'Неизвестная ошибка');
+                    let errorMsg = 'Fehler: ' + (responseData.error || 'Неизвестная ошибка');
                     if (responseData.details) {
                         errorMsg += '\nДетали: ' + responseData.details;
                     }
@@ -3110,10 +3110,10 @@
                 }
             } catch (err) {
                 console.error('Submit error:', err);
-                showErrorModal('Ошибка публикации: ' + err.message);
+                showErrorModal('Veröffentlichungsfehler: ' + err.message);
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Опубликовать новость';
+                submitBtn.textContent = 'Neuigkeit veröffentlichen';
             }
         });
 
@@ -3142,7 +3142,7 @@
             // Loader bereits in DOMContentLoaded versteckt
         });
 
-        // Открыть изображение в полном размере
+        // Открыть Bild в полном размере
         let galleryMediaItems = [];
         let currentMediaIndex = 0;
         let touchStartX = 0;
@@ -3325,7 +3325,7 @@
             updateGalleryDisplay();
         }
 
-        // Закрыть полноэкранное изображение
+        // Schließen полноэкранное Bild
         function closeImageFullscreen() {
             const overlay = document.getElementById('image-fullscreen-overlay');
             if (overlay) {
@@ -3700,10 +3700,10 @@
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }

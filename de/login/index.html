@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Вход - Dom Falcone</title>
+    <title>Anmeldung - Dom Falcone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
@@ -684,15 +684,15 @@
     <div class="page-header"
         style="background-image: url('../../assets/images/q1-background.jpg'); background-position: center 18%;">
         <div class="container">
-            <h1>Идентификация</h1>
-            <p>Назовите себя, чтобы войти в Дом</p>
+            <h1>Identifikation</h1>
+            <p>Nennen Sie sich, um das Haus zu betreten</p>
         </div>
     </div>
 
     <main class="content-section login-section">
         <div class="container">
             <div class="login-container animate-fade-up">
-                <h2 class="section-title">Выберите личность</h2>
+                <h2 class="section-title">Wählen Sie Ihre Identität</h2>
 
                 <!-- User Selection Grid -->
                 <div class="user-selection-grid" id="user-selection">
@@ -714,23 +714,23 @@
                 <!-- Named User Password Form -->
                 <div class="named-user-form" id="named-user-form">
                     <div class="named-user-info">
-                        <p>Вход как: <span id="selected-username"></span></p>
+                        <p>Anmeldung als: <span id="selected-username"></span></p>
                     </div>
                     <div class="form-group">
-                        <label for="named-password">Пароль</label>
-                        <input type="password" id="named-password" placeholder="Введите пароль"
+                        <label for="named-password">Passwort</label>
+                        <input type="password" id="named-password" placeholder="Passwort eingeben"
                             autocomplete="current-password">
                     </div>
                     <div class="error-message" id="named-error"></div>
                     <button class="btn btn-primary" id="named-login-btn">Anmelden</button>
-                    <button class="btn-back" id="back-from-named">← Назад</button>
+                    <button class="btn-back" id="back-from-named">← Zurück</button>
                 </div>
 
                 <!-- Guest Auth Container -->
                 <div class="guest-auth-container" id="guest-auth-container">
                     <div class="auth-tabs">
-                        <button class="tab-btn active" data-tab="login">Вход</button>
-                        <button class="tab-btn" data-tab="register">Регистрация</button>
+                        <button class="tab-btn active" data-tab="login">Anmelden</button>
+                        <button class="tab-btn" data-tab="register">Registrieren</button>
                     </div>
 
                     <div id="login-form" class="auth-form active">
@@ -739,8 +739,8 @@
                             <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
                         </div>
                         <div class="form-group">
-                            <label for="login-password">Пароль</label>
-                            <input type="password" id="login-password" placeholder="Введите пароль"
+                            <label for="login-password">Passwort</label>
+                            <input type="password" id="login-password" placeholder="Passwort eingeben"
                                 autocomplete="current-password">
                         </div>
                         <div class="error-message" id="login-error"></div>
@@ -749,29 +749,29 @@
 
                     <div id="register-form" class="auth-form">
                         <div class="form-group">
-                            <label for="reg-name">Отображаемое имя</label>
-                            <input type="text" id="reg-name" placeholder="Как вас называть?">
+                            <label for="reg-name">Anzeigename</label>
+                            <input type="text" id="reg-name" placeholder="Wie sollen wir Sie nennen?">
                         </div>
                         <div class="form-group">
                             <label for="reg-email">Email</label>
                             <input type="email" id="reg-email" placeholder="your@email.com" autocomplete="email">
                         </div>
                         <div class="form-group">
-                            <label for="reg-password">Пароль</label>
-                            <input type="password" id="reg-password" placeholder="Создайте пароль"
+                            <label for="reg-password">Passwort</label>
+                            <input type="password" id="reg-password" placeholder="Passwort erstellen"
                                 autocomplete="new-password">
                         </div>
                         <div class="form-group">
-                            <label for="reg-password-confirm">Подтвердите пароль</label>
-                            <input type="password" id="reg-password-confirm" placeholder="Повторите пароль"
+                            <label for="reg-password-confirm">Passwort bestätigen</label>
+                            <input type="password" id="reg-password-confirm" placeholder="Passwort wiederholen"
                                 autocomplete="new-password">
                         </div>
                         <div class="error-message" id="register-error"></div>
                         <div class="success-message" id="register-success"></div>
-                        <button class="btn btn-primary" id="register-btn">Зарегистрироваться</button>
+                        <button class="btn btn-primary" id="register-btn">Registrieren</button>
                     </div>
 
-                    <button class="btn-back" id="back-from-guest">← Назад</button>
+                    <button class="btn-back" id="back-from-guest">← Zurück</button>
                 </div>
             </div>
         </div>
@@ -985,13 +985,13 @@
 
             if (loading) {
                 btn.disabled = true;
-                btn.textContent = 'Загрузка...';
+                btn.textContent = 'Wird geladen...';
             } else {
                 btn.disabled = false;
                 if (btnId === 'named-login-btn' || btnId === 'login-btn') {
                     btn.textContent = 'Anmelden';
                 } else if (btnId === 'register-btn') {
-                    btn.textContent = 'Зарегистрироваться';
+                    btn.textContent = 'Registrieren';
                 }
             }
         }
@@ -1003,7 +1003,7 @@
             const password = document.getElementById('named-password').value;
 
             if (!password) {
-                document.getElementById('named-error').textContent = 'Введите пароль';
+                document.getElementById('named-error').textContent = 'Passwort eingeben';
                 return;
             }
 
@@ -1026,11 +1026,11 @@
                         window.location.href = '../dashboard';
                     }, 100);
                 } else {
-                    document.getElementById('named-error').textContent = data.error || 'Неверный пароль';
+                    document.getElementById('named-error').textContent = data.error || 'Falsches Passwort';
                 }
             } catch (err) {
                 console.error('Named login error:', err);
-                document.getElementById('named-error').textContent = 'Ошибка подключения к серверу';
+                document.getElementById('named-error').textContent = 'Verbindungsfehler zum Server';
             } finally {
                 setLoading('named-login-btn', false);
             }
@@ -1044,7 +1044,7 @@
             const password = document.getElementById('login-password').value;
 
             if (!email || !password) {
-                document.getElementById('login-error').textContent = 'Заполните все поля';
+                document.getElementById('login-error').textContent = 'Bitte alle Felder ausfüllen';
                 return;
             }
 
@@ -1070,14 +1070,14 @@
                     // Специальная обработка неподтверждённого email
                     if (data.email_not_verified) {
                         document.getElementById('login-error').innerHTML =
-                            data.error + '<br><a href="#" onclick="resendVerification(\'' + (data.email || email) + '\'); return false;" style="color: var(--color-primary); text-decoration: underline; cursor: pointer;">Отправить письмо повторно</a>';
+                            data.error + '<br><a href="#" onclick="resendVerification(\'' + (data.email || email) + '\'); return false;" style="color: var(--color-primary); text-decoration: underline; cursor: pointer;">E-Mail erneut senden</a>';
                     } else {
-                        document.getElementById('login-error').textContent = data.error || 'Неверный email или пароль';
+                        document.getElementById('login-error').textContent = data.error || 'Falsche E-Mail oder Passwort';
                     }
                 }
             } catch (err) {
                 console.error('Guest login error:', err);
-                document.getElementById('login-error').textContent = 'Ошибка подключения к серверу';
+                document.getElementById('login-error').textContent = 'Verbindungsfehler zum Server';
             } finally {
                 setLoading('login-btn', false);
             }
@@ -1099,13 +1099,13 @@
 
                 if (res.ok) {
                     document.getElementById('login-error').innerHTML =
-                        '<span style="color: #4caf50;">' + (data.message || 'Письмо отправлено! Проверьте почту.') + '</span>';
+                        '<span style="color: #4caf50;">' + (data.message || 'E-Mail gesendet! Überprüfen Sie Ihren Posteingang.') + '</span>';
                 } else {
-                    document.getElementById('login-error').textContent = data.error || 'Ошибка отправки письма';
+                    document.getElementById('login-error').textContent = data.error || 'Fehler beim Senden der E-Mail';
                 }
             } catch (err) {
                 console.error('Resend error:', err);
-                document.getElementById('login-error').textContent = 'Ошибка подключения к серверу';
+                document.getElementById('login-error').textContent = 'Verbindungsfehler zum Server';
             }
         }
 
@@ -1119,22 +1119,22 @@
             const confirmPassword = document.getElementById('reg-password-confirm').value;
 
             if (!email || !password) {
-                document.getElementById('register-error').textContent = 'Заполните все обязательные поля';
+                document.getElementById('register-error').textContent = 'Bitte alle Pflichtfelder ausfüllen';
                 return;
             }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                document.getElementById('register-error').textContent = 'Введите корректный email';
+                document.getElementById('register-error').textContent = 'Bitte gültige E-Mail eingeben';
                 return;
             }
 
             if (password !== confirmPassword) {
-                document.getElementById('register-error').textContent = 'Пароли не совпадают';
+                document.getElementById('register-error').textContent = 'Passwörter stimmen nicht überein';
                 return;
             }
 
             if (password.length < 8) {
-                document.getElementById('register-error').textContent = 'Пароль должен содержать минимум 8 символов';
+                document.getElementById('register-error').textContent = 'Passwort muss mindestens 8 Zeichen enthalten';
                 return;
             }
 
@@ -1150,7 +1150,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    document.getElementById('register-success').textContent = data.message || 'Регистрация успешна!';
+                    document.getElementById('register-success').textContent = data.message || 'Registrierung erfolgreich!';
                     clearInputs();
 
                     setTimeout(() => {
@@ -1158,10 +1158,10 @@
                         document.getElementById('login-email').value = email;
                     }, 2000);
                 } else {
-                    document.getElementById('register-error').textContent = data.error || 'Ошибка регистрации';
+                    document.getElementById('register-error').textContent = data.error || 'Registrierungsfehler';
                 }
             } catch (err) {
-                document.getElementById('register-error').textContent = 'Ошибка подключения к серверу';
+                document.getElementById('register-error').textContent = 'Verbindungsfehler zum Server';
                 console.error(err);
             } finally {
                 setLoading('register-btn', false);

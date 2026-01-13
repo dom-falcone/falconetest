@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Рейтинг - Dom Falcone</title>
+    <title>Rangliste - Dom Falcone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
         rel="stylesheet">
@@ -437,8 +437,8 @@
     <main>
         <div class="leaderboard-header">
             <div class="container">
-                <h1>🏆 Рейтинг семьи</h1>
-                <p>Те, кто доказал свою преданность Дому</p>
+                <h1>🏆 Rangliste семьи</h1>
+                <p>Diejenigen, die ihre Treue zum Haus bewiesen haben</p>
             </div>
         </div>
 
@@ -447,7 +447,7 @@
             <div id="podium-container" class="podium-container">
                 <div class="loading-state">
                     <div class="loading-spinner"></div>
-                    <p>Загрузка рейтинга...</p>
+                    <p>Rangliste wird geladen...</p>
                 </div>
             </div>
 
@@ -513,7 +513,7 @@
                 const res = await fetch(API_BASE + "/leaderboard", { headers });
 
                 if (!res.ok) {
-                    throw new Error('Ошибка загрузки рейтинга');
+                    throw new Error('Ladefehler рейтинга');
                 }
 
                 const data = await res.json();
@@ -522,7 +522,7 @@
                 console.error('Load leaderboard error:', err);
                 document.getElementById('podium-container').innerHTML = `
                     <div class="loading-state">
-                        <p style="color: var(--color-primary);">❌ Ошибка загрузки рейтинга</p>
+                        <p style="color: var(--color-primary);">❌ Ladefehler рейтинга</p>
                     </div>
                 `;
             } finally {
@@ -538,7 +538,7 @@
             if (!users || users.length === 0) {
                 podiumContainer.innerHTML = `
                     <div class="loading-state">
-                        <p>Рейтинг пока пуст</p>
+                        <p>Rangliste пока пуст</p>
                     </div>
                 `;
                 return;

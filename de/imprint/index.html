@@ -165,17 +165,17 @@
                         Falcone</span>
                 </div>
 
-                <h2>Представители</h2>
+                <h2>Vertreter</h2>
                 <ul style="list-style: none; padding-left: 0;">
-                    <li>Гуменюк Аркадий Павлович</li>
-                    <li>Мунтян Дмитрий Андреевич</li>
+                    <li>Arkadij Humeniuk</li>
+                    <li>Dmitrij Muntjan</li>
                 </ul>
 
-                <h2>Адрес</h2>
-                <p>Ул. Деревянко 4,<br>
+                <h2>Adresse</h2>
+                <p>Derevjanko-Str. 4,<br>
                     г. Харьков 61000, Украина</p>
 
-                <h2>Контакты</h2>
+                <h2>Kontakt</h2>
                 <p>Kontakt zum Haus вы можете на странице <a href="../contact"
                         style="color: var(--color-primary); text-decoration: none;">«Kontakt zum Haus»</a>.</p>
             </div>
@@ -460,10 +460,10 @@ function playNotificationSound(soundType) {
             const hours = Math.floor(diff / 3600000);
             const days = Math.floor(diff / 86400000);
 
-            if (minutes < 1) return 'Только что';
-            if (minutes < 60) return `${minutes} мин назад`;
-            if (hours < 24) return `${hours} ч назад`;
-            if (days < 7) return `${days} д назад`;
+            if (minutes < 1) return 'Gerade eben';
+            if (minutes < 60) return `${minutes} Min. her`;
+            if (hours < 24) return `${hours} Std. her`;
+            if (days < 7) return `${days} T. her`;
 
             return new Date(timestamp).toLocaleDateString('ru-RU');
         }
