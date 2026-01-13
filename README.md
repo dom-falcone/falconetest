@@ -1,69 +1,76 @@
 # Dom Falcone Website
 
-🦅 Официальный сайт Дома Фальконе.
+🦅 Official website of the House of Falcone.
 
-## О проекте
+## About the Project
 
-Этот сайт посвящен истории, новостям и деятельности Дома Фальконе. Включает полноценную систему авторизации, личные кабинеты, систему сообщений и новостной раздел.
+This website is dedicated to the history, news, and activities of the House of Falcone. It includes a full authentication system, personal dashboards, messaging system, and news section.
 
-## ✨ Возможности
+## ✨ Features
 
-- 🔐 **Авторизация** — вход и регистрация пользователей
-- 👤 **Профили** — личные страницы с аватарами и статистикой
-- 📰 **Новости** — создание, лайки, комментарии
-- 💬 **Сообщения** — личные чаты между участниками
-- 🔔 **Уведомления** — real-time уведомления о событиях
-- 📊 **Рейтинг** — лидерборд и система рангов
+- 🔐 **Authentication** — user login and registration
+- 👤 **Profiles** — personal pages with avatars and statistics
+- 📰 **News** — create posts, likes, comments
+- 💬 **Messages** — private chats between members
+- 🔔 **Notifications** — real-time event notifications
+- 📊 **Leaderboard** — ranking system with ranks and levels
+- 🌍 **Multilingual** — available in Russian (RU) and German (DE)
 
-## 🚀 Запуск локально
+## 🚀 Running Locally
 
 ```bash
-# Используя Python
+# Using Python
 python3 -m http.server 8000
 
-# Или Node.js
+# Or Node.js
 npx serve
 ```
 
-Откройте [http://localhost:9999](http://localhost:9999) в браузере.
+Open [http://localhost:8000](http://localhost:8000) in your browser.
 
-## 📁 Структура проекта
+## 📁 Project Structure
 
-| Директория | Описание |
-|------------|----------|
-| `homepage/` | Главная страница |
-| `about/` | О Доме |
-| `history/` | История Дома |
-| `enemies/` | Противники |
-| `news/` | Новости и комментарии |
-| `messages/` | Личные сообщения |
-| `dashboard/` | Личный кабинет |
-| `profile/` | Профили пользователей |
-| `login/` | Авторизация |
-| `hymn/` | Гимн Дома |
-| `contact/` | Контакты |
-| `agreement/` | Пользовательское соглашение |
-| `privacy/` | Политика конфиденциальности |
-| `imprint/` | Импрессум |
-| `assets/` | CSS, JS, изображения, аудио |
+| Directory | Description |
+|-----------|-------------|
+| `homepage/` | Landing page |
+| `about/` | About the House |
+| `history/` | History of the House |
+| `enemies/` | Adversaries |
+| `news/` | News and comments |
+| `messages/` | Private messages |
+| `dashboard/` | Personal dashboard |
+| `profile/` | User profiles |
+| `login/` | Authentication |
+| `hymn/` | House Hymn |
+| `contact/` | Contact page |
+| `faq/` | Frequently Asked Questions |
+| `developers/` | Developer team |
+| `agreement/` | Terms of Service |
+| `privacy/` | Privacy Policy |
+| `imprint/` | Imprint / Legal Notice |
+| `404/` | Custom 404 error page |
+| `de/` | German language version |
+| `assets/` | CSS, JS, images, audio |
 
-## 🛠 Технологии
+## 🛠 Technologies
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Стилизация**: Glassmorphism, CSS Gradients, CSS Animations
-- **API**: Cloudflare Workers (Authentication, Database)
-- **Шрифты**: Titillium Web (Google Fonts)
+- **Styling**: Glassmorphism, CSS Gradients, CSS Animations
+- **Backend**: Cloudflare Workers (Authentication, Database)
+- **Fonts**: Titillium Web (Google Fonts)
 
-## 📌 Версия
+## 📌 Version
 
-**v1.1** — Январь 2026
+**v1.2** — January 2026
 
-### Последние изменения:
-- ✨ Редизайн страницы новостей (premium glassmorphism)
-- ✨ Редизайн страницы сообщений
-- 🎨 Улучшенные анимации и hover-эффекты
-- 🔧 Исправления багов и оптимизация
+### Latest Changes:
+- ✨ Full German localization (DE)
+- ✨ Redesigned news page (premium glassmorphism)
+- ✨ Redesigned messages page
+- 🎨 Improved animations and hover effects
+- 🖼️ Custom CAPTCHA with real bottle images
+- 🔧 Bug fixes and performance optimization
 
 ---
 
-© 2026 Dom Falcone. Все права защищены.
+© 2026 Dom Falcone. All rights reserved.
